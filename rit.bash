@@ -21,6 +21,9 @@ function show_help() {
 	echo "    -h, --help       Show this help message"
 	echo "    -v, --version    Show version information"
 	echo "    -p, --profile    Specify a profile (use suite name as default)"
+	echo "    --scripts        Specify foreign script path"
+	echo "    --suites         Specify foreign test suite path (to search yaml profiles)"
+	echo "    --testcases      Specify foreign testcases path"
 	echo "    -x               Debug bash scripts"
 	echo "    -e               Run without -e shopt option (not recommend)"
 	echo
@@ -84,7 +87,31 @@ while [[ "$#" -gt 0 ]]; do
 				profile_name="$2"
 				shift
 			else
-				fatal_exit "--profile requires an argument."
+				fatal_exit "$1 requires an argument."
+			fi
+			;;
+		--scripts)
+			if [[ -n "$2" ]]; then
+				SCRIPT_PATH="$2"
+				shift
+			else
+				fatal_exit "--scripts requires an argument."
+			fi
+			;;
+		--suites)
+			if [[ -n "$2" ]]; then
+				SUITE_PATH="$2"
+				shift
+			else
+				fatal_exit "--suites requires an argument."
+			fi
+			;;
+		--testcases)
+			if [[ -n "$2" ]]; then
+				CASE_PATH="$2"
+				shift
+			else
+				fatal_exit "--testcases requires an argument."
 			fi
 			;;
 		-x)
