@@ -157,7 +157,7 @@ for ((i=0; i<${#post_scripts[@]}; i++)); do
 done
 
 # run test
-function script_choose() {
+function multi_dimensional_test() {
 	local depth=$1
 	local dim=$2
 	local max_depth=$(( ${#pre_scripts[@]} - 1 ))
@@ -183,7 +183,7 @@ function script_choose() {
 		if [ "$depth" -eq "$max_depth" ]; then
 			test_run "$dim$i"
 		else
-			script_choose $((depth+1)) "$dim$i"
+			multi_dimensional_test $((depth+1)) "$dim$i"
 		fi
 		script_run "${post_list[$i]}"
 	done
@@ -193,5 +193,5 @@ function script_choose() {
 	return 0
 }
 
-script_choose
+multi_dimensional_test
 
