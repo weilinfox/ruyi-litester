@@ -9,6 +9,8 @@ SCRIPT_PATH="$SOURCE_PATH"/scripts
 SUITE_PATH="$SOURCE_PATH"/suites
 CASE_PATH="$SOURCE_PATH"/testcases
 
+LOG_DATE="$(date '+%Y%m%d-%H%M%S')"
+
 suite_name=
 profile_name=
 
@@ -19,6 +21,8 @@ function show_help() {
 	echo "    -h, --help       Show this help message"
 	echo "    -v, --version    Show version information"
 	echo "    -p, --profile    Specify a profile (use suite name as default)"
+	echo "    -x               Debug bash scripts"
+	echo "    -e               Run without -e shopt option (not recommend)"
 	echo
 }
 
@@ -32,34 +36,32 @@ function fatal_exit() {
 	exit 255
 }
 
-function parse_script_matrix() {
-	# yaml/json content
-	local ctt="$1"
-	# dest list variable
-	local dest="$2"
-	local ctt_len="$(echo $ctt | yq --raw-output length)"
-
-	[ "$ctt_len" -lt 1 ] && return
-	for ((i=0; i<$ctt_len; i++)); do
-		local tmp_ctt="$(echo $ctt | yq --raw-output .[$i])"
-		local tmp_len="$(echo $tmp_ctt | yq --raw-output length)"
-		local tmp_list=
-
-		for ((j=0; j<$tmp_len; j++)); do
-			tmp_list="$tmp_list $(echo $tmp_ctt | yq --raw-output .[$j])"
-		done
-		tmp_list="${tmp_list:1}"
-
-		eval "$dest"'[${#'"$dest"'[@]}]="'"$tmp_list"'"'
-	done
-}
-
 function script_test() {
+	[[ "$1" == "_" ]] && return 0
+	[ -z "$1" ] && fatal_exit "empty script name"
+
 	[ -x "$SCRIPT_PATH"/"$1".bash ] || fatal_exit "script not found $1.bash"
 }
 
 function script_run() {
+	[[ "$1" == "_" ]] && return 0
+	[ -z "$1" ] && fatal_exit "empty script name"
+
 	"$SCRIPT_PATH"/"$1".bash
+}
+
+function env_create() {
+	echo fake env_create
+}
+
+function env_destroy() {
+	echo fake env_destroy
+}
+
+function test_run() {
+	local dim=$1
+
+	lit "${CASE_PATH}"/"$suite_name" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"$dim"_"$LOG_DATE".log
 }
 
 if [[ "$#" -eq 0 ]]; then
@@ -85,6 +87,12 @@ while [[ "$#" -gt 0 ]]; do
 				fatal_exit "--profile requires an argument."
 			fi
 			;;
+		-x)
+			set -x
+			;;
+		-e)
+			set +e
+			;;
 		*)
 			suite_name="$1"
 			;;
@@ -104,11 +112,37 @@ done
 suite_profiles="$(yq --raw-output ."$profile_name" "$SUITE_PATH"/"$suite_name".yaml)"
 [[ "$suite_profiles" == "null" ]] && fatal_exit "no such suite profile found \"$profile_name\""
 
+pre_yaml="$(echo $suite_profiles | yq --raw-output .pre)"
+post_yaml="$(echo $suite_profiles | yq --raw-output .post)"
+pre_len="$(echo $pre_yaml | yq --raw-output length)"
+post_len="$(echo $post_yaml | yq --raw-output length)"
+[[ "$pre_len" == "$post_len" ]] || fatal_exit "pre and post script list have different dimensions"
+[ "$pre_len" -lt 1 ] && fatal_exit "script list have 0 dimension"
+
 pre_scripts=()
 post_scripts=()
+for ((i=0; i<$pre_len; i++)); do
+	tmp_pre="$(echo $pre_yaml | yq --raw-output .[$i])"
+	tmp_post="$(echo $post_yaml | yq --raw-output .[$i])"
+	tmp_pre_len="$(echo $tmp_pre | yq --raw-output length)"
+	tmp_post_len="$(echo $tmp_post | yq --raw-output length)"
+	tmp_pre_list=
+	tmp_post_list=
 
-parse_script_matrix "$(echo $suite_profiles | yq --raw-output .pre)" pre_scripts
-parse_script_matrix "$(echo $suite_profiles | yq --raw-output .post)" post_scripts
+	[[ "$tmp_pre_len" == "$tmp_post_len" ]] || fatal_exit "pre and post script list $i dimension have different length"
+
+	for ((j=0; j<$tmp_pre_len; j++)); do
+		tmp_pre_list="$tmp_pre_list $(echo $tmp_pre | yq --raw-output .[$j])"
+		tmp_post_list="$tmp_post_list $(echo $tmp_post | yq --raw-output .[$j])"
+	done
+	tmp_pre_list="${tmp_pre_list:1}"
+	tmp_post_list="${tmp_post_list:1}"
+
+	pre_scripts[$i]="$tmp_pre_list"
+	post_scripts[$i]="$tmp_post_list"
+done
+unset pre_yaml post_yaml pre_len post_len
+unset tmp_pre tmp_post tmp_pre_len tmp_post_len tmp_pre_list tmp_post_list
 
 # test scripts
 for ((i=0; i<${#pre_scripts[@]}; i++)); do
@@ -122,18 +156,42 @@ for ((i=0; i<${#post_scripts[@]}; i++)); do
 	done
 done
 
-# TODO: multi-dimensional test
+# run test
+function script_choose() {
+	local depth=$1
+	local dim=$2
+	local max_depth=$(( ${#pre_scripts[@]} - 1 ))
 
-# run pre scripts
-for ((i=0; i<${#pre_scripts[@]}; i++)); do
-	script_run "${pre_scripts[i]}"
-done
+	local pre_list=()
+	local post_list=()
+	local list_len=
+	local i=
 
-LOG_DATE="$(date '+%Y%m%d-%H%M%S')"
-lit "${CASE_PATH}"/"$suite_name" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"$LOG_DATE".log
+	depth="${depth:-0}"
+	for s in ${pre_scripts[$depth]}; do
+		pre_list[${#pre_list[@]}]=$s
+	done
+	for s in ${post_scripts[$depth]}; do
+		post_list[${#post_list[@]}]=$s
+	done
+	list_len="${#pre_list[@]}"
 
-# run post scripts
-for ((i=0; i<${#post_scripts[@]}; i++)); do
-	script_run "${post_scripts[i]}"
-done
+	[ "$depth" -eq 0 ] && env_create
+
+	for ((i=0; i<$list_len; i++)); do
+		script_run "${pre_list[$i]}"
+		if [ "$depth" -eq "$max_depth" ]; then
+			test_run "$dim$i"
+		else
+			script_choose $((depth+1)) "$dim$i"
+		fi
+		script_run "${post_list[$i]}"
+	done
+
+	[ "$depth" -eq 0 ] && env_destroy
+
+	return 0
+}
+
+script_choose
 

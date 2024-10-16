@@ -1,6 +1,8 @@
 # variant, use suite name as default value
 ruyi:
   pre:
+    # each pre script should have a corresponding post script
+    # or set it to _
     - ["ruyi-pre", ]
   post:
     - ["ruyi-post", ]
