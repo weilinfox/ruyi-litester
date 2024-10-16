@@ -24,7 +24,7 @@ function show_help() {
 	echo "    --scripts        Specify foreign script path"
 	echo "    --suites         Specify foreign test suite path (to search yaml profiles)"
 	echo "    --testcases      Specify foreign testcases path"
-	echo "    -x               Debug bash scripts"
+	echo "    -x, --debug      Debug bash scripts"
 	echo "    -e               Run without -e shopt option (not recommend)"
 	echo
 }
@@ -114,7 +114,7 @@ while [[ "$#" -gt 0 ]]; do
 				fatal_exit "--testcases requires an argument."
 			fi
 			;;
-		-x)
+		-x|--debug)
 			set -x
 			;;
 		-e)
