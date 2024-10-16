@@ -9,6 +9,7 @@ Tags: ruyi, lit, schroot
 + LLVM Lit
 + schroot
 + yq
++ date
 
 Refer to configuration files to see testsuite dependencies.
 

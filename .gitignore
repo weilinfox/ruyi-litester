@@ -1,2 +1,5 @@
 testcases/.lit_test_times.txt
+testcases/*/.lit_test_times.txt
 testcases/Output/
+testcases/*/Output/
+*.log

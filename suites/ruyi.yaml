@@ -1,1 +1,7 @@
-[ruyi]
+# variant, use suite name as default value
+ruyi:
+  pre:
+    - ["ruyi-pre", ]
+  post:
+    - ["ruyi-post", ]
+
