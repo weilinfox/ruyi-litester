@@ -120,6 +120,9 @@ while [[ "$#" -gt 0 ]]; do
 		-e)
 			set +e
 			;;
+		-*|--*)
+			fatal_exit "unsupported argument $1"
+			;;
 		*)
 			suite_name="$1"
 			;;
