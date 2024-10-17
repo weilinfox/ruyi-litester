@@ -62,12 +62,6 @@ function env_destroy() {
 	echo fake env_destroy
 }
 
-function test_run() {
-	local dim=$1
-
-	"$DRIVER_PATH"/lit.bash "${CASE_PATH}"/"$suite_name" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"$dim"_"$LOG_DATE".log
-}
-
 if [[ "$#" -eq 0 ]]; then
 	show_help
 	exit 1
@@ -136,8 +130,19 @@ done
 [[ -z "${profile_name:=$suite_name}" ]] && fatal_exit "missing profile name"
 
 # Check testsuite files
-[[ -d "$CASE_PATH"/"$suite_name" ]] || fatal_exit "missing testcase directory"
 [[ -f "$SUITE_PATH"/"$suite_name".yaml ]] || fatal_exit "missing testsuite yaml profile"
+
+# parse testcases
+case_profiles="$(yq --raw-output ."$profile_name".cases "$SUITE_PATH"/"$suite_name".yaml)"
+case_dirs=()
+case_len="$(echo $case_profiles | yq --raw-output length)"
+for ((i=0; i<$case_len; i++)); do
+	tmp_case="$(echo $case_profiles | yq --raw-output .[$i])"
+	[[ -d "$CASE_PATH"/"$tmp_case" ]] || fatal_exit "missing testcase directory \"$tmp_case\""
+	case_dirs[${#case_dirs[@]}]="$tmp_case"
+done
+[ -z "${#case_dirs[@]}" ] && fatal_exit "no testcase configured"
+unset tmp_case
 
 # parse profile
 suite_profiles="$(yq --raw-output ."$profile_name" "$SUITE_PATH"/"$suite_name".yaml)"
@@ -188,6 +193,15 @@ for ((i=0; i<${#post_scripts[@]}; i++)); do
 done
 
 # run test
+function test_run() {
+	local dim=$1
+	local i=
+
+	for ((i=0; i<$case_len; i++)); do
+		"$DRIVER_PATH"/lit.bash "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"$dim"_"$LOG_DATE".log
+	done
+}
+
 function multi_dimensional_test() {
 	local depth=$1
 	local dim=$2
