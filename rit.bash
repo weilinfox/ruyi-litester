@@ -12,6 +12,8 @@ CASE_PATH="$SOURCE_PATH"/testcases
 
 LOG_DATE="$(date '+%Y%m%d-%H%M%S')"
 
+. "$DRIVER_PATH"/utils/logging.bash
+
 suite_name=
 profile_name=
 
@@ -36,7 +38,7 @@ function show_version() {
 }
 
 function fatal_exit() {
-	echo "Fatal: $1"
+	LOG_FATAL "$@"
 	exit 255
 }
 
@@ -55,11 +57,11 @@ function script_run() {
 }
 
 function env_create() {
-	echo fake env_create
+	LOG_DEBUG fake env_create
 }
 
 function env_destroy() {
-	echo fake env_destroy
+	LOG_DEBUG fake env_destroy
 }
 
 if [[ "$#" -eq 0 ]]; then
