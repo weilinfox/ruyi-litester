@@ -1,0 +1,7 @@
+type: lit
+# {lexical,random} random as default value
+order: random
+# true as default value
+concurrent: true
+# {none,fail,all}
+logging: all

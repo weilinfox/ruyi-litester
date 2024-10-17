@@ -1,5 +1,5 @@
 # NOTE: Test --help option for ruyi command and subcommands
-# RUN: bash %s | FileCheck %s
+# RUN: bash %s | FileCheck --dump-input=always %s
 
 ruyi --help
 # CHECK-LABEL: usage: ruyi [

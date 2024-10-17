@@ -141,6 +141,8 @@ case_len="$(echo $case_profiles | yq --raw-output length)"
 for ((i=0; i<$case_len; i++)); do
 	tmp_case="$(echo $case_profiles | yq --raw-output .[$i])"
 	[[ -d "$CASE_PATH"/"$tmp_case" ]] || fatal_exit "missing testcase directory \"$tmp_case\""
+	[[ -f "$CASE_PATH"/"$tmp_case"/rit.yaml ]] || fatal_exit "testcase \"$tmp_case\" missing rit.yaml"
+	[[ "$(yq .type "$CASE_PATH"/"$tmp_case"/rit.yaml)" != "null" ]] || fatal_exit "testcase \"$tmp_case\" type unknown"
 	case_dirs[${#case_dirs[@]}]="$tmp_case"
 done
 [ -z "${#case_dirs[@]}" ] && fatal_exit "no testcase configured"
@@ -197,10 +199,55 @@ done
 # run test
 function test_run() {
 	local dim=$1
+	local test_type=
+	local lit_order=
+	local lit_concurrent=
+	local lit_logging=
+	local lit_options=
 	local i=
 
 	for ((i=0; i<$case_len; i++)); do
-		"$DRIVER_PATH"/lit.bash "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"$dim"_"$LOG_DATE".log
+		test_type="$(yq --raw-output .type ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+
+		if [[ "$test_type" == "lit" ]]; then
+			lit_order="$(yq --raw-output .order ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+			lit_concurrent="$(yq --raw-output .concurrent ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+			lit_logging="$(yq --raw-output .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+
+			if [ -z "$lit_order" ] || [[ "$lit_order" == "random" ]]; then
+				lit_options="$lit_options --order random"
+			elif [[ "$lit_order" == "lexical" ]]; then
+				lit_options="$lit_options --order lexical"
+			else
+				LOG_WARN "Unknown lit order setting \"$lit_order\", use default value"
+				lit_options="$lit_options --order random"
+			fi
+
+			if [ -z "$lit_concurrent" ] || [[ "$lit_concurrent" == "true" ]]; then
+				lit_options="$lit_options --workers 4"
+			elif [[ "$lit_concurrent" == "false" ]]; then
+				lit_options="$lit_options --workers 1"
+			else
+				LOG_WARN "Unknown lit concurrent setting \"$lit_concurrent\", use default value"
+				lit_options="$lit_options --workers 4"
+			fi
+
+			if [ -z "$lit_logging" ] || [[ "$lit_logging" == "fail" ]]; then
+				lit_options="$lit_options —verbose"
+			elif [[ "$lit_logging" == "all" ]]; then
+				lit_options="$lit_options --show-all"
+			elif [[ "$lit_logging" == "none" ]]; then
+				lit_options="$lit_options"
+			else
+				LOG_WARN "Unknown lit logging setting \"$lit_logging\", use default value"
+				lit_options="$lit_options —verbose"
+			fi
+
+			LOG_DEBUG Run lit "$lit_options" "$(basename $CASE_PATH)"/"${case_dirs[$i]}"
+			"$DRIVER_PATH"/lit.bash $lit_options "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"$dim"_"$LOG_DATE".log
+		else
+			LOG_ERROR "Unknown test type \"$test_type\""
+		fi
 	done
 }
 

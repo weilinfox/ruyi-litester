@@ -7,9 +7,8 @@
 ## 依赖
 
 + LLVM Lit
-+ date
++ coreutils
 + schroot
-+ tee
 + yq
 
 在测试用例配置中查看用例的依赖。
