@@ -107,6 +107,7 @@ concurrent: true
 # 只记录结果/记录详细的失败用例信息/记录所有详细信息
 # fail 对应 lit --verbose
 # all 对应 lit --show-all
+# 默认 fail
 # 具体能够记录到的信息还要看用例具体编写
 logging: all
 ```
