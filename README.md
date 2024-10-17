@@ -7,6 +7,7 @@ Tags: ruyi, lit, schroot
 ## Dependencies
 
 + LLVM Lit
++ bash
 + coreutils
 + schroot
 + yq
