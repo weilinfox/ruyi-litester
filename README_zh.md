@@ -84,6 +84,8 @@ example_profile1:
 
 example-install-and-remove 和 example-help-message 这两个测试用例将会分别在这 9 种测试环境中运行并输出分别的测试报告。
 
+脚本运行顺序类似于栈，如第一种测试环境的脚本运行顺序为 ``install-from-src`` -> ``setup-en-locale`` -> ``_`` -> ``remove-from-src``，当然 ``_`` 代表空会被忽略。
+
 而 ``example.yaml`` 中的 ``example_profile1`` 配置则定义了一个三维共 2 种测试环境。
 
 ## 测试用例配置
