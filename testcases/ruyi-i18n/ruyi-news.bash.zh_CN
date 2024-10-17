@@ -5,6 +5,6 @@
 # CHECK: RuyiSDK 支持展示新闻了
 
 # ruyi news read 1
-# CHECK-LABEL: RuyiSDK 支持展示新闻了
+# CHECK-LABEL: # RuyiSDK 支持展示新闻了
 # CHECK: 感谢您对 RuyiSDK 的支持！
 

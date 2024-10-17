@@ -9,6 +9,6 @@ ruyi news list
 # CHECK: RuyiSDK now supports displaying news
 
 ruyi news read 1
-# CHECK-LABEL: RuyiSDK now supports displaying news
+# CHECK-LABEL: # RuyiSDK now supports displaying news
 # CHECK: Thank you for supporting RuyiSDK!
 
