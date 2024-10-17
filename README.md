@@ -18,6 +18,8 @@ Refer to configuration files to see testsuite dependencies.
 
 + [ ] full ruyi testcases
 + [x] multi-dimensional test
++ [X] lit test
++ [ ] mugen testcase compatibility
 + [ ] schroot test environment
 + [ ] qemu test environment
 + [ ] os-autoinst test environment
