@@ -5,6 +5,7 @@ set -e
 SELF_VERSION=0.0.1
 SOURCE_PATH="$(dirname $(realpath $0))"
 RUN_PATH="$(realpath .)"
+DRIVER_PATH="$SOURCE_PATH"/driver
 SCRIPT_PATH="$SOURCE_PATH"/scripts
 SUITE_PATH="$SOURCE_PATH"/suites
 CASE_PATH="$SOURCE_PATH"/testcases
@@ -64,7 +65,7 @@ function env_destroy() {
 function test_run() {
 	local dim=$1
 
-	lit "${CASE_PATH}"/"$suite_name" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"$dim"_"$LOG_DATE".log
+	"$DRIVER_PATH"/lit.bash "${CASE_PATH}"/"$suite_name" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"$dim"_"$LOG_DATE".log
 }
 
 if [[ "$#" -eq 0 ]]; then

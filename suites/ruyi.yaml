@@ -1,5 +1,8 @@
 # variant, use suite name as default value
 ruyi:
+  cases:
+    # testcases list
+    - ruyi-basic
   pre:
     # each pre script should have a corresponding post script
     # or set it to _
