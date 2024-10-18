@@ -8,7 +8,7 @@ ruyi update
 old_path=$(pwd)
 tmp_path="/tmp/rit-ruyi-basic-ruyi-install"
 mkdir "$tmp_path" && cd "$tmp_path"
-ruyi extract coremark
+ruyi extract ruyisdk-demo
 # CHECK-LABEL: info: extracting
 # CHECK: info: package
 ls -la coremark.h
