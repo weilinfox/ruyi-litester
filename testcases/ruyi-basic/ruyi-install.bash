@@ -6,6 +6,7 @@ export RUYI_DEBUG=x
 ruyi update
 
 # NOTE: binary install test
+# NOTE: DO NOT install gnu-upstream in other testcase
 http_proxy=http://wrong.proxy https_proxy=http://wrong.proxy ruyi install gnu-upstream
 # CHECK-LABEL: info: downloading
 # CHECK-COUNT-3: warn: failed to fetch distfile
