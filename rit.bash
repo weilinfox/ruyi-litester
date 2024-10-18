@@ -18,7 +18,7 @@ suite_name=
 profile_name=
 
 function show_help() {
-	echo "Usage: rit.bash [-p profile] suite"
+	echo "Usage: rit.bash [options] suite"
 	echo
 	echo "Options:"
 	echo "    -h, --help       Show this help message"
