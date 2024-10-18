@@ -101,7 +101,8 @@ example-install-and-remove 和 example-help-message 这两个测试用例将会�
 ```yaml
 # lit 用例
 type: lit
-# {lexical,random} 顺序/乱序执行
+# {lexical,random,smart} 顺序/乱序执行
+# lit --order
 # 默认 random
 order: random
 # 测试用例中的小用例是否允许并行

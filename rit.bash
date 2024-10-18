@@ -218,6 +218,8 @@ function test_run() {
 				lit_options="$lit_options --order random"
 			elif [[ "$lit_order" == "lexical" ]]; then
 				lit_options="$lit_options --order lexical"
+			elif [[ "$lit_order" == "smart" ]]; then
+				lit_options="$lit_options --order smart"
 			else
 				LOG_WARN "Unknown lit order setting \"$lit_order\", use default value"
 				lit_options="$lit_options --order random"

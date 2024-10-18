@@ -1,6 +1,6 @@
 type: lit
-# {lexical,random} random as default value
-order: random
+# {lexical,random,smart} random as default value
+order: smart
 # true as default value
 concurrent: true
 # {none,fail,all}
