@@ -1,4 +1,4 @@
-# NOTE: Test ruyi venv creation
+# NOTE: Test ruyi venv --emulator with qemu-user-riscv-upstream
 # REQUIRES: x86_64
 #
 # RUN: bash %s | FileCheck %s
