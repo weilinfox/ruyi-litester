@@ -1,6 +1,12 @@
 # NOTE: Test --help option for ruyi command and subcommands
 # RUN: bash %s | FileCheck --dump-input=always %s
 
+ruyi
+# CHECK-LABEL: usage: ruyi [
+# CHECK: RuyiSDK Package Manager
+# CHECK: options:
+# CHECK: subcommands:
+
 ruyi --help
 # CHECK-LABEL: usage: ruyi [
 # CHECK: RuyiSDK Package Manager
