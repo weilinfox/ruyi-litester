@@ -1,0 +1,4 @@
+type: lit
+order: lexical
+concurrent: false
+logging: all

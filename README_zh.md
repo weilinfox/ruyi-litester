@@ -2,6 +2,8 @@
 
 用 LLVM Integrated tester 测试 Ruyi 包管理器
 
+使用 LLVM Integrated tester 实现数据驱动的测试，使用 mugen 格式的结构化脚本实现复杂过程的测试。
+
 关键字: ruyi, lit, schroot
 
 ## 依赖
