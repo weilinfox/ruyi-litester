@@ -1,5 +1,4 @@
-# NOTE: Test ruyi news items
-# RUN: bash %s | FileCheck %s
+# NOTE: Test ruyi xdg env support
 # RUN: XDG_CACHE_HOME=~/.cache/rit-ruyi-advance-ruyi-xdg \
 # RUN:     XDG_CACHE_HOME=~/.local/share/rit-ruyi-advance-ruyi-xdg \
 # RUN:     XDG_STATE_HOME=~/.local/state/rit-ruyi-advance-ruyi-xdg \
