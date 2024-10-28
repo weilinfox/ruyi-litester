@@ -229,7 +229,7 @@ function test_run() {
 
 	# run env pre scripts
 	for i in $(ls $ENV_PATH/*.pre); do
-		source "$ENV_PATH"/"$i"
+		source "$i"
 	done
 
 	for ((i=0; i<$case_len; i++)); do
@@ -280,7 +280,7 @@ function test_run() {
 
 	# run env post scripts
 	for i in $(ls $ENV_PATH/*.post); do
-		source "$ENV_PATH"/"$i"
+		source "$i"
 	done
 }
 
