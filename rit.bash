@@ -239,6 +239,7 @@ function test_run() {
 			lit_order="$(yq --raw-output .order ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
 			lit_concurrent="$(yq --raw-output .concurrent ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
 			lit_logging="$(yq --raw-output .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+			lit_options=
 
 			if [ -z "$lit_order" ] || [[ "$lit_order" == "random" ]]; then
 				lit_options="$lit_options --order random"
