@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SELF_PATH=$(realpath $(dirname $0))
+SELF_PATH=$(realpath $(dirname $0)/../../)
 
-source "$SELF_PATH/../../driver/utils/logging.bash"
+source "$SELF_PATH/driver/utils/logging.bash"
 
 mkdir -p ~/.local/bin/
 
@@ -34,7 +34,7 @@ fi
 chmod +x ~/.local/bin/ruyi
 
 if [ -z "$(whereis ruyi | cut -d: -f2)" ]; then
-	echo "export PATH=~/.local/bin:$PATH" >> /tmp/rit.bash_env/ruyi_ruyi-bin-install.pre
-	echo "export PATH=$PATH" >> /tmp/rit.bash_env/ruyi_ruyi-bin-install.post
+	echo "export PATH=~/.local/bin:$PATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-bin-install.pre
+	echo "export PATH=$PATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-bin-install.post
 fi
 

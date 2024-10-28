@@ -1,7 +1,9 @@
 #!/bin/bash
 
+SELF_PATH=$(realpath $(dirname $0)/../../)
+
 rm -f ~/.local/bin/ruyi
 
-rm -f /tmp/rit.bash_env/ruyi_ruyi-bin-install.pre
-rm -f /tmp/rit.bash_env/ruyi_ruyi-bin-install.post
+rm -f "$SELF_PATH"/rit.bash_env/ruyi_ruyi-bin-install.pre
+rm -f "$SELF_PATH"/rit.bash_env/ruyi_ruyi-bin-install.post
 
