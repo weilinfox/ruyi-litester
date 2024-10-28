@@ -156,7 +156,7 @@ done
 [[ -f "$SUITE_PATH"/"$suite_name".yaml ]] || fatal_exit "missing testsuite yaml profile"
 
 # parse testcases
-case_profiles="$(yq --raw-output ."$profile_name".cases "$SUITE_PATH"/"$suite_name".yaml)"
+case_profiles="$(yq --raw-output .\"$profile_name\".cases "$SUITE_PATH"/"$suite_name".yaml)"
 case_dirs=()
 case_len="$(echo $case_profiles | yq --raw-output length)"
 for ((i=0; i<$case_len; i++)); do
@@ -170,7 +170,7 @@ done
 unset tmp_case
 
 # parse profile
-suite_profiles="$(yq --raw-output ."$profile_name" "$SUITE_PATH"/"$suite_name".yaml)"
+suite_profiles="$(yq --raw-output .\"$profile_name\" "$SUITE_PATH"/"$suite_name".yaml)"
 [[ "$suite_profiles" == "null" ]] && fatal_exit "no such suite profile found \"$profile_name\""
 
 pre_yaml="$(echo $suite_profiles | yq --raw-output .pre)"
