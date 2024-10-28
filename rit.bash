@@ -9,8 +9,20 @@ DRIVER_PATH="$SOURCE_PATH"/driver
 SCRIPT_PATH="$SOURCE_PATH"/scripts
 SUITE_PATH="$SOURCE_PATH"/suites
 CASE_PATH="$SOURCE_PATH"/testcases
+ENV_PATH="/tmp/rit_env"
+LOCK_FILE="/tmp/.rit.lock"
 
 LOG_DATE="$(date '+%Y%m%d-%H%M%S')"
+
+if [ -e "$LOCK_FILE" ]; then
+	echo "Find lock file $LOCK_FILE"
+	echo "exit now..."
+	code_exit 2
+fi
+
+touch "$LOCK_FILE"
+rm -rf "$ENV_PATH"
+mkdir -p "$ENV_PATH"
 
 . "$DRIVER_PATH"/utils/logging.bash
 
@@ -37,9 +49,18 @@ function show_version() {
 	echo "Version: $SELF_VERSION"
 }
 
+function code_exit() {
+
+	rm -rf "$ENV_PATH"
+	rm -f "$LOCK_FILE"
+
+	exit $1
+}
+
 function fatal_exit() {
 	LOG_FATAL "$@"
-	exit 255
+
+	code_exit 255
 }
 
 function script_test() {
@@ -66,18 +87,18 @@ function env_destroy() {
 
 if [[ "$#" -eq 0 ]]; then
 	show_help
-	exit 1
+	code_exit 1
 fi
 
 while [[ "$#" -gt 0 ]]; do
 	case $1 in
 		-h|--help)
 			show_help
-			exit 0
+			code_exit 0
 			;;
 		-v|--version)
 			show_version
-			exit 0
+			code_exit 0
 			;;
 		-p|--profile)
 			if [[ -n "$2" ]]; then
@@ -206,6 +227,11 @@ function test_run() {
 	local lit_options=
 	local i=
 
+	# run env pre scripts
+	for i in $(ls $ENV_PATH/*.pre); do
+		source "$ENV_PATH"/"$i"
+	done
+
 	for ((i=0; i<$case_len; i++)); do
 		test_type="$(yq --raw-output .type ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
 
@@ -251,6 +277,11 @@ function test_run() {
 			LOG_ERROR "Unknown test type \"$test_type\""
 		fi
 	done
+
+	# run env post scripts
+	for i in $(ls $ENV_PATH/*.post); do
+		source "$ENV_PATH"/"$i"
+	done
 }
 
 function multi_dimensional_test() {
@@ -290,4 +321,6 @@ function multi_dimensional_test() {
 }
 
 multi_dimensional_test
+
+code_exit 0
 
