@@ -9,8 +9,8 @@ DRIVER_PATH="$SOURCE_PATH"/driver
 SCRIPT_PATH="$SOURCE_PATH"/scripts
 SUITE_PATH="$SOURCE_PATH"/suites
 CASE_PATH="$SOURCE_PATH"/testcases
-ENV_PATH="/tmp/rit_env"
-LOCK_FILE="/tmp/.rit.lock"
+ENV_PATH="/tmp/rit.bash_env"
+LOCK_FILE="/tmp/.rit.bash.lock"
 
 LOG_DATE="$(date '+%Y%m%d-%H%M%S')"
 
