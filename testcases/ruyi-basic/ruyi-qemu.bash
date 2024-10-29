@@ -3,8 +3,6 @@
 #
 # RUN: bash %s 2>&1 | FileCheck %s
 
-export RUYI_DEBUG=x
-
 ruyi update
 
 ruyi install gnu-plct qemu-user-riscv-upstream

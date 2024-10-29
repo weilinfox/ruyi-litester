@@ -3,8 +3,6 @@
 #
 # RUN: bash %s 2>&1 | FileCheck %s
 
-export RUYI_DEBUG=x
-
 qemu_pkg=qemu-user-riscv-upstream
 qemu_cmd="-e qemu-user-riscv-upstream"
 qemu_bin=ruyi-qemu
