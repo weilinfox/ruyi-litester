@@ -1,5 +1,5 @@
 # NOTE: Test ruyi gnu-plct-rv64ilp32-elf toolchain
-# RUN: bash %s | FileCheck %s
+# RUN: bash %s 2>&1 | FileCheck %s
 
 export RUYI_DEBUG=x
 
@@ -9,7 +9,7 @@ ruyi install gnu-plct-rv64ilp32-elf
 
 venv_path=/tmp/rit-ruyi-basic-ruyi-toolchain_gnu-plct-rv64ilp32-elf
 ruyi venv -t gnu-plct-rv64ilp32-elf --without-sysroot baremetal-rv64ilp32 "$venv_path"
-# CHECK-LABEL: info: Creating a Ruyi virtual environment at
+# CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
 # CHECK: info: The virtual environment is now created.
 
 mkdir "$venv_path"/test_tmp
@@ -21,11 +21,9 @@ EOF
 
 source "$venv_path"/bin/ruyi-activate
 
-echo "Gcc check point"
-# CHECK-LABEL Gcc check point
 riscv64-plct-elf-gcc -O2 -c "$venv_path"/test_tmp/test.c -o "$venv_path"/test_tmp/test.o
-echo $?
-# CHECK-NEXT: 0
+echo "Gcc check point $?"
+# CHECK-LABEL: Gcc check point 0
 riscv64-plct-elf-readelf -h "$venv_path"/test_tmp/test.o
 # CHECK-LABEL: ELF Header:
 # CHECK: ELF32
