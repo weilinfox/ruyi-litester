@@ -262,7 +262,7 @@ function test_run() {
 			fi
 
 			if [ -z "$lit_logging" ] || [[ "$lit_logging" == "fail" ]]; then
-				lit_options="$lit_options —verbose"
+				lit_options="$lit_options --verbose"
 			elif [[ "$lit_logging" == "all" ]]; then
 				lit_options="$lit_options --show-all"
 			elif [[ "$lit_logging" == "none" ]]; then
