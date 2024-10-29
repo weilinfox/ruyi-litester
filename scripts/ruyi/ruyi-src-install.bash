@@ -22,17 +22,16 @@ deactivate
 cat > ~/.local/bin/ruyi << EOF
 #!/bin/bash
 
-source "$TMP_DIR"/venv-ruyi/bin/activate
-
 python3 -m ruyi \$@
-
-deactivate
 EOF
 
 chmod +x ~/.local/bin/ruyi
 
 rm -rf ~/.local/share/ruyi/ ~/.local/state/ruyi/ ~/.cache/ruyi/
 
+PYTHON_INTER=$(ls "$TMP_DIR"/venv-ruyi/lib)
+echo "export PYTHONPATH=$TMP_DIR/venv-ruyi/lib/$PYTHON_INTER/site-packages/" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-src-install.pre
+echo "export PYTHONPATH=$PYTHONPATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-src-install.post
 if [ -z "$(whereis ruyi | cut -d: -f2)" ]; then
 	echo "export PATH=~/.local/bin:$PATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-src-install.pre
 	echo "export PATH=$PATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-src-install.post
