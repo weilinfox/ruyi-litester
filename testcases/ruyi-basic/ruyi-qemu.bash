@@ -1,7 +1,7 @@
 # NOTE: Test ruyi venv --emulator with qemu-user-riscv-upstream
 # REQUIRES: x86_64
 #
-# RUN: bash %s | FileCheck %s
+# RUN: bash %s 2>&1 | FileCheck %s
 
 export RUYI_DEBUG=x
 
@@ -11,7 +11,7 @@ ruyi install gnu-plct qemu-user-riscv-upstream
 
 venv_path=/tmp/rit-ruyi-basic-ruyi-qemu
 ruyi venv -t gnu-plct -e qemu-user-riscv-upstream milkv-duo "$venv_path"
-# CHECK-LABEL: info: Creating a Ruyi virtual environment at
+# CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
 # CHECK: info: The virtual environment is now created.
 # CHECK: ruyi-deactivate
 # CHECK: /tmp/rit-ruyi-basic-ruyi-qemu/sysroot
@@ -36,7 +36,8 @@ echo $?
 # CHECK-NEXT: 0
 
 ruyi-qemu "$venv_path"/test_tmp/hello_ruyi.o
-# CHECK-NEXT: hello, ruyi
+# NOTE: do not use CHECK-NEXT to skip qemu warnings
+# CHECK: hello, ruyi
 
 ruyi-deactivate
 rm -rf "$venv_path"
