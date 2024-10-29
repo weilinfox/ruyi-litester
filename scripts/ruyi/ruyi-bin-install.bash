@@ -33,6 +33,8 @@ fi
 
 chmod +x ~/.local/bin/ruyi
 
+rm -rf ~/.local/share/ruyi/ ~/.local/state/ruyi/ ~/.cache/ruyi/
+
 if [ -z "$(whereis ruyi | cut -d: -f2)" ]; then
 	echo "export PATH=~/.local/bin:$PATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-bin-install.pre
 	echo "export PATH=$PATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-bin-install.post
