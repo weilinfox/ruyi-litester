@@ -4,4 +4,4 @@ order: smart
 # true as default value
 concurrent: true
 # {none,fail,all}
-logging: all
+logging: fail
