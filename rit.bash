@@ -269,7 +269,7 @@ function test_run() {
 				lit_options="$lit_options"
 			else
 				LOG_WARN "Unknown lit logging setting \"$lit_logging\", use default value"
-				lit_options="$lit_options —verbose"
+				lit_options="$lit_options --verbose"
 			fi
 
 			LOG_DEBUG Run lit "$lit_options" "$(basename $CASE_PATH)"/"${case_dirs[$i]}"
