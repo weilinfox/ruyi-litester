@@ -24,7 +24,7 @@ cat > ~/.local/bin/ruyi << EOF
 
 source "$TMP_DIR"/venv-ruyi/bin/activate
 
-python3 -m ruyi $@
+python3 -m ruyi \$@
 
 deactivate
 EOF
