@@ -7,18 +7,18 @@ tmp_path=/tmp/rit-ruyi-basic-ruyi-admin
 mkdir -p "$tmp_path"
 
 ruyi admin manifest $0
-# CHECK-SAME: [
+# CHECK-LABEL: [
 # CHECK: "name":
 # CHECK: "size":
 # CHECK: "checksums":
 ruyi admin manifest --format json $0
-# CHECK-SAME: [
+# CHECK-LABEL: [
 # CHECK: "name":
 # CHECK: "size":
 # CHECK: "checksums":
 
 ruyi admin manifest --format toml $0
-# CHECK-LABEL: [[distfiles]]
+# CHECK-LABEL{LITERAL}: [[distfiles]]
 # CHECK-NEXT: name =
 # CHECK-NEXT: size =
 # CHECK-EMPTY:
@@ -31,10 +31,10 @@ ruyi admin format-manifest "$tmp_path"/test.toml
 cat "$tmp_path"/test.toml
 # CHECK-LABEL: format = "v1"
 # CHECK-EMPTY:
-# CHECK-SAME: [metadata]
+# CHECK-NEXT: [metadata]
 # CHECK: desc =
 # CHECK: vendor =
-# CHECK: [[distfiles]]
+# CHECK{LITERAL}: [[distfiles]]
 # CHECK: [distfiles.checksums]
 
 rm -rf "$tmp_path"
