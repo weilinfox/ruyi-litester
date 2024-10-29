@@ -1,5 +1,6 @@
-# NOTE: Test ruyi venv cmake toolchain file
-# RUN: bash %s | FileCheck %s
+# NOTE: Test ruyi venv make
+# NOTE: ``ruyi venv`` print message to stderr
+# RUN: bash %s 2>&1 | FileCheck %s
 
 export RUYI_DEBUG=x
 
@@ -9,7 +10,7 @@ ruyi install gnu-plct-xthead
 
 venv_path=/tmp/rit-ruyi-basic-ruyi-cmake
 ruyi venv -t gnu-plct-xthead sipeed-lpi4a "$venv_path"
-# CHECK-LABEL: info: Creating a Ruyi virtual environment at
+# CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
 # CHECK: info: The virtual environment is now created.
 # CHECK: ruyi-deactivate
 # CHECK: /tmp/rit-ruyi-basic-ruyi-cmake/sysroot
@@ -20,8 +21,10 @@ echo Gcc compilation checkpoint
 old_path="$(pwd)"
 mkdir "$venv_path"/test_tmp && cd "$venv_path"/test_tmp
 ruyi extract coremark\(1.0.1\)
-# CHECK-LABEL: info: extracting
+# CHECK-LABEL: info: extracting {{.*}}
 # CHECK: info: package
+ls -la
+# CHECK: coremark.h
 
 sed -i 's/\bgcc\b/riscv64-plctxthead-linux-gnu-gcc/g' linux64/core_portme.mak
 make PORT_DIR=linux64 link
