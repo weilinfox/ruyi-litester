@@ -1,5 +1,6 @@
 # NOTE: Test ruyi install and extract
-# RUN: bash %s | FileCheck %s
+# NOTE: ``ruyi install`` outputs are printed to stderr
+# RUN: bash %s 2>&1 | FileCheck %s
 
 export RUYI_DEBUG=x
 
@@ -8,13 +9,13 @@ ruyi update
 # NOTE: binary install test
 # NOTE: DO NOT install gnu-upstream in other testcase
 http_proxy=http://wrong.proxy https_proxy=http://wrong.proxy ruyi install gnu-upstream
-# CHECK-LABEL: info: downloading
+# CHECK-LABEL: info: downloading {{.*}}
 # CHECK-COUNT-3: warn: failed to fetch distfile
 # CHECK: fatal error: failed to fetch
 # CHECK: Downloads can fail for a multitude of reasons
 # CHECK: * Basic connectivity problems
 ruyi install gnu-upstream
-# CHECK-LABEL: info: downloading
+# CHECK-LABEL: info: downloading {{.*}}
 # CHECK: info: extracting
 # CHECK: info: package
 ruyi install gnu-upstream
