@@ -1,5 +1,5 @@
 # NOTE: Test ruyi install and extract
-# RUN: bash %s | FileCheck %s
+# RUN: bash %s 2>&1 | FileCheck %s
 
 export RUYI_DEBUG=x
 
@@ -9,10 +9,11 @@ old_path=$(pwd)
 tmp_path="/tmp/rit-ruyi-basic-ruyi-install"
 mkdir "$tmp_path" && cd "$tmp_path"
 ruyi extract ruyisdk-demo
-# CHECK-LABEL: info: extracting
+# CHECK-LABEL: info: extracting {{.*}} for package {{.*}}
 # CHECK: info: package
-ls -la coremark.h
-# CHECK: coremark.h
+ls -la rvv-autovec
+# CHECK: Makefile
+# CHECK: test.c
 cd "$old_path"
 rm -rf "$tmp_path"
 
