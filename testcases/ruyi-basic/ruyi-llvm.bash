@@ -1,7 +1,7 @@
 # NOTE: Test ruyi venv --sysroot-from with llvm toolchain
 # REQUIRES: x86_64 || riscv64
 #
-# RUN: bash %s | FileCheck %s
+# RUN: bash %s 2>&1 | FileCheck %s
 
 export RUYI_DEBUG=x
 
@@ -20,7 +20,7 @@ ruyi install llvm-upstream gnu-plct $qemu_pkg
 
 venv_path=/tmp/rit-ruyi-basic-ruyi-llvm
 ruyi venv -t llvm-upstream --sysroot-from gnu-plct $qemu_cmd generic "$venv_path"
-# CHECK-LABEL: info: Creating a Ruyi virtual environment at
+# CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
 # CHECK: info: The virtual environment is now created.
 # CHECK: ruyi-deactivate
 # CHECK: /tmp/rit-ruyi-basic-ruyi-llvm/sysroot
@@ -45,7 +45,7 @@ echo $?
 # CHECK-NEXT: 0
 
 $qemu_bin "$venv_path"/test_tmp/hello_ruyi.o
-# CHECK-NEXT: hello, ruyi
+# CHECK: hello, ruyi
 
 ruyi-deactivate
 rm -rf "$venv_path"
