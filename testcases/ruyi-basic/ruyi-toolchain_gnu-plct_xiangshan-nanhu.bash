@@ -1,5 +1,5 @@
 # NOTE: Test ruyi gnu-plct toolchain xiangshan-nanhu profile
-# RUN: bash %s | FileCheck %s
+# RUN: bash %s 2>&1 | FileCheck %s
 
 export RUYI_DEBUG=x
 
@@ -9,7 +9,7 @@ ruyi install gnu-plct
 
 venv_path=/tmp/rit-ruyi-basic-ruyi-toolchain_gnu-plct_xiangshan-nanhu
 ruyi venv -t gnu-plct xiangshan-nanhu "$venv_path"
-# CHECK-LABEL: info: Creating a Ruyi virtual environment at
+# CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
 # CHECK: info: The virtual environment is now created.
 
 mkdir "$venv_path"/test_tmp
@@ -39,11 +39,9 @@ EOF
 
 source "$venv_path"/bin/ruyi-activate
 
-echo "Gcc check point"
-# CHECK-LABEL Gcc check point
 riscv64-plct-linux-gnu-gcc -O2 -c -o "$venv_path"/test_tmp/test.o "$venv_path"/test_tmp/test.c
-echo $?
-# CHECK-NEXT: 0
+echo "Gcc check point $?"
+# CHECK-LABEL Gcc check point 0
 
 ruyi-deactivate
 rm -rf "$venv_path"
