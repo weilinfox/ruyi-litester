@@ -1,4 +1,7 @@
 # NOTE: Test ruyi install and extract
+# NOTE: I dont know why ``ruyi extract`` outputs:
+# NOTE:   "info: extracting" and "info: package"
+# NOTE:   are print to stderr
 # RUN: bash %s 2>&1 | FileCheck %s
 
 export RUYI_DEBUG=x
