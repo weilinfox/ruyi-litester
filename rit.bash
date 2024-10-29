@@ -229,6 +229,7 @@ function test_run() {
 
 	# run env pre scripts
 	for i in $(ls $ENV_PATH/*.pre); do
+		LOG_DEBUG source $i
 		source "$i"
 	done
 
@@ -281,6 +282,7 @@ function test_run() {
 
 	# run env post scripts
 	for i in $(ls $ENV_PATH/*.post); do
+		LOG_DEBUG source $i
 		source "$i"
 	done
 }
