@@ -4,6 +4,8 @@ SELF_PATH=$(realpath $(dirname $0)/../../)
 
 source "$SELF_PATH/driver/utils/logging.bash"
 
+LOG_DEBUG Running ruyi-bin-install
+
 mkdir -p ~/.local/bin/
 
 RUYI_VERSION=${RUYI_VERSION:-"0.20.0"}

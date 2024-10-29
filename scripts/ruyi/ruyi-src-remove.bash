@@ -2,6 +2,10 @@
 
 SELF_PATH=$(realpath $(dirname $0)/../../)
 
+source "$SELF_PATH/driver/utils/logging.bash"
+
+LOG_DEBUG Running ruyi-src-remove
+
 TMP_DIR="/tmp/rit-script-ruyi-src-install"
 
 ~/.local/bin/ruyi self clean --distfiles --installed-pkgs --progcache --repo --telemetry

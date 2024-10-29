@@ -2,6 +2,10 @@
 
 SELF_PATH=$(realpath $(dirname $0)/../../)
 
+source "$SELF_PATH/driver/utils/logging.bash"
+
+LOG_DEBUG Running ruyi-src-install
+
 TMP_DIR="/tmp/rit-script-ruyi-src-install"
 RUYI_MASTER="https://github.com/ruyisdk/ruyi/"
 
