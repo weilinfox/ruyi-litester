@@ -274,7 +274,7 @@ function test_run() {
 			fi
 
 			LOG_DEBUG Run lit "$lit_options" "$(basename $CASE_PATH)"/"${case_dirs[$i]}"
-			"$DRIVER_PATH"/lit.bash $lit_options "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"$dim"_"$LOG_DATE".log
+			"$DRIVER_PATH"/lit.bash $lit_options "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
 		else
 			LOG_ERROR "Unknown test type \"$test_type\""
 		fi
