@@ -6,18 +6,18 @@ export RUYI_DEBUG=x
 tmp_path=/tmp/rit-ruyi-basic-ruyi-admin
 mkdir -p "$tmp_path"
 
-ruyi admin manifest $0
+ruyi admin checksum $0
 # CHECK-LABEL: [
 # CHECK: "name":
 # CHECK: "size":
 # CHECK: "checksums":
-ruyi admin manifest --format json $0
+ruyi admin checksum --format json $0
 # CHECK-LABEL: [
 # CHECK: "name":
 # CHECK: "size":
 # CHECK: "checksums":
 
-ruyi admin manifest --format toml $0
+ruyi admin checksum --format toml $0
 # CHECK-LABEL{LITERAL}: [[distfiles]]
 # CHECK-NEXT: name =
 # CHECK-NEXT: size =
@@ -26,7 +26,7 @@ ruyi admin manifest --format toml $0
 # CHECK-NEXT: sha256 =
 # CHECK-NEXT: sha512 =
 
-ruyi admin manifest --format toml $0 > "$tmp_path"/test.toml
+ruyi admin checksum --format toml $0 > "$tmp_path"/test.toml
 ruyi admin format-manifest "$tmp_path"/test.toml
 cat "$tmp_path"/test.toml
 # CHECK-LABEL: format = "v1"
