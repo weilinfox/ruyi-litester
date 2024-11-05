@@ -6,7 +6,7 @@ source "$SELF_PATH/driver/utils/logging.bash"
 
 LOG_DEBUG Running ruyi-bin-remove
 
-~/.local/bin/ruyi self clean --distfiles --installed-pkgs --progcache --repo --telemetry
+~/.local/bin/ruyi self clean --all
 rm -rf ~/.local/share/ruyi/ ~/.local/state/ruyi/ ~/.cache/ruyi/
 
 rm -f ~/.local/bin/ruyi
