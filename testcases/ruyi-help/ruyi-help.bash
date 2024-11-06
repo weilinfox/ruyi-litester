@@ -73,6 +73,10 @@ ruyi admin --help
 # CHECK: options:
 # CHECK: subcommands:
 
+ruyi admin run-plugin-cmd --help
+# CHECK-LABEL: usage: ruyi admin run-plugin-cmd [
+# CHECK: positional arguments:
+
 ruyi admin checksum --help
 # CHECK-LABEL: usage: ruyi admin checksum [
 # CHECK: positional arguments:
