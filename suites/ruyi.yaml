@@ -15,6 +15,7 @@ ruyi-src:
   cases:
     - ruyi-help
     - ruyi-basic
+    - ruyi-advance
   pre:
     - ["ruyi/ruyi-src-install", ]
   post:
