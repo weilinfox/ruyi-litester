@@ -73,8 +73,8 @@ ruyi admin --help
 # CHECK: options:
 # CHECK: subcommands:
 
-ruyi admin manifest --help
-# CHECK-LABEL: usage: ruyi admin manifest [
+ruyi admin checksum --help
+# CHECK-LABEL: usage: ruyi admin checksum [
 # CHECK: positional arguments:
 # CHECK-NEXT: file
 # CHECK: options:
