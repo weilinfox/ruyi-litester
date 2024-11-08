@@ -35,8 +35,8 @@ ruyi i --help
 
 ruyi list --help
 # CHECK-LABEL: usage: ruyi list [
-# CHECK: positional arguments:
 # CHECK: options:
+# CHECK: subcommands:
 
 ruyi list profiles --help
 # CHECK-LABEL: usage: ruyi list profiles [
@@ -49,7 +49,6 @@ ruyi news --help
 
 ruyi news read --help
 # CHECK-LABEL: usage: ruyi news read [
-# CHECK: Outputs news item(s)
 # CHECK: positional arguments:
 # CHECK: options:
 
