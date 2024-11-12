@@ -144,7 +144,14 @@ logging: all
 | aarch64 |  |
 | riscv64 |  |
 | x86\_64 |  |
-| revyos | 当前系统为 RevyOS |
+| archlinux |  |
+| debian |  |
+| fedora |  |
+| linux | 系统为 Linux，但是没有成功获取到具体发行版信息 |
+| openkylin |  |
+| openeuler |  |
+| revyos | 当前系统为 RevyOS，通常同时存在 debian 特性字段 |
+| ubuntu | 有时会是 debian 而不出现 ubuntu |
 
 ## TODO 列表
 

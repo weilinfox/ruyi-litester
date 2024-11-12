@@ -221,6 +221,77 @@ done
 HOST_FEATURES="$(uname -m)"
 
 function distro_features() {
+	# os-release variables
+	local ANSI_COLOR=
+	local ARCHITECTURE=
+	local BUILD_ID=
+	local CPE_NAME=
+	local DEFAULT_HOSTNAME=
+	local ID=
+	local ID_LIKE=
+	local IMAGE_ID=
+	local IMAGE_VERSION=
+	local LOGO=
+	local NAME=
+	local PRETTY_NAME=
+	local PORTABLE_PREFIXES=
+	local VARIANT=
+	local VARIANT_ID=
+	local VERSION=
+	local VERSION_ID=
+	local VERSION_CODENAME=
+	local VENDOR_NAME=
+	local VENDOR_URL=
+	local BUG_REPORT_URL=
+	local DOCUMENTATION_URL=
+	local HOME_URL=
+	local PRIVACY_POLICY_URL=
+	local SUPPORT_URL=
+	local SUPPORT_END=
+	local SYSEXT_LEVEL=
+	local CONFEXT_LEVEL=
+	local SYSEXT_SCOPE=
+	local CONFEXT_SCOPE=
+
+	# fedora os-release variables
+	local PLATFORM_ID=
+	local REDHAT_BUGZILLA_PRODUCT=
+	local REDHAT_BUGZILLA_PRODUCT_VERSION=
+	local REDHAT_SUPPORT_PRODUCT=
+	local REDHAT_SUPPORT_PRODUCT_VERSION=
+
+	# openkylin os-release variables
+	local FULL_NAME=
+	local VERSION_US=
+	local PRODUCT_FEATURES=
+
+	# ubuntu os-release variables
+	local UBUNTU_CODENAME=
+
+	# variables
+	local distro=
+
+	if [ -f "/etc/os-release" ]; then
+		. /etc/os-release
+
+		distro="linux"
+
+		[[ "$NAME" == "Arch Linux" ]] && distro="archlinux"
+		[[ "$NAME" == "Arch Linux ARM" ]] && distro="archlinux"
+		[[ "$NAME" == "Debian GNU/Linux" ]] && distro="debian"
+		[[ "$NAME" == "Fedora Linux" ]] && distro="fedora"
+		[[ "$NAME" == "Ubuntu" ]] && distro="ubuntu"
+		[[ "$NAME" == "openKylin" ]] && distro="openkylin"
+		[[ "$NAME" == "openEuler" ]] && distro="openeuler"
+		[[ "$PRETTY_NAME" == "Gentoo Linux" ]] && distro="gentoo"
+
+		[[ "$ID_LIKE" == "arch" ]] && distro="archlinux"
+		# here Ubuntu will fallback to Debian
+		[[ "$ID_LIKE" == "debian" ]] && distro="debian"
+
+		HOST_FEATURES="$HOST_FEATURES $distro"
+	fi
+
 	[ -f "/etc/revyos-release" ] && HOST_FEATURES="$HOST_FEATURES revyos"
 }
 distro_features
