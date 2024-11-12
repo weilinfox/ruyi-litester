@@ -1,8 +1,6 @@
 #!/bin/bash
 
-SELF_PATH=$(realpath $(dirname $0)/../../)
-
-source "$SELF_PATH/driver/utils/logging.bash"
+source "$RIT_DRIVER_PATH/utils/logging.bash"
 
 LOG_DEBUG Running ruyi-src-install
 
@@ -34,10 +32,10 @@ chmod +x ~/.local/bin/ruyi
 rm -rf ~/.local/share/ruyi/ ~/.local/state/ruyi/ ~/.cache/ruyi/
 
 PYTHON_INTER=$(ls "$TMP_DIR"/venv-ruyi/lib)
-echo "export PYTHONPATH=$TMP_DIR/venv-ruyi/lib/$PYTHON_INTER/site-packages/" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-src-install.pre
-echo "export PYTHONPATH=$PYTHONPATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-src-install.post
+echo "export PYTHONPATH=$TMP_DIR/venv-ruyi/lib/$PYTHON_INTER/site-packages/" >> "$RIT_CASE_ENV_PATH"/ruyi_ruyi-src-install.pre
+echo "export PYTHONPATH=$PYTHONPATH" >> "$RIT_CASE_ENV_PATH"/ruyi_ruyi-src-install.post
 if [ -z "$(whereis ruyi | cut -d: -f2)" ]; then
-	echo "export PATH=~/.local/bin:$PATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-src-install.pre
-	echo "export PATH=$PATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-src-install.post
+	echo "export PATH=~/.local/bin:$PATH" >> "$RIT_CASE_ENV_PATH"/ruyi_ruyi-src-install.pre
+	echo "export PATH=$PATH" >> "$RIT_CASE_ENV_PATH"/ruyi_ruyi-src-install.post
 fi
 

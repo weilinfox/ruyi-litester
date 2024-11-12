@@ -1,8 +1,6 @@
 #!/bin/bash
 
-SELF_PATH=$(realpath $(dirname $0)/../../)
-
-source "$SELF_PATH/driver/utils/logging.bash"
+source "$RIT_DRIVER_PATH/utils/logging.bash"
 
 LOG_DEBUG Running ruyi-bin-install
 
@@ -38,7 +36,7 @@ chmod +x ~/.local/bin/ruyi
 rm -rf ~/.local/share/ruyi/ ~/.local/state/ruyi/ ~/.cache/ruyi/
 
 if [ -z "$(whereis ruyi | cut -d: -f2)" ]; then
-	echo "export PATH=~/.local/bin:$PATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-bin-install.pre
-	echo "export PATH=$PATH" >> "$SELF_PATH"/rit.bash_env/ruyi_ruyi-bin-install.post
+	echo "export PATH=~/.local/bin:$PATH" >> "$RIT_CASE_ENV_PATH"/ruyi_ruyi-bin-install.pre
+	echo "export PATH=$PATH" >> "$RIT_CASE_ENV_PATH"/ruyi_ruyi-bin-install.post
 fi
 
