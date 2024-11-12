@@ -7,8 +7,9 @@ config.name = "RuyiAdvance"
 config.test_format = lit.formats.ShTest(True)
 config.suffixes = ['.bash']
 
-config.available_features.add(platform.machine())
-if pathlib.Path("/etc/revyos-release").exists():
-    config.available_features.add("revyos")
+rit_features = os.environ.get("RIT_CASE_FEATURES", "").split()
+
+for f in rit_features:
+    config.available_features.add(f)
 
 config.environment.update(os.environ)
