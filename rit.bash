@@ -217,6 +217,25 @@ for ((i=0; i<${#post_scripts[@]}; i++)); do
 	done
 done
 
+# host features
+HOST_FEATURES="$(uname -m)"
+
+function distro_features() {
+	[ -f "/etc/revyos-release" ] && HOST_FEATURES="$HOST_FEATURES revyos"
+}
+distro_features
+
+# export rit variables
+export RIT_CASE_ENV_PATH="$ENV_PATH"
+export RIT_CASE_FEATURES="$HOST_FEATURES"
+export RIT_CASE_PATH="$CASE_PATH"
+export RIT_DRIVER_PATH="$DRIVER_PATH"
+export RIT_RUN_PATH="$RUN_PATH"
+export RIT_SCRIPT_PATH="$SCRIPT_PATH"
+export RIT_SELF_PATH="$SOURCE_PATH"
+export RIT_SUITE_PATH="$SUITE_PATH"
+export RIT_VERSION="$SELF_VERSION"
+
 # run test
 function test_run() {
 	local dim=$1

@@ -119,6 +119,33 @@ concurrent: true
 logging: all
 ```
 
+## 内部变量
+
+内部变量在框架全局可用，外部工具则可以由环境变量获取。
+
+| 变量名称 | 含义 | 备注 |
+| :--: | :-- | :-- |
+| RIT\_CASE\_ENV\_PATH | 用例环境变量配置 |  绝对路径 |
+| RIT\_CASE\_FEATURES | 测试环境可用特性 |  |
+| RIT\_CASE\_PATH | 框架 testcase 根目录 | 绝对路径 |
+| RIT\_DRIVER\_PATH | 框架 driver 目录 | 绝对路径 |
+| RIT\_RUN\_PATH | 运行目录 | 绝对路径 |
+| RIT\_SCRIPT\_PATH | 框架 script 目录 | 绝对路径 |
+| RIT\_SELF\_PATH | 框架根目录 | 绝对路径 |
+| RIT\_SUITE\_PATH | 框架 suite 目录 | 绝对路径 |
+| RIT\_VERSION | 框架版本 |  |
+
+### RIT\_CASE\_FEATURES
+
+测试环境可用特性
+
+| 可能值 | 备注 |
+| :--: | :-- |
+| aarch64 |  |
+| riscv64 |  |
+| x86\_64 |  |
+| revyos | 当前系统为 RevyOS |
+
 ## TODO 列表
 
 + [ ] 完整的 Ruyi 测试用例
