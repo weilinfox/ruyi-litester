@@ -293,6 +293,8 @@ function distro_features() {
 	fi
 
 	[ -f "/etc/revyos-release" ] && HOST_FEATURES="$HOST_FEATURES revyos"
+
+	return 0
 }
 distro_features
 
