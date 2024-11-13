@@ -8,11 +8,21 @@
 
 ## 依赖
 
-+ LLVM Lit
+框架本身：
+
 + bash
 + coreutils
 + schroot
-+ yq
++ yq (依赖 jq)
+
+运行 Lit 测试：
+
++ LLVM Lit
+
+运行 Mugen 测试：
+
++ grep
++ 发行版自身包管理器
 
 在测试用例配置中查看用例的依赖。
 
@@ -157,7 +167,7 @@ logging: all
 
 + [ ] 完整的 Ruyi 测试用例
 + [x] 多维环境测试
-+ [X] lit 测试
++ [x] lit 测试
 + [ ] mugen 测试用例兼容
 + [ ] schroot 测试环境支持
 + [ ] qemu 测试环境支持

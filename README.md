@@ -6,11 +6,21 @@ Tags: ruyi, lit, schroot
 
 ## Dependencies
 
-+ LLVM Lit
+Framework itself:
+
 + bash
 + coreutils
 + schroot
-+ yq
++ yq (depends jq)
+
+Run Lit testcases:
+
++ LLVM Lit
+
+Run Mugen testcases:
+
++ grep
++ Distro package manager
 
 Refer to configuration files to see testsuite dependencies.
 
@@ -18,7 +28,7 @@ Refer to configuration files to see testsuite dependencies.
 
 + [ ] full ruyi testcases
 + [x] multi-dimensional test
-+ [X] lit test
++ [x] lit test
 + [ ] mugen testcase compatibility
 + [ ] schroot test environment
 + [ ] qemu test environment
