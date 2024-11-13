@@ -20,6 +20,11 @@ if [ -e "$LOCK_FILE" ]; then
 	exit 2
 fi
 
+if [[ "$(whoami)" == "root" ]]; then
+	echo "Do not run rit with root user"
+	exit 3
+fi
+
 touch "$LOCK_FILE"
 rm -rf "$ENV_PATH"
 mkdir -p "$ENV_PATH"
