@@ -334,7 +334,7 @@ function test_run() {
 			lit_logging="$(yq --raw-output .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
 			lit_options=
 
-			if [ -z "$lit_order" ] || [[ "$lit_order" == "random" ]]; then
+			if [[ "$lit_order" == "null" ]] || [[ "$lit_order" == "random" ]]; then
 				lit_options="$lit_options --order random"
 			elif [[ "$lit_order" == "lexical" ]]; then
 				lit_options="$lit_options --order lexical"
@@ -345,7 +345,7 @@ function test_run() {
 				lit_options="$lit_options --order random"
 			fi
 
-			if [ -z "$lit_concurrent" ] || [[ "$lit_concurrent" == "true" ]]; then
+			if [[ "$lit_concurrent" == "null" ]] || [[ "$lit_concurrent" == "true" ]]; then
 				lit_options="$lit_options --workers 4"
 			elif [[ "$lit_concurrent" == "false" ]]; then
 				lit_options="$lit_options --workers 1"
@@ -354,7 +354,7 @@ function test_run() {
 				lit_options="$lit_options --workers 4"
 			fi
 
-			if [ -z "$lit_logging" ] || [[ "$lit_logging" == "fail" ]]; then
+			if [[ "$lit_logging" == "null" ]] || [[ "$lit_logging" == "fail" ]]; then
 				lit_options="$lit_options --verbose"
 			elif [[ "$lit_logging" == "all" ]]; then
 				lit_options="$lit_options --show-all"
