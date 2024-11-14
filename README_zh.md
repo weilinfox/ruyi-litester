@@ -207,6 +207,8 @@ PKG_INSTALL --debian --ubuntu --revyos package1 package2 --fedora --openeuler pa
 
 Rit 的 Linux 发行版识别支持范围请参考 ``RIT_CASE_FEATURES`` 环境变量。
 
+``PKG_REMOVE`` 则不需要任何参数， ``PKG_INSTALL`` 会自动记录安装的软件包列表。
+
 ## TODO 列表
 
 + [ ] 完整的 Ruyi 测试用例
