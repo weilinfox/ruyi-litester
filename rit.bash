@@ -10,6 +10,7 @@ SCRIPT_PATH="$SOURCE_PATH"/scripts
 SUITE_PATH="$SOURCE_PATH"/suites
 CASE_PATH="$SOURCE_PATH"/testcases
 ENV_PATH="$SOURCE_PATH"/rit.bash_env
+TMP_PATH="/tmp/rit.bash"
 LOCK_FILE="$SOURCE_PATH"/.rit.bash.lock
 
 LOG_DATE="$(date '+%Y%m%d-%H%M%S')"
@@ -28,6 +29,7 @@ fi
 touch "$LOCK_FILE"
 rm -rf "$ENV_PATH"
 mkdir -p "$ENV_PATH"
+mkdir -p "$TMP_PATH"
 
 . "$DRIVER_PATH"/utils/logging.bash
 
@@ -312,6 +314,7 @@ export RIT_RUN_PATH="$RUN_PATH"
 export RIT_SCRIPT_PATH="$SCRIPT_PATH"
 export RIT_SELF_PATH="$SOURCE_PATH"
 export RIT_SUITE_PATH="$SUITE_PATH"
+export RIT_TMP_PATH="$TMP_PATH"
 export RIT_VERSION="$SELF_VERSION"
 
 # run test

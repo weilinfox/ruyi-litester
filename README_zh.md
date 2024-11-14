@@ -143,6 +143,7 @@ logging: all
 | RIT\_SCRIPT\_PATH | 框架 script 目录 | 绝对路径 |
 | RIT\_SELF\_PATH | 框架根目录 | 绝对路径 |
 | RIT\_SUITE\_PATH | 框架 suite 目录 | 绝对路径 |
+| RIT\_TMP\_PATH | 框架临时文件目录 | 绝对路径 |
 | RIT\_VERSION | 框架版本 |  |
 
 ### RIT\_CASE\_FEATURES
