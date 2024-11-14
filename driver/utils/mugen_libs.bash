@@ -42,6 +42,67 @@ function CHECK_RESULT() {
 }
 
 function PKG_INSTALL() {
+	local arch_flag=
+	local arch_pkg=
+	local debian_flag=
+	local debian_pkg=
+	local fedora_flag=
+	local fedora_pkg=
+	local gentoo_flag=
+	local gentoo_pkg=
+	local ubuntu_flag=
+	local ubuntu_pkg=
+	local pkg_flag=
+	local pkg_list=
+
+	while [ "$#" -gt 0 ]; do
+	case $1 in
+		--archlinux)
+			arch_flag=x
+			[ -z "$pkg_list" ] || { arch_flag=o; pkg_flag=x; }
+			;;
+		--debian)
+			debian_flag=x
+			[ -z "$pkg_list" ] || { debian_flag=o; pkg_flag=x; }
+			;;
+		--fedora)
+			fedora_flag=x
+			[ -z "$pkg_list" ] || { fedora_flag=o; pkg_flag=x; }
+			;;
+		--gentoo)
+			gentoo_flag=x
+			[ -z "$pkg_list" ] || { gentoo_flag=o; pkg_flag=x; }
+			;;
+		--ubuntu)
+			ubuntu_flag=x
+			[ -z "$pkg_list" ] || { ubuntu_flag=o; pkg_flag=x; }
+			;;
+		--*)
+			LOG_WARN "Unknown distro argument $1"
+			;;
+		*)
+			pkg_list="$pkg_list $1"
+			;;
+	esac
+	shift
+
+	if [[ "$pkg_flag" == "x" ]] || [ "$#" -eq 0 ]; then
+		[[ "$arch_flag" == "x" ]] && { arch_flag= ; arch_pkg="$pkg_list"; }
+		[[ "$debian_flag" == "x" ]] && { debian_flag= ; debian_pkg="$pkg_list"; }
+		[[ "$fedora_flag" == "x" ]] && { fedora_flag= ; fedora_pkg="$pkg_list"; }
+		[[ "$gentoo_flag" == "x" ]] && { gentoo_flag= ; gentoo_pkg="$pkg_list"; }
+		[[ "$ubuntu_flag" == "x" ]] && { ubuntu_flag= ; ubuntu_pkg="$pkg_list"; }
+
+		pkg_list=
+		pkg_flag=
+
+		[[ "$arch_flag" == "o" ]] && arch_flag=x
+		[[ "$debian_flag" == "o" ]] && debian_flag=x
+		[[ "$fedora_flag" == "o" ]] && fedora_flag=x
+		[[ "$gentoo_flag" == "o" ]] && gentoo_flag=x
+		[[ "$ubuntu_flag" == "o" ]] && ubuntu_flag=x
+	fi
+	done
 }
 
 function PKG_REMOVE() {
