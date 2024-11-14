@@ -205,6 +205,8 @@ PKG_INSTALL --debian package1 --archlinux package2
 PKG_INSTALL --debian --ubuntu --revyos package1 package2 --fedora --openeuler package3
 ```
 
+Rit 的 Linux 发行版识别支持范围请参考 ``RIT_CASE_FEATURES`` 环境变量。
+
 ## TODO 列表
 
 + [ ] 完整的 Ruyi 测试用例
