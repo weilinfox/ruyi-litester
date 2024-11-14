@@ -50,6 +50,8 @@ function PKG_INSTALL() {
 	local fedora_pkg=
 	local gentoo_flag=
 	local gentoo_pkg=
+	local openkylin_flag=
+	local openkylin_pkg=
 	local revyos_flag=
 	local revyos_pkg=
 	local ubuntu_flag=
@@ -75,6 +77,10 @@ function PKG_INSTALL() {
 			gentoo_flag=x
 			[ -z "$pkg_list" ] || { gentoo_flag=o; pkg_flag=x; }
 			;;
+		--openkylin)
+			openkylin_flag=x
+			[ -z "$pkg_list" ] || { openkylin_flag=o; pkg_flag=x; }
+			;;
 		--revyos)
 			revyos_flag=x
 			[ -z "$pkg_list" ] || { revyos_flag=o; pkg_flag=x; }
@@ -96,6 +102,7 @@ function PKG_INSTALL() {
 		[[ "$arch_flag" == "x" ]] && { arch_flag= ; arch_pkg="$pkg_list"; }
 		[[ "$debian_flag" == "x" ]] && { debian_flag= ; debian_pkg="$pkg_list"; }
 		[[ "$fedora_flag" == "x" ]] && { fedora_flag= ; fedora_pkg="$pkg_list"; }
+		[[ "$openkylin_flag" == "x" ]] && { openkylin_flag= ; openkylin_pkg="$pkg_list"; }
 		[[ "$gentoo_flag" == "x" ]] && { gentoo_flag= ; gentoo_pkg="$pkg_list"; }
 		[[ "$revyos_flag" == "x" ]] && { revyos_flag= ; revyos_pkg="$pkg_list"; }
 		[[ "$ubuntu_flag" == "x" ]] && { ubuntu_flag= ; ubuntu_pkg="$pkg_list"; }
@@ -106,6 +113,7 @@ function PKG_INSTALL() {
 		[[ "$arch_flag" == "o" ]] && arch_flag=x
 		[[ "$debian_flag" == "o" ]] && debian_flag=x
 		[[ "$fedora_flag" == "o" ]] && fedora_flag=x
+		[[ "$openkylin_flag" == "o" ]] && openkylin_flag=x
 		[[ "$gentoo_flag" == "o" ]] && gentoo_flag=x
 		[[ "$revyos_flag" == "o" ]] && revyos_flag=x
 		[[ "$ubuntu_flag" == "o" ]] && ubuntu_flag=x
