@@ -4,7 +4,7 @@
 
 使用 LLVM Integrated tester 实现数据驱动的测试，使用 mugen 格式的结构化脚本实现复杂过程的测试。
 
-关键字: ruyi, lit, schroot
+关键字: ruyi, lit, mugen, schroot
 
 ## 依赖
 
@@ -162,6 +162,48 @@ logging: all
 | openeuler |  |
 | revyos | 当前系统为 RevyOS，通常同时存在 debian 特性字段 |
 | ubuntu | 有时会是 debian 而不出现 ubuntu |
+
+## Mugen 兼容
+
+Rit 的只是在测试用例和测试套配置上一定程度兼容了 mugen 格式的测试用例。
+
+关于 mugen 测试框架的详细信息可用参考 openEuler [上游](https://gitee.com/openeuler/mugen/)。
+
+### 测试套 json 配置
+
+在 mugen 框架中，测试套的 json 配置文件被放置在 suite2cases 目录下，但是 Rit 的 mugen 测试套将该文件存放在测试套根目录下，且只有 ``cases`` 字段。
+
+### 框架函数导入
+
+在 mugen 框架中，测试用例为了使用框架定义的函数，需要 ``source`` 相应的 sh 脚本：
+
+```shell
+source "${OET_PATH}"/libs/locallibs/common_lib.sh
+```
+
+而在 Rit 的 mugen 测试用例中，则 ``source`` 如下脚本：
+
+```bash
+source "${RIT_DRIVER_PATH}"/driver/utils/mugen_libs.bash
+```
+
+### 软件包安装
+
+在 mugen 框架中，测试用例使用 ``DNF_INSTALL`` 和 ``DNF_REMOVE`` 函数在测试机上安装软件包，只支持 openEuler。
+
+而在 Rit 的 mugen 测试用例中，测试用例将使用 ``PKG_INSTALL`` 和 ``PKG_REMOVE`` 函数执行类似的操作，支持多种发行版。
+
+样例 1，在 Debian 安装 package1，而在 Archlinux 安装 package2，其他发行版则什么也不做：
+
+```shell
+PKG_INSTALL --debian package1 --archlinux package2
+```
+
+样例 2，在 Debian、 Ubuntu 和 RevyOS 安装 package1 和 package2，而在 Fedora 和 openEuler 安装 package3，其他发行版则什么也不做：
+
+```shell
+PKG_INSTALL --debian --ubuntu --revyos package1 package2 --fedora --openeuler package3
+```
 
 ## TODO 列表
 
