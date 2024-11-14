@@ -1,4 +1,7 @@
 
+source "${RIT_DRIVER_PATH}"/driver/utils/libs.bash
+
+# here use mugen logging format
 function LOG_PRINT() {
 	local level=$1
 	shift
@@ -39,6 +42,18 @@ function CHECK_RESULT() {
 	fi
 
 	return 0
+}
+
+function DNF_INSTALL() {
+}
+
+function APT_INSTALL() {
+}
+
+function PACMAN_INSTALL() {
+}
+
+function EMERGE_INSTALL() {
 }
 
 function PKG_INSTALL() {
@@ -127,6 +142,26 @@ function PKG_INSTALL() {
 		[[ "$ubuntu_flag" == "o" ]] && ubuntu_flag=x
 	fi
 	done
+
+	if HOST_HAS_FEATURE "archlinux"; then
+		PACMAN_INSTALL "$arch_pkg"
+	elif HOST_HAS_FEATURE "debian"; then
+		APT_INSTALL "$debian_pkg"
+	elif HOST_HAS_FEATURE "fedora"; then
+		DNF_INSTALL "$fedora_pkg"
+	elif HOST_HAS_FEATURE "openeuler"; then
+		DNF_INSTALL "$openeuler_pkg"
+	elif HOST_HAS_FEATURE "openkylin"; then
+		APT_INSTALL "$openkylin_pkg"
+	elif HOST_HAS_FEATURE "gentoo"; then
+		EMERGE_INSTALL "$gentoo_pkg"
+	elif HOST_HAS_FEATURE "revyos"; then
+		APT_INSTALL "$revyos_pkg"
+	elif HOST_HAS_FEATURE "ubuntu"; then
+		APT_INSTALL "$ubuntu_pkg"
+	else
+		LOG_ERROR "Unsupported distro?"
+	fi
 }
 
 function PKG_REMOVE() {
