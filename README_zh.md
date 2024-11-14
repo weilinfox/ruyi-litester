@@ -206,6 +206,8 @@ PKG_INSTALL --debian package1 --archlinux package2
 PKG_INSTALL --debian --ubuntu --revyos package1 package2 --fedora --openeuler package3
 ```
 
+由于当前 RevyOS 基于 Debian sid，在 ``RIT_CASE_FEATURES`` 变量中 ``debian`` 和 ``revyos`` 字段会同时出现，故不要使用 ``--revyos`` 参数。
+
 Rit 的 Linux 发行版识别支持范围请参考 ``RIT_CASE_FEATURES`` 环境变量。
 
 ``PKG_REMOVE`` 则不需要任何参数， ``PKG_INSTALL`` 会自动记录安装的软件包列表。

@@ -105,6 +105,7 @@ function PKG_INSTALL() {
 		--revyos)
 			revyos_flag=x
 			[ -z "$pkg_list" ] || { revyos_flag=o; pkg_flag=x; }
+			LOG_WARN "--revyos is not recommended, please use --debian"
 			;;
 		--ubuntu)
 			ubuntu_flag=x
