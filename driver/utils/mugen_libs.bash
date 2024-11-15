@@ -45,15 +45,43 @@ function CHECK_RESULT() {
 }
 
 function DNF_INSTALL() {
+	local pkgs="$1"
+	local tool="$(whereis -b dnf | cut -d':' -f2)"
+
+	if [ -z "$tool" ]; then
+		LOG_ERROR "Unsupported package manager: dnf"
+		return 1
+	fi
 }
 
 function APT_INSTALL() {
+	local pkgs="$1"
+	local tool="$(whereis -b apt-get | cut -d':' -f2)"
+
+	if [ -z "$tool" ]; then
+		LOG_ERROR "Unsupported package manager: apt-get"
+		return 1
+	fi
 }
 
 function PACMAN_INSTALL() {
+	local pkgs="$1"
+	local tool="$(whereis -b pacman | cut -d':' -f2)"
+
+	if [ -z "$tool" ]; then
+		LOG_ERROR "Unsupported package manager: pacman"
+		return 1
+	fi
 }
 
 function EMERGE_INSTALL() {
+	local pkgs="$1"
+	local tool="$(whereis -b emerge | cut -d':' -f2)"
+
+	if [ -z "$tool" ]; then
+		LOG_ERROR "Unsupported package manager: emerge"
+		return 1
+	fi
 }
 
 function PKG_INSTALL() {
@@ -165,6 +193,61 @@ function PKG_INSTALL() {
 	fi
 }
 
+function DNF_REMOVE() {
+	local tool="$(whereis -b dnf | cut -d':' -f2)"
+
+	if [ -z "$tool" ]; then
+		LOG_ERROR "Unsupported package manager: dnf"
+		return 1
+	fi
+}
+
+function APT_REMOVE() {
+	local tool="$(whereis -b apt-get | cut -d':' -f2)"
+
+	if [ -z "$tool" ]; then
+		LOG_ERROR "Unsupported package manager: apt-get"
+		return 1
+	fi
+}
+
+function PACMAN_REMOVE() {
+	local tool="$(whereis -b pacman | cut -d':' -f2)"
+
+	if [ -z "$tool" ]; then
+		LOG_ERROR "Unsupported package manager: pacman"
+		return 1
+	fi
+}
+
+function EMERGE_REMOVE() {
+	local tool="$(whereis -b emerge | cut -d':' -f2)"
+
+	if [ -z "$tool" ]; then
+		LOG_ERROR "Unsupported package manager: emerge"
+		return 1
+	fi
+}
+
 function PKG_REMOVE() {
+	if HOST_HAS_FEATURE "archlinux"; then
+		PACMAN_REMOVE
+	elif HOST_HAS_FEATURE "debian"; then
+		APT_REMOVE
+	elif HOST_HAS_FEATURE "fedora"; then
+		DNF_REMOVE
+	elif HOST_HAS_FEATURE "openeuler"; then
+		DNF_REMOVE
+	elif HOST_HAS_FEATURE "openkylin"; then
+		APT_REMOVE
+	elif HOST_HAS_FEATURE "gentoo"; then
+		EMERGE_REMOVE
+	elif HOST_HAS_FEATURE "revyos"; then
+		APT_REMOVE
+	elif HOST_HAS_FEATURE "ubuntu"; then
+		APT_REMOVE
+	else
+		LOG_ERROR "Unsupported distro?"
+	fi
 }
 
