@@ -11,6 +11,7 @@ Framework itself:
 + bash
 + coreutils
 + schroot
++ util-linux
 + yq (depends jq)
 
 Run Lit testcases:

@@ -13,6 +13,7 @@
 + bash
 + coreutils
 + schroot
++ util-linux
 + yq (依赖 jq)
 
 运行 Lit 测试：
