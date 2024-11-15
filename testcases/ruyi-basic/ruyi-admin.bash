@@ -7,10 +7,14 @@ tmp_path=/tmp/rit-ruyi-basic-ruyi-admin
 mkdir -p "$tmp_path"
 
 ruyi admin checksum $0
-# CHECK-LABEL: [
-# CHECK: "name":
-# CHECK: "size":
-# CHECK: "checksums":
+# CHECK-LABEL{LITERAL}: [[distfiles]]
+# CHECK-NEXT: name =
+# CHECK-NEXT: size =
+# CHECK-EMPTY:
+# CHECK-NEXT: [distfiles.checksums]
+# CHECK-NEXT: sha256 =
+# CHECK-NEXT: sha512 =
+
 ruyi admin checksum --format json $0
 # CHECK-LABEL: [
 # CHECK: "name":
