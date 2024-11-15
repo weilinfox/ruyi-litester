@@ -4,7 +4,7 @@ source "$RIT_DRIVER_PATH/utils/logging.bash"
 
 LOG_DEBUG Running ruyi-src-install
 
-TMP_DIR="/tmp/rit-script-ruyi-src-install"
+TMP_DIR="$RIT_TMP_PATH/rit-script-ruyi-src-install"
 RUYI_MASTER="https://github.com/ruyisdk/ruyi/"
 
 mkdir -p "$TMP_DIR" ~/.local/bin/
