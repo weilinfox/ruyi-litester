@@ -215,6 +215,19 @@ Rit 的 Linux 发行版识别支持范围请参考 ``RIT_CASE_FEATURES`` 环境�
 
 ``PKG_REMOVE`` 则不需要任何参数， ``PKG_INSTALL`` 会自动记录安装的软件包列表。
 
+### sudo
+
+openEuler 上游的 mugen 需要用 root 用户运行测试，而 Rit 不允许使用 root 用户运行。
+
+在 Rit 的 mugen 兼容库和 mugen 测试用例中，任何需要 root 权限进行的操作都需要 ``sudo`` 提权，故测试用户需要配置 sudo 免密码。
+
+所以 Rit 认为非必要不要做必须提权的操作。
+
+会调用 ``sudo`` 提权的函数罗列如下：
+
++ PKG\_INSTALL
++ PKG\_REMOVE
+
 ## TODO 列表
 
 + [ ] 完整的 Ruyi 测试用例
