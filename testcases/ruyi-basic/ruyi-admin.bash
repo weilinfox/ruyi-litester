@@ -11,7 +11,7 @@ ruyi admin checksum $0
 # CHECK-NEXT: name =
 # CHECK-NEXT: size =
 # CHECK-EMPTY:
-# CHECK-NEXT: [distfiles.checksums]
+# CHECK-LABEL: [distfiles.checksums]
 # CHECK-NEXT: sha256 =
 # CHECK-NEXT: sha512 =
 
