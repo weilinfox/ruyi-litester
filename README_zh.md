@@ -37,8 +37,8 @@ lit 运行测试时还依赖 LLVM FileCheck，发行版打包 LLVM 时都会一�
 | :--: | :--: | :-- |
 | Arch Linux | [extra/llvm](https://archlinux.org/packages/extra/x86_64/llvm/) | lit 和 FileCheck 均在该包提供 |
 | Gentoo  | [dev-python/lit](https://packages.gentoo.org/packages/dev-python/lit) |  |
-| Debian | llvm-\*-tools | 如 llvm-14-tools \* |
-| Ubuntu | llvm-\*-tools | 如 llvm-14-tools \* |
+| Debian | llvm-\*-tools | 如 [llvm-14-tools](https://packages.debian.org/bookworm/llvm-14-tools) \* |
+| Ubuntu | llvm-\*-tools | 如 [llvm-14-tools](https://packages.debian.org/bookworm/llvm-14-tools) \* |
 | Fedora | [python3-lit](https://packages.fedoraproject.org/pkgs/python-lit/python3-lit/) | 39， 40 |
 | Fedora | [python3-lit](https://packages.fedoraproject.org/pkgs/llvm/python3-lit/) | 41 及以上 |
 | openEuler | [python-lit](https://gitee.com/src-openeuler/python-lit) |  |
