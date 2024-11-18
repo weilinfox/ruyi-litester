@@ -27,6 +27,31 @@
 
 在测试用例配置中查看用例的依赖。
 
+### LLVM Lit
+
+lit 运行测试时还依赖 LLVM FileCheck，发行版打包 LLVM 时都会一并打包 FileCheck，但是不一定打包 lit。
+
+| 发行版 | 包名 | 备注 |
+| :--: | :--: | :-- |
+| Arch Linux | [extra/llvm](https://archlinux.org/packages/extra/x86_64/llvm/) | lit 和 FileCheck 均在该包提供 |
+| Gentoo  | [dev-python/lit](https://packages.gentoo.org/packages/dev-python/lit) |  |
+| Debian |  | 未打包 |
+| Ubuntu |  | 未打包 |
+| Fedora | [python3-lit](https://packages.fedoraproject.org/pkgs/python-lit/python3-lit/) | 39， 40 |
+| Fedora | [python3-lit](https://packages.fedoraproject.org/pkgs/llvm/python3-lit/) | 41 及以上 |
+| openEuler | [python-lit](https://gitee.com/src-openeuler/python-lit) |  |
+
+### yq
+
+| 发行版 | 包名 | 备注 |
+| :--: | :--: | :-- |
+| Arch Linux | [extra/yq](https://archlinux.org/packages/extra/any/yq/) |  |
+| Gentoo | [app-misc/yq](https://packages.gentoo.org/packages/app-misc/yq) |  |
+| Debian  | [yq](https://packages.debian.org/bookworm/yq) | Bookworm 以上及 bullseye-backports |
+| Ubuntu | [yq](https://packages.ubuntu.com/noble/yq) | Noble 及以上 |
+| Fedora | [yq](https://packages.fedoraproject.org/pkgs/yq/yq/) | 39 及以上 |
+| openEuler |  | 未打包 |
+
 ## 使用方法
 
 参考 ``rit.bash --help``。
