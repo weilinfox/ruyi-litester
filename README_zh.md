@@ -29,6 +29,8 @@
 
 ### LLVM Lit
 
+上游页面： [llvm-project](https://github.com/llvm/llvm-project/tree/main/llvm/utils/lit) 或者 [pypi](https://pypi.org/project/lit/)。
+
 lit 运行测试时还依赖 LLVM FileCheck，发行版打包 LLVM 时都会一并打包 FileCheck，但是不一定打包 lit。
 
 | 发行版 | 包名 | 备注 |
