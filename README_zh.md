@@ -37,13 +37,13 @@ lit 运行测试时还依赖 LLVM FileCheck，发行版打包 LLVM 时都会一�
 | :--: | :--: | :-- |
 | Arch Linux | [extra/llvm](https://archlinux.org/packages/extra/x86_64/llvm/) | lit 和 FileCheck 均在该包提供 |
 | Gentoo  | [dev-python/lit](https://packages.gentoo.org/packages/dev-python/lit) |  |
-| Debian |  | 未打包 |
-| Ubuntu |  | 未打包 |
+| Debian | llvm-\*-tools | 如 llvm-14-tools \* |
+| Ubuntu | llvm-\*-tools | 如 llvm-14-tools \* |
 | Fedora | [python3-lit](https://packages.fedoraproject.org/pkgs/python-lit/python3-lit/) | 39， 40 |
 | Fedora | [python3-lit](https://packages.fedoraproject.org/pkgs/llvm/python3-lit/) | 41 及以上 |
 | openEuler | [python-lit](https://gitee.com/src-openeuler/python-lit) |  |
 
-Debian/Ubuntu 可以考虑采用 [weilinfox](https://github.com/weilinfox/) 维护的 [llvm-lit PPA](sudo add-apt-repository ppa:weilinfox/llvm-lit)。注意该 PPA 并不提供可用性保证。
+\* Debian/Ubuntu 通常直接安装 ``llvm`` 包即可引入默认版本的 llvm-tools，当然也可以手动安装指定版本。要注意它提供的 FileCheck 命令名称包含大版本号，如 llvm-14-tools 提供 ``/usr/bin/FileCheck-14``，并且没有像其他发行版一样给出 ``/usr/bin/lit``，而是 ``/usr/lib/llvm-14/build/utils/lit/lit.py``。 Rit 在运行测试之前会在 ``$RIT_TMP_PATH/bin`` 下建立所需的软链接。
 
 ### yq
 
