@@ -9,7 +9,7 @@ TMP_DIR="$RIT_TMP_PATH/rit-script-ruyi-src-install"
 ~/.local/bin/ruyi self clean --all
 rm -rf ~/.local/share/ruyi/ ~/.local/state/ruyi/ ~/.cache/ruyi/
 
-rm -rf "$TMP_DIR" ~/.local/bin/ruyi
+rm -rf "$TMP_DIR" ~/.local/bin/ruyi ~/.local/bin/FileCheck
 
 rm -f "$RIT_CASE_ENV_PATH"/ruyi_ruyi-src-install.pre
 rm -f "$RIT_CASE_ENV_PATH"/ruyi_ruyi-src-install.post

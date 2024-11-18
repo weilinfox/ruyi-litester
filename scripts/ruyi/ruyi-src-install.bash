@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source "$RIT_DRIVER_PATH/utils/logging.bash"
+source "$RIT_DRIVER_PATH/utils/libs.bash"
 
 LOG_DEBUG Running ruyi-src-install
 
@@ -26,6 +27,15 @@ cat > ~/.local/bin/ruyi << EOF
 
 python3 -m ruyi \$@
 EOF
+
+# Debian/Ubuntu FileCheck wrapper
+if ( HOST_HAS_FEATURE "debian" || HOST_HAS_FEATURE "ubuntu" ) && \
+    [ -z "$(whereis -b FileCheck | cut -d':' -f2)" ] && [ ! -z "$(ls /usr/bin/FileCheck*)" ]; then
+	for fc in $(ls /usr/bin/FileCheck*); do
+		ln -s $fc ~/.local/bin/FileCheck
+		break
+	done
+fi
 
 chmod +x ~/.local/bin/ruyi
 
