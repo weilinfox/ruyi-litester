@@ -303,7 +303,35 @@ function distro_features() {
 
 	return 0
 }
+
+# Debian/Ubuntu lit and FileCheck wrapper
+function whereis_lit_on_debian() {
+for i in $HOST_FEATURES; do
+if [[ "$i" == "ubuntu" ]] || [[ "$i" == "debian" ]]; then
+	mkdir -p "$TMP_PATH/bin"
+	OLD_PATH="$PATH"
+	NEW_PATH="$TMP_PATH/bin:$PATH"
+	if [ -z "$(whereis -b FileCheck | cut -d':' -f2)" ] && [ ! -z "$(ls /usr/lib/llvm-*/bin/FileCheck)" ]; then
+	for fc in $(ls /usr/lib/llvm-*/bin/FileCheck); do
+		ln -s $fc "$TMP_PATH/bin/FileCheck"
+		export PATH="$NEW_PATH"
+		break
+	done
+	fi
+	if [ -z "$(whereis -b lit | cut -d':' -f2)" ] && [ ! -z "$(ls /usr/lib/llvm-*/build/utils/lit/lit.py)" ]; then
+	for fc in $(ls /usr/lib/llvm-*/build/utils/lit/lit.py); do
+		ln -s $fc "$TMP_PATH/bin/lit"
+		export PATH="$NEW_PATH"
+		break
+	done
+	fi
+	break
+fi
+done
+}
+
 distro_features
+whereis_lit_on_debian
 
 # export rit variables
 export RIT_CASE_ENV_PATH="$ENV_PATH"
