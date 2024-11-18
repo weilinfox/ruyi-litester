@@ -41,6 +41,8 @@ lit 运行测试时还依赖 LLVM FileCheck，发行版打包 LLVM 时都会一�
 | Fedora | [python3-lit](https://packages.fedoraproject.org/pkgs/llvm/python3-lit/) | 41 及以上 |
 | openEuler | [python-lit](https://gitee.com/src-openeuler/python-lit) |  |
 
+Debian/Ubuntu 可以考虑采用 [weilinfox](https://github.com/weilinfox/) 维护的 [llvm-lit PPA](sudo add-apt-repository ppa:weilinfox/llvm-lit)。注意该 PPA 并不提供可用性保证。
+
 ### yq
 
 | 发行版 | 包名 | 备注 |
