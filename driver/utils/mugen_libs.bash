@@ -44,9 +44,15 @@ function CHECK_RESULT() {
 	return 0
 }
 
+RIT_MUGEN_DNF_TMP="$RIT_TMP_PATH"/rit_mugen_dnf.tmp
+
 function DNF_INSTALL() {
 	local pkgs="$1"
 	local tool="$(whereis -b dnf | cut -d':' -f2)"
+	local output=
+	local repos=
+	local updates=
+	local ret=
 
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: dnf"
@@ -55,6 +61,56 @@ function DNF_INSTALL() {
 		LOG_ERROR "This function will call sudo dnf, early return"
 		return 1
 	fi
+
+	output="$(sudo dnf --assumeno install $pkgs)"
+	if [[ "$output" =~ "already installed" ]] && [[ "$output" =~ "Nothing to do" ]]; then
+		LOG_INFO "pkgs:($pkgs) already installed"
+		return 0
+	fi
+
+	repos="$(sudo dnf repolist | awk '{print $NF}' | sed -e '1d;:a;N;$!ba;s/\\n/ /g')"
+	ret="$?"
+	if [ "$ret" -ne "0" ]; then
+		LOG_ERROR "dnf repolist check script return none zero value($ret) with output ($repos)"
+		return 1
+	fi
+
+	updates="$(sudo dnf --assumeno install $pkgs 2>&1 | grep -A 1226 "Upgrading:" | grep update | grep -wE "$(uname -m)|noarch" | awk '{print $1}' | xargs)"
+	ret="$?"
+	if [ "$ret" -ne "0" ]; then
+		LOG_ERROR "dnf --assumeno install check script return none zero value($ret) with output ($updates)"
+		return 1
+	fi
+
+	# real package list
+	if [ -z "$updates" ]; then
+		output="$(sudo dnf --assumeno install $pkgs 2>&1 | grep -wE "$(echo $repos | sed 's/ /|/g')" | grep -wE "$(uname -m)|noarch" | awk '{print $1}')"
+		ret="$?"
+	else
+		# exclude update packages
+		output="$(sudo dnf --assumeno install $pkgs 2>&1 | grep -wE "$(echo $repos | sed 's/ /|/g')" | grep -wE "$(uname -m)|noarch" | grep -vE "$(echo $updates | sed 's/ /|/g')" | awk '{print $1}')"
+		ret="$?"
+	fi
+	if [ "$ret" -ne "0" ]; then
+		LOG_ERROR "dnf --assumeno install script return none zero value($ret) with output ($output)"
+		return 1
+	fi
+
+	sudo dnf -y install $pkgs
+	ret="$?"
+	if [ "$ret" -ne 0 ]; then
+		LOG_ERROR "dnf install exit with none zero value ($ret)"
+		return 1
+	fi
+	pkgs=
+	for ret in $output; do
+		pkgs="$pkgs $ret"
+	done
+
+	LOG_INFO "Installed packages: ($pkgs)"
+	echo "$pkgs" >> $RIT_MUGEN_DNF_TMP
+
+	return 0
 }
 
 function APT_INSTALL() {
@@ -215,6 +271,12 @@ function DNF_REMOVE() {
 		LOG_ERROR "This function will call sudo dnf, early return"
 		return 1
 	fi
+
+	local pkgs="$(tail --lines 1 "$RIT_MUGEN_DNF_TMP")"
+	head --lines -1 "$RIT_MUGEN_DNF_TMP" > "$RIT_MUGEN_DNF_TMP".new
+	mv "$RIT_MUGEN_DNF_TMP".new "$RIT_MUGEN_DNF_TMP"
+
+	sudo dnf -y remove $pkgs
 }
 
 function APT_REMOVE() {
