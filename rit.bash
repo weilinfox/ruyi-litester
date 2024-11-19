@@ -165,12 +165,8 @@ done
 [[ -z "${profile_name:=$suite_name}" ]] && fatal_exit "missing profile name"
 
 # Check sudo NOPASSWD
-if [[ "$sudo"x == "xx" ]]; then
-	LOG_DEBUG "Check sudo NOPASSWD"
-	LOG_INFO "If sudo ask you to input password below, Ctrl^C and check your /etc/sudoers"
-	if sudo -l | grep NOPASSWD >/dev/null; then
-		fatal_exit "sudo NOPASSWD dit not set properly"
-	fi
+if [[ "$sudo"x == "xx" ]] && sudo --non-interactive --list | grep NOPASSWD >/dev/null; then
+	fatal_exit "sudo NOPASSWD dit not set properly"
 fi
 
 # Check testsuite files
