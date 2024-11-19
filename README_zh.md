@@ -174,6 +174,7 @@ logging: all
 | RIT\_RUN\_PATH | 运行目录 | 绝对路径 |
 | RIT\_SCRIPT\_PATH | 框架 script 目录 | 绝对路径 |
 | RIT\_SELF\_PATH | 框架根目录 | 绝对路径 |
+| RIT\_SUDO | 允许测试套调用 ``sudo`` 提权 | 小写 ``x`` 为真 |
 | RIT\_SUITE\_PATH | 框架 suite 目录 | 绝对路径 |
 | RIT\_TMP\_PATH | 框架临时文件目录 | 绝对路径 |
 | RIT\_VERSION | 框架版本 |  |

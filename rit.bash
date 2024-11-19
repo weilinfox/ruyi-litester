@@ -35,6 +35,7 @@ mkdir -p "$TMP_PATH"
 
 suite_name=
 profile_name=
+sudo=
 
 function show_help() {
 	echo "Usage: rit.bash [options] suite"
@@ -46,6 +47,7 @@ function show_help() {
 	echo "    --scripts        Specify foreign script path"
 	echo "    --suites         Specify foreign test suite path (to search yaml profiles)"
 	echo "    --testcases      Specify foreign testcases path"
+	echo "    -s, --sudo       Allow sudo privilege escalation"
 	echo "    -x, --debug      Debug bash scripts"
 	echo "    -e               Run without -e shopt option (not recommend)"
 	echo
@@ -139,6 +141,9 @@ while [[ "$#" -gt 0 ]]; do
 				fatal_exit "--testcases requires an argument."
 			fi
 			;;
+		-s|--sudo)
+			sudo="x"
+			;;
 		-x|--debug)
 			set -x
 			;;
@@ -158,6 +163,15 @@ done
 [[ "$#" -gt 0 ]] && fatal_exit "too much arguments"
 [[ -z "$suite_name" ]] && fatal_exit "missing argument <suite>"
 [[ -z "${profile_name:=$suite_name}" ]] && fatal_exit "missing profile name"
+
+# Check sudo NOPASSWD
+if [[ "$sudo"x == "xx" ]]; then
+	LOG_DEBUG "Check sudo NOPASSWD"
+	LOG_INFO "If sudo ask you to input password below, Ctrl^C and check your /etc/sudoers"
+	if sudo -l | grep NOPASSWD >/dev/null; then
+		fatal_exit "sudo NOPASSWD dit not set properly"
+	fi
+fi
 
 # Check testsuite files
 [[ -f "$SUITE_PATH"/"$suite_name".yaml ]] || fatal_exit "missing testsuite yaml profile"
@@ -341,6 +355,7 @@ export RIT_DRIVER_PATH="$DRIVER_PATH"
 export RIT_RUN_PATH="$RUN_PATH"
 export RIT_SCRIPT_PATH="$SCRIPT_PATH"
 export RIT_SELF_PATH="$SOURCE_PATH"
+export RIT_SUDO="$sudo"
 export RIT_SUITE_PATH="$SUITE_PATH"
 export RIT_TMP_PATH="$TMP_PATH"
 export RIT_VERSION="$SELF_VERSION"

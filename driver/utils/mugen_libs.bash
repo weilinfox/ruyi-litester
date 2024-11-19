@@ -51,6 +51,9 @@ function DNF_INSTALL() {
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: dnf"
 		return 1
+	elif ! SUDO_CHECK; then
+		LOG_ERROR "This function will call sudo dnf, early return"
+		return 1
 	fi
 }
 
@@ -60,6 +63,9 @@ function APT_INSTALL() {
 
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: apt-get"
+		return 1
+	elif ! SUDO_CHECK; then
+		LOG_ERROR "This function will call sudo apt-get, early return"
 		return 1
 	fi
 }
@@ -71,6 +77,9 @@ function PACMAN_INSTALL() {
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: pacman"
 		return 1
+	elif ! SUDO_CHECK; then
+		LOG_ERROR "This function will call sudo pacman, early return"
+		return 1
 	fi
 }
 
@@ -80,6 +89,9 @@ function EMERGE_INSTALL() {
 
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: emerge"
+		return 1
+	elif ! SUDO_CHECK; then
+		LOG_ERROR "This function will call sudo emerge, early return"
 		return 1
 	fi
 }
@@ -199,6 +211,9 @@ function DNF_REMOVE() {
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: dnf"
 		return 1
+	elif ! SUDO_CHECK; then
+		LOG_ERROR "This function will call sudo dnf, early return"
+		return 1
 	fi
 }
 
@@ -207,6 +222,9 @@ function APT_REMOVE() {
 
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: apt-get"
+		return 1
+	elif ! SUDO_CHECK; then
+		LOG_ERROR "This function will call sudo apt-get, early return"
 		return 1
 	fi
 }
@@ -217,6 +235,9 @@ function PACMAN_REMOVE() {
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: pacman"
 		return 1
+	elif ! SUDO_CHECK; then
+		LOG_ERROR "This function will call sudo pacman, early return"
+		return 1
 	fi
 }
 
@@ -225,6 +246,9 @@ function EMERGE_REMOVE() {
 
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: emerge"
+		return 1
+	elif ! SUDO_CHECK; then
+		LOG_ERROR "This function will call sudo emerge, early return"
 		return 1
 	fi
 }

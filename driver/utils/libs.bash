@@ -8,3 +8,10 @@ function HOST_HAS_FEATURE() {
 	return 1
 }
 
+function SUDO_CHECK() {
+	local ans=
+	[[ "$RIT_SUDO"x == "xx" ]]; ans=$?
+
+	return "$ans"
+}
+
