@@ -18,7 +18,9 @@ default_ruyi_dir=~/.cache/ruyi
 default_ruyi_data_dir=~/.local/share/ruyi
 default_ruyi_state_dir=~/.local/state/ruyi
 
-mkdir -p "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
+[ -z "$XDG_CACHE_HOME" ] || mkdir -p "$XDG_CACHE_HOME"
+[ -z "$XDG_DATA_HOME" ] || mkdir -p "$XDG_DATA_HOME"
+[ -z "$XDG_STATE_HOME" ] || mkdir -p "$XDG_STATE_HOME"
 rm -rf "$xdg_ruyi_dir" "$xdg_ruyi_data_dir" "$xdg_ruyi_state_dir"
 rm -rf "$default_ruyi_dir" "$default_ruyi_data_dir" "$default_ruyi_state_dir"
 
