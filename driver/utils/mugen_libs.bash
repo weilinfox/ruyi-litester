@@ -496,3 +496,27 @@ function PKG_REMOVE() {
 	fi
 }
 
+function main() {
+	if [[ "$(type -t post_test)" == "function" ]]; then
+		trap post_test EXIT INT HUP TERM || exit 1
+	else
+		LOG_ERROR "post_test not appare in testcase"
+		exit 1
+	fi
+
+	if [[ "$(type -t run_test)" != "function" ]]; then
+		LOG_ERROR "post_test not appare in testcase"
+		exit 1
+	fi
+
+	if [[ "$(type -t config_params)" == "function" ]]; then
+		config_params
+	fi
+
+	if [[ "$(type -t pre_test)" == "function" ]]; then
+		pre_test
+	fi
+
+	run_test
+}
+
