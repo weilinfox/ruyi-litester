@@ -56,6 +56,8 @@ lit 运行测试时还依赖 LLVM FileCheck，发行版打包 LLVM 时都会一�
 | Fedora | [yq](https://packages.fedoraproject.org/pkgs/yq/yq/) | 39 及以上 |
 | openEuler |  | 未打包 |
 
+openEuler 可以使用 yq [GitHub Release](https://github.com/mikefarah/yq/releases/) 中的二进制。
+
 ## 使用方法
 
 参考 ``rit.bash --help``。
