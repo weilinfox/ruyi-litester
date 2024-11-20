@@ -1,12 +1,12 @@
 # NOTE: Test ruyi config file
-# RUN: bash %s | FileCheck %s
+# RUN: bash %s 2>&1 | FileCheck %s
 
 export RUYI_DEBUG=x
 
 tmp_path="/tmp/rit-ruyi-advance-ruyi-config"
 tmp_repo="$tmp_path"/packages-index
 
-cfg_d="~/.config/ruyi"
+cfg_d=~/.config/ruyi
 cfg_f="$cfg_d/config.toml"
 cfg_bak="$tmp_path"/config.toml
 
@@ -27,7 +27,7 @@ EOF
 
 config_create
 cat >>"$cfg_f" <<EOF
-local = "$tmp_path"
+local = "$tmp_repo"
 EOF
 ruyi update
 ruyi update
@@ -40,7 +40,7 @@ rm -rf "$tmp_repo"
 config_create
 echo Check bad remote repo
 # CHECK-LABEL: Check bad remote repo
-sed -i "s|remote.*|remote = \"https://wrong_magic\"|" $cfg_f
+sed -i "s|remote.*|remote = \"https://wrong_magic.git\"|" $cfg_f
 ruyi update
 # CHECK: wrong_magic
 
@@ -52,5 +52,5 @@ ruyi update
 # CHECK: wrong_magic
 
 [ -f "$cfg_bak" ] && mv -v "$cfg_bak" "$cfg_f"
-rm -rf "$tmp_repo"
+rm -rf "$tmp_path"
 
