@@ -45,6 +45,7 @@ function CHECK_RESULT() {
 }
 
 RIT_MUGEN_DNF_TMP="$RIT_TMP_PATH"/rit_mugen_dnf.tmp
+RIT_MUGEN_PACMAN_TMP="$RIT_TMP_PATH"/rit_mugen_pacman.tmp
 
 function DNF_INSTALL() {
 	local pkgs="$1"
@@ -129,6 +130,8 @@ function APT_INSTALL() {
 function PACMAN_INSTALL() {
 	local pkgs="$1"
 	local tool="$(whereis -b pacman | cut -d':' -f2)"
+	local output=
+	local ret=
 
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: pacman"
@@ -137,6 +140,42 @@ function PACMAN_INSTALL() {
 		LOG_ERROR "This function will call sudo pacman, early return"
 		return 1
 	fi
+
+	# Archlinux cannot be upgrade partly
+	sudo pacman -Syuu
+	ret="$?"
+	if [ "$ret" -ne 0 ]; then
+		LOG_ERROR "pacman -Syuu return none zero value($ret)"
+		return 1
+	fi
+
+	output="$(sudo pacman --need --noconfirm -Sw "$pkgs" 2>&1 | grep -E "^ there is nothing to do$")"
+	if [ "$ret" -eq 0 ]; then
+		LOG_INFO "pkgs:($pkgs) is already installed"
+		return 0
+	fi
+
+	# check /var/log/pacman.log
+	output="$(tail -n1 /var/log/pacman.log | grep 'pacman --need --noconfirm -Sw')"
+	if [ "$?" -ne 0 ]; then
+		LOG_ERROR "failed to check /var/log/pacman.log"
+		return 1
+	fi
+
+	sudo pacman --need --noconfirm -S $pkgs
+	if [ "$?" -ne 0 ]; then
+		LOG_ERROR "failed to install packages($pkgs)"
+		return 1
+	fi
+
+	output="$(grep -FA 1024 "$output" /var/log/pacman.log | grep -F "[ALPM] installed" | cut -d" " -f4)"
+	local pkgs=
+	for ret in $output; do
+		pkgs="$pkgs $ret"
+	done
+
+	LOG_INFO "Installed packages: ($pkgs)"
+	echo "$pkgs" >> $RIT_MUGEN_PACMAN_TMP
 }
 
 function EMERGE_INSTALL() {
@@ -301,6 +340,12 @@ function PACMAN_REMOVE() {
 		LOG_ERROR "This function will call sudo pacman, early return"
 		return 1
 	fi
+
+	local pkgs="$(tail --lines 1 "$RIT_MUGEN_PACMAN_TMP")"
+	head --lines -1 "$RIT_MUGEN_PACMAN_TMP" > "$RIT_MUGEN_PACMAN_TMP".new
+	mv "$RIT_MUGEN_PACMAN_TMP".new "$RIT_MUGEN_PACMAN_TMP"
+
+	sudo pacman --noconfirm -R $pkgs
 }
 
 function EMERGE_REMOVE() {
