@@ -51,6 +51,8 @@ sed -i "s|branch.*|branch = \"wrong_magic\"|" $cfg_f
 ruyi update
 # CHECK: wrong_magic
 
+rm -v "$cfg_f"
+
 [ -f "$cfg_bak" ] && mv -v "$cfg_bak" "$cfg_f"
 rm -rf "$tmp_path"
 
