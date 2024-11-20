@@ -67,6 +67,7 @@ function DNF_INSTALL() {
 	output="$(sudo LC_ALL=C dnf --assumeno install $pkgs)"
 	if [[ "$output" =~ "already installed" ]] && [[ "$output" =~ "Nothing to do" ]]; then
 		LOG_INFO "pkgs:($pkgs) already installed"
+		echo >> $RIT_MUGEN_DNF_TMP
 		return 0
 	fi
 
@@ -139,6 +140,7 @@ function APT_INSTALL() {
 	ret="$?"
 	if [[ "$output" =~ " 0 newly installed" ]]; then
 		LOG_INFO "pkgs:($pkgs) already installed"
+		echo >> $RIT_MUGEN_APT_TMP
 		return 0
 	fi
 	# 0 already the newest version, 1 something can be done but, 100 no such package
@@ -187,6 +189,7 @@ function PACMAN_INSTALL() {
 	output="$(sudo LC_ALL=C pacman --need --noconfirm -Sw "$pkgs" 2>&1 | grep -E "^ there is nothing to do$")"
 	if [ "$ret" -eq 0 ]; then
 		LOG_INFO "pkgs:($pkgs) is already installed"
+		echo >> $RIT_MUGEN_PACMAN_TMP
 		return 0
 	fi
 
@@ -350,7 +353,7 @@ function DNF_REMOVE() {
 	head --lines -1 "$RIT_MUGEN_DNF_TMP" > "$RIT_MUGEN_DNF_TMP".new
 	mv "$RIT_MUGEN_DNF_TMP".new "$RIT_MUGEN_DNF_TMP"
 
-	sudo dnf -y remove $pkgs
+	[ -z "$pkgs" ] || sudo dnf -y remove $pkgs
 }
 
 function APT_REMOVE() {
@@ -368,7 +371,7 @@ function APT_REMOVE() {
 	head --lines -1 "$RIT_MUGEN_APT_TMP" > "$RIT_MUGEN_APT_TMP".new
 	mv "$RIT_MUGEN_APT_TMP".new "$RIT_MUGEN_APT_TMP"
 
-	sudo apt-get -y remove $pkgs
+	[ -z "$pkgs" ] || sudo apt-get -y remove $pkgs
 }
 
 function PACMAN_REMOVE() {
@@ -386,7 +389,7 @@ function PACMAN_REMOVE() {
 	head --lines -1 "$RIT_MUGEN_PACMAN_TMP" > "$RIT_MUGEN_PACMAN_TMP".new
 	mv "$RIT_MUGEN_PACMAN_TMP".new "$RIT_MUGEN_PACMAN_TMP"
 
-	sudo pacman --noconfirm -R $pkgs
+	[ -z "$pkgs" ] || sudo pacman --noconfirm -R $pkgs
 }
 
 function EMERGE_REMOVE() {
