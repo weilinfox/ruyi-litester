@@ -165,7 +165,7 @@ done
 [[ -z "${profile_name:=$suite_name}" ]] && fatal_exit "missing profile name"
 
 # Check sudo NOPASSWD
-if [[ "$sudo"x == "xx" ]];
+if [[ "$sudo"x == "xx" ]]; then
 	sudo --reset-timestamp || fatal_exit "Failed to call sudo"
 	if sudo --non-interactive --list | grep NOPASSWD >/dev/null; then
 		fatal_exit "sudo NOPASSWD did not set properly"
