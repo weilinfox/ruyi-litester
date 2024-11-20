@@ -45,6 +45,7 @@ function CHECK_RESULT() {
 }
 
 RIT_MUGEN_DNF_TMP="$RIT_TMP_PATH"/rit_mugen_dnf.tmp
+RIT_MUGEN_APT_TMP="$RIT_TMP_PATH"/rit_mugen_apt.tmp
 RIT_MUGEN_PACMAN_TMP="$RIT_TMP_PATH"/rit_mugen_pacman.tmp
 
 function DNF_INSTALL() {
@@ -117,6 +118,8 @@ function DNF_INSTALL() {
 function APT_INSTALL() {
 	local pkgs="$1"
 	local tool="$(whereis -b apt-get | cut -d':' -f2)"
+	local output=
+	local ret=
 
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: apt-get"
@@ -125,6 +128,38 @@ function APT_INSTALL() {
 		LOG_ERROR "This function will call sudo apt-get, early return"
 		return 1
 	fi
+
+	sudo apt-get update
+	if [ "$?" -ne 0 ]; then
+		LOG_ERROR "apt-get update failed to fetch releases"
+		return 1
+	fi
+
+	output="$(sudo LC_ALL=C apt-get --simulate --no-show-upgraded --no-install-recommends install $pkgs)"
+	ret="$?"
+	if [[ "$output" =~ " 0 newly installed" ]]; then
+		LOG_INFO "pkgs:($pkgs) already installed"
+		return 0
+	fi
+	# 0 already the newest version, 1 something can be done but, 100 no such package
+	if [ "$ret" -ne 0 ]; then
+		LOG_ERROR "apt-get --simulate find something wrong with package installation ($ret) ($output)"
+		return 1
+	fi
+
+	output="$(sudo LC_ALL=C apt-get --simulate --no-show-upgraded --no-install-recommends install $pkgs 2>&1 | grep -iA 1898 "NEW packages will be installed" | grep -E "^  ")"
+	if [ "$?" -ne 0 ]; then
+		LOG_ERROR "apt-get --simulate failed to get package list"
+		return 1
+	fi
+
+	sudo apt-get --assume-yes --no-install-recommends install $pkgs
+	pkgs=
+	for ret in $output; do
+		pkgs="$pkgs $ret"
+	done
+	LOG_INFO "Installed packages: ($pkgs)"
+	echo "$pkgs" >> $RIT_MUGEN_APT_TMP
 }
 
 function PACMAN_INSTALL() {
@@ -169,7 +204,7 @@ function PACMAN_INSTALL() {
 	fi
 
 	output="$(grep -FA 1024 "$output" /var/log/pacman.log | grep -F "[ALPM] installed" | cut -d" " -f4)"
-	local pkgs=
+	pkgs=
 	for ret in $output; do
 		pkgs="$pkgs $ret"
 	done
@@ -328,6 +363,12 @@ function APT_REMOVE() {
 		LOG_ERROR "This function will call sudo apt-get, early return"
 		return 1
 	fi
+
+	local pkgs="$(tail --lines 1 "$RIT_MUGEN_APT_TMP")"
+	head --lines -1 "$RIT_MUGEN_APT_TMP" > "$RIT_MUGEN_APT_TMP".new
+	mv "$RIT_MUGEN_APT_TMP".new "$RIT_MUGEN_APT_TMP"
+
+	sudo apt-get -y remove $pkgs
 }
 
 function PACMAN_REMOVE() {
