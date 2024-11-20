@@ -63,20 +63,20 @@ function DNF_INSTALL() {
 		return 1
 	fi
 
-	output="$(sudo dnf --assumeno install $pkgs)"
+	output="$(sudo LC_ALL=C dnf --assumeno install $pkgs)"
 	if [[ "$output" =~ "already installed" ]] && [[ "$output" =~ "Nothing to do" ]]; then
 		LOG_INFO "pkgs:($pkgs) already installed"
 		return 0
 	fi
 
-	repos="$(sudo dnf repolist | awk '{print $NF}' | sed -e '1d;:a;N;$!ba;s/\\n/ /g')"
+	repos="$(sudo LC_ALL=C dnf repolist | awk '{print $NF}' | sed -e '1d;:a;N;$!ba;s/\\n/ /g')"
 	ret="$?"
 	if [ "$ret" -ne "0" ]; then
 		LOG_ERROR "dnf repolist check script return none zero value($ret) with output ($repos)"
 		return 1
 	fi
 
-	updates="$(sudo dnf --assumeno install $pkgs 2>&1 | grep -A 1226 "Upgrading:" | grep update | grep -wE "$(uname -m)|noarch" | awk '{print $1}' | xargs)"
+	updates="$(sudo LC_ALL=C dnf --assumeno install $pkgs 2>&1 | grep -A 1226 "Upgrading:" | grep update | grep -wE "$(uname -m)|noarch" | awk '{print $1}' | xargs)"
 	ret="$?"
 	if [ "$ret" -ne "0" ]; then
 		LOG_ERROR "dnf --assumeno install check script return none zero value($ret) with output ($updates)"
@@ -85,11 +85,11 @@ function DNF_INSTALL() {
 
 	# real package list
 	if [ -z "$updates" ]; then
-		output="$(sudo dnf --assumeno install $pkgs 2>&1 | grep -wE "$(echo $repos | sed 's/ /|/g')" | grep -wE "$(uname -m)|noarch" | awk '{print $1}')"
+		output="$(sudo LC_ALL=C dnf --assumeno install $pkgs 2>&1 | grep -wE "$(echo $repos | sed 's/ /|/g')" | grep -wE "$(uname -m)|noarch" | awk '{print $1}')"
 		ret="$?"
 	else
 		# exclude update packages
-		output="$(sudo dnf --assumeno install $pkgs 2>&1 | grep -wE "$(echo $repos | sed 's/ /|/g')" | grep -wE "$(uname -m)|noarch" | grep -vE "$(echo $updates | sed 's/ /|/g')" | awk '{print $1}')"
+		output="$(sudo LC_ALL=C dnf --assumeno install $pkgs 2>&1 | grep -wE "$(echo $repos | sed 's/ /|/g')" | grep -wE "$(uname -m)|noarch" | grep -vE "$(echo $updates | sed 's/ /|/g')" | awk '{print $1}')"
 		ret="$?"
 	fi
 	if [ "$ret" -ne "0" ]; then
@@ -97,7 +97,7 @@ function DNF_INSTALL() {
 		return 1
 	fi
 
-	sudo dnf -y install $pkgs
+	sudo LC_ALL=C dnf -y install $pkgs
 	ret="$?"
 	if [ "$ret" -ne 0 ]; then
 		LOG_ERROR "dnf install exit with none zero value ($ret)"
@@ -149,7 +149,7 @@ function PACMAN_INSTALL() {
 		return 1
 	fi
 
-	output="$(sudo pacman --need --noconfirm -Sw "$pkgs" 2>&1 | grep -E "^ there is nothing to do$")"
+	output="$(sudo LC_ALL=C pacman --need --noconfirm -Sw "$pkgs" 2>&1 | grep -E "^ there is nothing to do$")"
 	if [ "$ret" -eq 0 ]; then
 		LOG_INFO "pkgs:($pkgs) is already installed"
 		return 0
@@ -162,7 +162,7 @@ function PACMAN_INSTALL() {
 		return 1
 	fi
 
-	sudo pacman --need --noconfirm -S $pkgs
+	sudo LC_ALL=C pacman --need --noconfirm -S $pkgs
 	if [ "$?" -ne 0 ]; then
 		LOG_ERROR "failed to install packages($pkgs)"
 		return 1
