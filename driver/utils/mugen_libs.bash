@@ -47,6 +47,7 @@ function CHECK_RESULT() {
 RIT_MUGEN_DNF_TMP="$RIT_TMP_PATH"/rit_mugen_dnf.tmp
 RIT_MUGEN_APT_TMP="$RIT_TMP_PATH"/rit_mugen_apt.tmp
 RIT_MUGEN_PACMAN_TMP="$RIT_TMP_PATH"/rit_mugen_pacman.tmp
+RIT_MUGEN_EMERGE_TMP="$RIT_TMP_PATH"/rit_mugen_portage.tmp
 
 function DNF_INSTALL() {
 	local pkgs="$1"
@@ -156,12 +157,20 @@ function APT_INSTALL() {
 	fi
 
 	sudo apt-get --assume-yes --no-install-recommends install $pkgs
+	ret="$?"
+	if [ "$ret" -ne 0 ]; then
+		LOG_ERROR "apt-get install exit with none zero value ($ret)"
+		return 1
+	fi
+
 	pkgs=
 	for ret in $output; do
 		pkgs="$pkgs $ret"
 	done
 	LOG_INFO "Installed packages: ($pkgs)"
 	echo "$pkgs" >> $RIT_MUGEN_APT_TMP
+
+	return 0
 }
 
 function PACMAN_INSTALL() {
@@ -214,11 +223,15 @@ function PACMAN_INSTALL() {
 
 	LOG_INFO "Installed packages: ($pkgs)"
 	echo "$pkgs" >> $RIT_MUGEN_PACMAN_TMP
+
+	return 0
 }
 
 function EMERGE_INSTALL() {
 	local pkgs="$1"
 	local tool="$(whereis -b emerge | cut -d':' -f2)"
+	local output=
+	local ret=
 
 	if [ -z "$tool" ]; then
 		LOG_ERROR "Unsupported package manager: emerge"
@@ -227,6 +240,57 @@ function EMERGE_INSTALL() {
 		LOG_ERROR "This function will call sudo emerge, early return"
 		return 1
 	fi
+
+	sudo emerge-webrsync
+	ret="$?"
+	if [ "$ret" -ne 0 ]; then
+		LOG_ERROR "emerge-webrsync return none zero value($ret)"
+		return 1
+	fi
+	getuto
+	ret="$?"
+	if [ "$ret" -ne 0 ]; then
+		LOG_ERROR "getuto return none zero value($ret)"
+		return 1
+	fi
+	# do upgrade
+	sudo emerge --color=n --update --deep --newuse --getbinpkg @world
+	ret="$?"
+	if [ "$ret" -ne 0 ]; then
+		LOG_ERROR "emerge -uUD return none zero value($ret)"
+		return 1
+	fi
+
+	output="$(sudo LC_ALL=C emerge --color=n --getbinpkg --noreplace --autounmask=y --pretend $pkgs 2>&1)"
+	ret="$?"
+	if [ "$ret" -ne 0 ]; then
+		LOG_ERROR "emerge --pretent return none zero value($ret)"
+		return 1
+	fi
+
+	output="$(echo -e "$output" | grep -E "[ebuild|[binary[ ]*N[ ]*]" | sed "s/[ebuild|[binary[ ]*N[ ]*] \([^ \.]*\)[:-][0-9]*[ \.:].*/\\1/")"
+	if [ -z "$output" ]; then
+		LOG_INFO "pkgs:($pkgs) is already installed"
+		echo >> $RIT_MUGEN_EMERGE_TMP
+		return 0
+	fi
+
+	sudo emerge --color=n --noreplace --getbinpkg --autounmask=y $pkgs
+	ret="$?"
+	if [ "$ret" -ne 0 ]; then
+		LOG_ERROR "emerge exit with none zero value ($ret)"
+		return 1
+	fi
+
+	pkgs=
+	for ret in $output; do
+		pkgs="$pkgs $ret"
+	done
+
+	LOG_INFO "Installed packages: ($pkgs)"
+	echo "$pkgs" >> $RIT_MUGEN_EMERGE_TMP
+
+	return 0
 }
 
 function PKG_INSTALL() {
@@ -402,6 +466,12 @@ function EMERGE_REMOVE() {
 		LOG_ERROR "This function will call sudo emerge, early return"
 		return 1
 	fi
+
+	local pkgs="$(tail --lines 1 "$RIT_MUGEN_EMERGE_TMP")"
+	head --lines -1 "$RIT_MUGEN_EMERGE_TMP" > "$RIT_MUGEN_EMERGE_TMP".new
+	mv "$RIT_MUGEN_EMERGE_TMP".new "$RIT_MUGEN_EMERGE_TMP"
+
+	[ -z "$pkgs" ] || sudo emerge --depclean $pkgs
 }
 
 function PKG_REMOVE() {
