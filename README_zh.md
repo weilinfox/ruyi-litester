@@ -56,6 +56,8 @@ lit 运行测试时还依赖 LLVM FileCheck，发行版打包 LLVM 时都会一�
 | Fedora | [yq](https://packages.fedoraproject.org/pkgs/yq/yq/) | 39 及以上 |
 | openEuler |  | 未打包 |
 
+Ubuntu Jammy x86\_64 有 backport 的 yq，而 riscv64 可以临时使用 [这个的包](http://archive.ubuntu.com/ubuntu/pool/universe/y/yq/yq_3.1.0-3_all.deb)。
+
 openEuler 可以使用 yq [GitHub Release](https://github.com/mikefarah/yq/releases/) 中的二进制。
 
 ## 使用方法
