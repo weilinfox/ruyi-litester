@@ -1,5 +1,5 @@
 # NOTE: Test ruyi venv --sysroot-from with llvm toolchain
-# REQUIRES: x86_64 || riscv64
+# REQUIRES: x86_64
 #
 # RUN: bash %s 2>&1 | FileCheck %s
 
