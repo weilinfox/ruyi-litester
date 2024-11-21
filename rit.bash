@@ -480,5 +480,8 @@ function multi_dimensional_test() {
 
 multi_dimensional_test
 
+# clean
+rm -rf "$TMP_PATH"
+
 code_exit 0
 
