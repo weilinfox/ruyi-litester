@@ -2,7 +2,7 @@
 # NOTE: ``ruyi venv`` print message to stderr
 # RUN: bash %s 2>&1 | FileCheck %s
 
-export RUYI_DEBUG=x
+# export RUYI_DEBUG=x
 
 ruyi update
 

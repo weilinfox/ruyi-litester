@@ -2,7 +2,7 @@
 # NOTE: ``ruyi install`` outputs are printed to stderr
 # RUN: bash %s 2>&1 | FileCheck %s
 
-export RUYI_DEBUG=x
+# export RUYI_DEBUG=x
 
 ruyi update
 
