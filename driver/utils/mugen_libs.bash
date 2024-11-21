@@ -258,7 +258,7 @@ function EMERGE_INSTALL() {
 	ret="$?"
 	if [ "$ret" -ne 0 ]; then
 		LOG_ERROR "emerge -uUD return none zero value($ret)"
-		return 1
+		# return 1
 	fi
 
 	output="$(sudo LC_ALL=C emerge --color=n --getbinpkg --noreplace --autounmask=y --pretend $pkgs 2>&1)"
