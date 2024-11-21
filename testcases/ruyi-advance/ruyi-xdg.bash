@@ -36,7 +36,9 @@ ruyi news list
 # CHECK-LABEL: News items:
 ruyi news read 1
 # CHECK-LABEL: RuyiSDK now supports displaying news
-ruyi install gnu-plct
+# NOTE: Remove curl output
+output="$(ruyi install gnu-plct 2>&1)"
+unset output
 
 echo Now check directory creation
 # CHECK-LABEL: Now check directory creation
