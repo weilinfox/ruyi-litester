@@ -344,7 +344,7 @@ elif [[ "$i" == "gentoo" ]]; then
 	mkdir -p "$TMP_PATH/bin"
 	OLD_PATH="$PATH"
 	NEW_PATH="$TMP_PATH/bin:$PATH"
-	if [ -z "$(whereis -b FileCheck | cut -d':' -f2)" ] && [ ! -z "$(ls /usr/lib/llvm-*/bin/FileCheck)" ]; then
+	if [ -z "$(whereis -b FileCheck | cut -d':' -f2)" ] && [ ! -z "$(ls /usr/lib/llvm/*/bin/FileCheck)" ]; then
 	for fc in $(ls /usr/lib/llvm/*/bin/FileCheck); do
 		ln -s $fc "$TMP_PATH/bin/FileCheck"
 		export PATH="$NEW_PATH"
