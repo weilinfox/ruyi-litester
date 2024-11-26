@@ -36,6 +36,7 @@ mkdir -p "$TMP_PATH"
 suite_name=
 profile_name=
 sudo=
+match_expr=
 
 function show_help() {
 	echo "Usage: rit.bash [options] suite"
@@ -47,6 +48,7 @@ function show_help() {
 	echo "    --scripts        Specify foreign script path"
 	echo "    --suites         Specify foreign test suite path (to search yaml profiles)"
 	echo "    --testcases      Specify foreign testcases path"
+	echo "    --match          Run testcases matching the given expression"
 	echo "    -s, --sudo       Allow sudo privilege escalation"
 	echo "    -x, --debug      Debug bash scripts"
 	echo "    -e               Run without -e shopt option (not recommend)"
@@ -139,6 +141,14 @@ while [[ "$#" -gt 0 ]]; do
 				shift
 			else
 				fatal_exit "--testcases requires an argument."
+			fi
+			;;
+		--match)
+			if [[ -n "$2" ]]; then
+				match_expr="$2"
+				shift
+			else
+				fatal_exit "--match requires an argument."
 			fi
 			;;
 		-s|--sudo)
