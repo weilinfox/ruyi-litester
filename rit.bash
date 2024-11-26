@@ -37,6 +37,8 @@ suite_name=
 profile_name=
 sudo=
 match_expr=
+lit_args=
+mugen_args=
 
 function show_help() {
 	echo "Usage: rit.bash [options] suite"
@@ -49,6 +51,8 @@ function show_help() {
 	echo "    --suites         Specify foreign test suite path (to search yaml profiles)"
 	echo "    --testcases      Specify foreign testcases path"
 	echo "    --match          Run testcases matching the given expression"
+	echo "    --lit            Arguments witch pass to lit"
+	echo "    --mugen          Arguments witch pass to mugen"
 	echo "    -s, --sudo       Allow sudo privilege escalation"
 	echo "    -x, --debug      Debug bash scripts"
 	echo "    -e               Run without -e shopt option (not recommend)"
@@ -149,6 +153,22 @@ while [[ "$#" -gt 0 ]]; do
 				shift
 			else
 				fatal_exit "--match requires an argument."
+			fi
+			;;
+		--lit)
+			if [[ -n "$2" ]]; then
+				lit_args="$2"
+				shift
+			else
+				fatal_exit "--lit requires an argument."
+			fi
+			;;
+		--mugen)
+			if [[ -n "$2" ]]; then
+				mugen_args="$2"
+				shift
+			else
+				fatal_exit "--mugen requires an argument."
 			fi
 			;;
 		-s|--sudo)
@@ -439,7 +459,7 @@ function test_run() {
 			fi
 
 			LOG_DEBUG Run lit "$lit_options" "$(basename $CASE_PATH)"/"${case_dirs[$i]}"
-			"$DRIVER_PATH"/lit.bash $lit_options "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
+			"$DRIVER_PATH"/lit.bash $lit_options $lit_args "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
 		else
 			LOG_ERROR "Unknown test type \"$test_type\""
 		fi
