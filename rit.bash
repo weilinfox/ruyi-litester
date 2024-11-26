@@ -31,6 +31,7 @@ rm -rf "$ENV_PATH"
 mkdir -p "$ENV_PATH"
 mkdir -p "$TMP_PATH"
 
+. "$DRIVER_PATH"/utils/libs.bash
 . "$DRIVER_PATH"/utils/logging.bash
 
 suite_name=
@@ -214,9 +215,16 @@ for ((i=0; i<$case_len; i++)); do
 	[[ -d "$CASE_PATH"/"$tmp_case" ]] || fatal_exit "missing testcase directory \"$tmp_case\""
 	[[ -f "$CASE_PATH"/"$tmp_case"/rit.yaml ]] || fatal_exit "testcase \"$tmp_case\" missing rit.yaml"
 	[[ "$(yq .type "$CASE_PATH"/"$tmp_case"/rit.yaml)" != "null" ]] || fatal_exit "testcase \"$tmp_case\" type unknown"
-	case_dirs[${#case_dirs[@]}]="$tmp_case"
+
+	if EXPR_MATCH "$tmp_case" $match_expr; then
+		case_dirs[${#case_dirs[@]}]="$tmp_case"
+	else
+		LOG_INFO "Filter $tmp_case with matching expression"
+	fi
 done
-[ -z "${#case_dirs[@]}" ] && fatal_exit "no testcase configured"
+
+case_len="${#case_dirs[@]}"
+[ "$case_len" -eq 0 ] && fatal_exit "no testcase configured"
 unset tmp_case
 
 # parse profile
