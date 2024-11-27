@@ -6,7 +6,7 @@ function LOG_PRINT() {
 	local level=$1
 	shift
 
-	echo "$(date +%Y-%m-%d\ %T)  $0  [ $level  ]  $@"
+	echo "$(date '+%a %b %d %T %Y') - $level - $@"
 }
 
 function LOG_INFO() {
