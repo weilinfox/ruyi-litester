@@ -122,7 +122,13 @@ function exec_case() {
 
 	mkdir -p "$log_path"
 
-	SLEEP_WAIT "${timeout:-15m}" "$cmd $case_path" > "$log_path/$(date +%Y-%m-%d-%T).log" 2>&1
+	exec 4>&1 5>&2
+	exec > "$log_path/$(date +%Y-%m-%d-%T).log" 2>&1
+
+	SLEEP_WAIT "${timeout:-15m}" "$cmd $case_path"
+
+	exec 1>&4 2>&5
+	exec 4>&- 5>&-
 
 	local code="$?"
 	if [ "$code" -eq 0 ]; then
@@ -145,7 +151,7 @@ function test_all() {
 		LOG_INFO "End to run testcase:${CASE_NAME[$i]}."
 	done
 
-	LOG_INFO "A total of 14 use cases were executed, with $CASE_SUCCESS successes and $((CASE_TIMEOUT+CASE_FAILURE)) failures."
+	LOG_INFO "A total of $CASE_LEN use cases were executed, with $CASE_SUCCESS successes and $((CASE_TIMEOUT+CASE_FAILURE)) failures."
 }
 
 mkdir -p "$LOG_DIR"
