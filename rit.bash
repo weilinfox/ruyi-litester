@@ -198,7 +198,7 @@ done
 # Check sudo NOPASSWD
 if [[ "$sudo"x == "xx" ]]; then
 	sudo --reset-timestamp || fatal_exit "Failed to call sudo"
-	if sudo --non-interactive --list | grep NOPASSWD >/dev/null; then
+	if ! sudo --non-interactive --list 2>&1 | grep NOPASSWD >/dev/null; then
 		fatal_exit "sudo NOPASSWD did not set properly"
 	fi
 fi
