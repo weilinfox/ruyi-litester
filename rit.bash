@@ -418,6 +418,8 @@ function test_run() {
 	local lit_concurrent=
 	local lit_logging=
 	local lit_options=
+	local mugen_logging=
+	local mugen_option=
 	local i=
 
 	# run env pre scripts
@@ -468,6 +470,23 @@ function test_run() {
 
 			LOG_DEBUG Run lit "$lit_options" "$(basename $CASE_PATH)"/"${case_dirs[$i]}"
 			"$DRIVER_PATH"/lit.bash $lit_options $lit_args "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
+
+		elif [[ "$test_type" == "mugen" ]]; then
+			mugen_logging="$(yq --raw-output .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+			mugen_option=
+
+			if [[ "$mugen_logging" == "null" ]] || [[ "$mugen_logging" == "info" ]]; then
+				mugen_options="$mugen_options"
+			elif [[ "$mugen_logging" == "debug" ]]; then
+				mugen_options="$mugen_options -x"
+			else
+				LOG_WARN "Unknown mugen logging setting \"$mugen_logging\", use default value"
+				mugen_options="$mugen_options"
+			fi
+
+			LOG_DEBUG Run mugen "$mugen_options" -f "$(basename $CASE_PATH)"/"${case_dirs[$i]}"
+			"$DRIVER_PATH"/mugen.bash $mugen_options $mugen_args -f "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
+
 		else
 			LOG_ERROR "Unknown test type \"$test_type\""
 		fi
