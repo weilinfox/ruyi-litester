@@ -489,8 +489,8 @@ function test_run() {
 				lit_options="$lit_options --verbose"
 			fi
 
-			LOG_DEBUG Run lit "$lit_options" "$(basename $CASE_PATH)"/"${case_dirs[$i]}"
-			"$DRIVER_PATH"/lit.bash $lit_options $lit_args "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
+			LOG_DEBUG Run lit "$lit_options" "$lit_args" "$(basename $CASE_PATH)"/"${case_dirs[$i]}"
+			"$DRIVER_PATH"/lit.bash $lit_options "$lit_args" "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
 
 		elif [[ "$test_type" == "mugen" ]]; then
 			mugen_logging="$(yq --raw-output .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
@@ -505,8 +505,8 @@ function test_run() {
 				mugen_options="$mugen_options"
 			fi
 
-			LOG_DEBUG Run mugen "$mugen_options" -f "$(basename $CASE_PATH)"/"${case_dirs[$i]}"
-			"$DRIVER_PATH"/mugen.bash $mugen_options $mugen_args -f "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
+			LOG_DEBUG Run mugen "$mugen_options" "$mugen_args" -f "${case_dirs[$i]}"
+			"$DRIVER_PATH"/mugen.bash $mugen_options "$mugen_args" -f "${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
 
 		else
 			LOG_ERROR "Unknown test type \"$test_type\""
@@ -518,6 +518,8 @@ function test_run() {
 		LOG_DEBUG source $i
 		source "$i"
 	done
+
+	return 0
 }
 
 function multi_dimensional_test() {
