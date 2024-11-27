@@ -216,7 +216,7 @@ for ((i=0; i<$case_len; i++)); do
 	[[ -f "$CASE_PATH"/"$tmp_case"/rit.yaml ]] || fatal_exit "testcase \"$tmp_case\" missing rit.yaml"
 	[[ "$(yq .type "$CASE_PATH"/"$tmp_case"/rit.yaml)" != "null" ]] || fatal_exit "testcase \"$tmp_case\" type unknown"
 
-	if EXPR_MATCH "$tmp_case" $match_expr; then
+	if [ -z "$match_expr" ] || EXPR_MATCH "$tmp_case" $match_expr; then
 		case_dirs[${#case_dirs[@]}]="$tmp_case"
 	else
 		LOG_INFO "Filter $tmp_case with matching expression"
