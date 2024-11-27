@@ -26,8 +26,8 @@ if [[ "$(whoami)" == "root" ]]; then
 	exit 3
 fi
 
-touch "$LOCK_FILE"
 rm -rf "$ENV_PATH"
+rm -rf "$TMP_PATH"
 mkdir -p "$ENV_PATH"
 mkdir -p "$TMP_PATH"
 
@@ -67,8 +67,12 @@ function show_version() {
 
 function code_exit() {
 
-	rm -rf "$ENV_PATH"
 	rm -f "$LOCK_FILE"
+
+	if [ "$1" -eq 0 ]; then
+		rm -rf "$ENV_PATH"
+		rm -rf "$TMP_PATH"
+	fi
 
 	exit $1
 }
@@ -77,6 +81,18 @@ function fatal_exit() {
 	LOG_FATAL "$@"
 
 	code_exit 255
+}
+
+function int_exit() {
+	LOG_FATAL "SIGINT exit"
+
+	code_exit 254
+}
+
+function error_exit() {
+	LOG_FATAL "SIGERR exit at line $1 code $?"
+
+	code_exit 253
 }
 
 function script_test() {
@@ -105,6 +121,10 @@ if [[ "$#" -eq 0 ]]; then
 	show_help
 	code_exit 1
 fi
+
+touch "$LOCK_FILE"
+trap 'error_exit $LINENO' ERR
+trap 'int_exit' INT
 
 while [[ "$#" -gt 0 ]]; do
 	case $1 in
@@ -237,6 +257,7 @@ pre_len="$(echo $pre_yaml | yq --raw-output length)"
 post_len="$(echo $post_yaml | yq --raw-output length)"
 [[ "$pre_len" == "$post_len" ]] || fatal_exit "pre and post script list have different dimensions"
 [ "$pre_len" -lt 1 ] && fatal_exit "script list have 0 dimension"
+
 
 pre_scripts=()
 post_scripts=()
@@ -536,9 +557,6 @@ function multi_dimensional_test() {
 }
 
 multi_dimensional_test
-
-# clean
-rm -rf "$TMP_PATH"
 
 code_exit 0
 
