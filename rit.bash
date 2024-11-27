@@ -178,7 +178,7 @@ while [[ "$#" -gt 0 ]]; do
 			;;
 		--lit)
 			if [[ -n "$2" ]]; then
-				lit_args="$2"
+				eval "lit_args=($2)"
 				shift
 			else
 				fatal_exit "--lit requires an argument."
@@ -186,7 +186,7 @@ while [[ "$#" -gt 0 ]]; do
 			;;
 		--mugen)
 			if [[ -n "$2" ]]; then
-				mugen_args="$2"
+				eval "mugen_args=($2)"
 				shift
 			else
 				fatal_exit "--mugen requires an argument."
@@ -490,7 +490,7 @@ function test_run() {
 			fi
 
 			LOG_DEBUG Run lit "$lit_options" "$lit_args" "$(basename $CASE_PATH)"/"${case_dirs[$i]}"
-			"$DRIVER_PATH"/lit.bash $lit_options "$lit_args" "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
+			"$DRIVER_PATH"/lit.bash $lit_options ${lit_args[@]} "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
 
 		elif [[ "$test_type" == "mugen" ]]; then
 			mugen_logging="$(yq --raw-output .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
@@ -506,7 +506,7 @@ function test_run() {
 			fi
 
 			LOG_DEBUG Run mugen "$mugen_options" "$mugen_args" -f "${case_dirs[$i]}"
-			"$DRIVER_PATH"/mugen.bash $mugen_options "$mugen_args" -f "${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
+			"$DRIVER_PATH"/mugen.bash $mugen_options ${mugen_args[@]} -f "${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
 
 		else
 			LOG_ERROR "Unknown test type \"$test_type\""
