@@ -21,6 +21,7 @@ Run Lit testcases:
 Run Mugen testcases:
 
 + grep
++ procps-ng
 + Distro package manager
 
 Refer to configuration files to see testsuite dependencies.
