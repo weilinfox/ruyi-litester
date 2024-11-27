@@ -52,14 +52,11 @@ while getopts "f:r:xm:" OPTION; do
 			MATCH="$OPTARG"
 			;;
 		*)
-
 			show_help
 			exit 1
 			;;
 	esac
 done
-
-echo $SUITE $CASE $XRUN "$MATCH"
 
 if [ -z "$RIT_SUDO" ]; then
 	LOG_WARN "We recommend to run mugen testcases with rit -s or --sudo"
@@ -75,30 +72,32 @@ fi
 
 CASE_LEN="$(jq --raw-output '.cases | length' "$RIT_CASE_PATH/$SUITE/$SUITE.json")"
 CASE_PATH=()
+CASE_NAME=()
 LOG_DIR="$RIT_RUN_PATH"/mugen_log
 
 for ((i=0;i<$CASE_LEN;i++)); do
-	CASE_NAME="$(jq --raw-output ".cases.[$i].name" "$RIT_CASE_PATH/$SUITE/$SUITE.json")"
+	case_name="$(jq --raw-output ".cases.[$i].name" "$RIT_CASE_PATH/$SUITE/$SUITE.json")"
 
-	if [ -n "$CASE" ] && [[ "$CASE_NAME" != "$CASE" ]]; then
+	if [ -n "$CASE" ] && [[ "$case_name" != "$CASE" ]]; then
 		continue
 	fi
 
-	if [ -n "$MATCH" ] && ! EXPR_MATCH "$CASE_NAME" $MATCH; then
-		LOG_INFO "Filter testcase $CASE_NAME."
+	if [ -n "$MATCH" ] && ! EXPR_MATCH "$case_name" $MATCH; then
+		LOG_INFO "Filter testcase $case_name."
 		continue
 	fi
 
-	if [ -f "$RIT_CASE_PATH/$SUITE/$CASE_NAME.sh" ]; then
-		CASE_P="$RIT_CASE_PATH/$SUITE/$CASE_NAME.sh"
-	elif [ -f "$RIT_CASE_PATH/$SUITE/$CASE_NAME/$CASE_NAME.sh" ]; then
-		CASE_P="$RIT_CASE_PATH/$SUITE/$CASE_NAME/$CASE_NAME.sh"
+	if [ -f "$RIT_CASE_PATH/$SUITE/$case_name.sh" ]; then
+		case_path="$RIT_CASE_PATH/$SUITE/$case_name.sh"
+	elif [ -f "$RIT_CASE_PATH/$SUITE/$case_name/$case_name.sh" ]; then
+		case_path="$RIT_CASE_PATH/$SUITE/$case_name/$case_name.sh"
 	else
-		LOG_WARN "Testcase of suite $SUITE not found: $CASE_NAME."
-		LOG_INFO "Skip testcase $CASE_NAME."
+		LOG_WARN "Testcase of suite $SUITE not found: $case_name."
+		LOG_INFO "Skip testcase $case_name."
 		continue
 	fi
-	CASE_PATH[${#CASE_PATH[@]}]="$CASE_P"
+	CASE_NAME[${#CASE_NAME[@]}]="$case_name"
+	CASE_PATH[${#CASE_PATH[@]}]="$case_path"
 done
 
 CASE_LEN="${#CASE_PATH[@]}"
@@ -107,5 +106,51 @@ if [ "$CASE_LEN" -lt 1 ]; then
 	exit 1
 fi
 
+CASE_SUCCESS=0
+CASE_FAILURE=0
+CASE_TIMEOUT=0
+
+function exec_case() {
+	local case_path="$2"
+	local timeout="$(grep -E '^EXECUTE_T=[0-9]+[msh]$' "$2" | tail -n1 | cut -d'=' -f2)"
+	local cmd="bash "
+	local log_path="$LOG_DIR/$SUITE/$1"
+
+	if [ -n "$XRUN" ]; then
+		cmd="$cmd -x"
+	fi
+
+	mkdir -p "$log_path"
+
+	SLEEP_WAIT "${timeout:-15m}" "$cmd $case_path" > "$log_path/$(date +%Y-%m-%d-%T).log" 2>&1
+
+	local code="$?"
+	if [ "$code" -eq 0 ]; then
+		LOG_INFO "The case exit by code 0."
+		((CASE_SUCCESS++))
+	elif [ "$code" -eq 124 ]; then
+		LOG_WARN "The case execution timeout."
+		LOG_ERROR "The case exit by code 124."
+		((CASE_TIMEOUT++))
+	else
+		LOG_ERROR "The case exit by code $code."
+		((CASE_FAILURE++))
+	fi
+}
+
+function test_all() {
+	for ((i=0;i<$CASE_LEN;i++)); do
+		LOG_INFO "start to run testcase:${CASE_NAME[$i]}."
+		exec_case "${CASE_NAME[$i]}" "${CASE_PATH[$i]}"
+		LOG_INFO "End to run testcase:${CASE_NAME[$i]}."
+	done
+
+	LOG_INFO "A total of 14 use cases were executed, with $CASE_SUCCESS successes and $((CASE_TIMEOUT+CASE_FAILURE)) failures."
+}
+
 mkdir -p "$LOG_DIR"
+mkdir -p "$LOG_DIR/$SUITE"
+test_all 2>&1 | tee --append "$LOG_DIR/$SUITE/exec.log"
+
+exit $((CASE_TIMEOUT+CASE_FAILURE))
 

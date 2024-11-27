@@ -10,11 +10,11 @@ function LOG_PRINT() {
 }
 
 function LOG_INFO() {
-	LOG_PRINT "INFO" $@
+	LOG_PRINT "INFO " $@
 }
 
 function LOG_WARN() {
-	LOG_PRINT "WARN" $@
+	LOG_PRINT "WARN " $@
 }
 
 function LOG_ERROR() {
