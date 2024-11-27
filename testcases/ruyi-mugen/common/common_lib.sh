@@ -7,7 +7,7 @@
 # @Desc      :   ruyi-mugen common libs
 # #############################################
 
-source "${RIT_DRIVER_PATH}"/driver/utils/mugen_libs.bash
+source "${RIT_DRIVER_PATH}"/utils/mugen_libs.bash
 
 RUYI_VERSION=${RUYI_VERSION:="0.16.0"}
 

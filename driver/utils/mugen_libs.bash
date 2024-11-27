@@ -1,5 +1,5 @@
 
-source "${RIT_DRIVER_PATH}"/driver/utils/libs.bash
+source "${RIT_DRIVER_PATH}"/utils/libs.bash
 
 # here use mugen logging format
 function LOG_PRINT() {

@@ -7,8 +7,7 @@ if [ -z "$RIT_DRIVER_PATH" ]; then
 	exit -1
 fi
 
-source "${RIT_DRIVER_PATH}"/driver/utils/libs.bash
-source "${RIT_DRIVER_PATH}"/driver/utils/mugen_libs.bash
+source "${RIT_DRIVER_PATH}"/utils/mugen_libs.bash
 
 if [ -z "$RIT_CASE_PATH" ] || [ ! -d "$RIT_CASE_PATH" ] ; then
 	LOG_ERROR "Unreachable RIT_CASE_PATH"
