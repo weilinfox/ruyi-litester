@@ -520,3 +520,9 @@ function main() {
 	run_test
 }
 
+function SLEEP_WAIT() {
+	local timeout="$1"
+	local cmd="$2"
+	timeout --signal=SIGINT --kill-after=15s "$timeout" $cmd
+}
+
