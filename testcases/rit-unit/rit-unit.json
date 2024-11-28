@@ -1,0 +1,10 @@
+{
+	"cases": [
+		{
+			"name": "rit_test_match"
+		},
+		{
+			"name": "rit_test_lock"
+		}
+	]
+}
