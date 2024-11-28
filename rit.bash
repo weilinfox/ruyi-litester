@@ -11,7 +11,7 @@ SUITE_PATH="$SOURCE_PATH"/suites
 CASE_PATH="$SOURCE_PATH"/testcases
 ENV_PATH="$SOURCE_PATH"/rit.bash_env
 TMP_PATH="/tmp/rit.bash"
-LOCK_FILE="$SOURCE_PATH"/.rit.bash.lock
+LOCK_FILE="$TMP_PATH"/.rit.bash.lock
 
 LOG_DATE="$(date '+%Y%m%d-%H%M%S')"
 
