@@ -444,7 +444,7 @@ function test_run() {
 	local i=
 
 	# run env pre scripts
-	for i in $(ls $ENV_PATH/*.pre); do
+	for i in $(ls $ENV_PATH/*.pre 2>/dev/null); do
 		LOG_DEBUG source $i
 		source "$i"
 	done
@@ -514,7 +514,7 @@ function test_run() {
 	done
 
 	# run env post scripts
-	for i in $(ls $ENV_PATH/*.post); do
+	for i in $(ls $ENV_PATH/*.post 2>/dev/null); do
 		LOG_DEBUG source $i
 		source "$i"
 	done
