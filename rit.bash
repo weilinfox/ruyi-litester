@@ -9,8 +9,8 @@ DRIVER_PATH="$SOURCE_PATH"/driver
 SCRIPT_PATH="$SOURCE_PATH"/scripts
 SUITE_PATH="$SOURCE_PATH"/suites
 CASE_PATH="$SOURCE_PATH"/testcases
-ENV_PATH="$SOURCE_PATH"/rit.bash_env
 TMP_PATH="/tmp/rit.bash"
+ENV_PATH="$TMP_PATH"/rit.bash_env
 LOCK_FILE="$TMP_PATH"/.rit.bash.lock
 
 LOG_DATE="$(date '+%Y%m%d-%H%M%S')"
@@ -28,8 +28,8 @@ fi
 
 rm -rf "$ENV_PATH"
 rm -rf "$TMP_PATH"
-mkdir -p "$ENV_PATH"
 mkdir -p "$TMP_PATH"
+mkdir -p "$ENV_PATH"
 
 . "$DRIVER_PATH"/utils/libs.bash
 . "$DRIVER_PATH"/utils/logging.bash
