@@ -164,6 +164,17 @@ concurrent: true
 logging: all
 ```
 
+### Mugen 用例配置
+
+```yaml
+# mugen 用例
+type: mugen
+# {debug,info} 用例日志级别
+# debug 使用 -x 参数
+# 默认 info
+logging: debug
+```
+
 ## 内部变量
 
 内部变量在框架全局可用，外部工具则可以由环境变量获取。
