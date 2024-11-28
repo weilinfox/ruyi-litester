@@ -206,7 +206,13 @@ logging: all
 
 Rit 的只是在测试用例和测试套配置上一定程度兼容了 mugen 格式的测试用例。
 
-关于 mugen 测试框架的详细信息可用参考 openEuler [上游](https://gitee.com/openeuler/mugen/)。
+关于 mugen 测试框架的详细信息可以参考 openEuler [上游](https://gitee.com/openeuler/mugen/)。
+
+### 测试运行和日志获取
+
+这个 mugen 兼容程序提供了和 openEuler 上游功能完全相同的 ``-f`` ``-r`` 和 ``-x`` 参数。
+
+Rit 会通过测试套配置文件自动生成 ``-f`` 和 ``-x`` 参数。而 ``-r`` 参数在 Rit 框架中通常是用不到的，故额外提供了功能更强 ``-m`` 参数，它的使用方法与 Rit 的 ``--match`` 完全相同。
 
 ### 测试套 json 配置
 
@@ -271,7 +277,7 @@ Rit 认为非必要不要做必须提权的操作，默认情况下框架中所�
 
 不建议给 ``--match`` 传入不符合语法的表达式。
 
-而对于测试用例列表中的某个测试， Rit 提供了 ``--lit`` 和 ``--mugen`` 直接向 driver 传参。 Lit 可以参考 ``--filter-out`` 参数， Mugen 则提供了和 Rit 用法相同的 ``--match`` 参数。
+而对于测试用例列表中的某个测试， Rit 提供了 ``--lit`` 和 ``--mugen`` 直接向 driver 传参。 Lit 可以参考 ``--filter-out`` 参数， Mugen 则提供了和 Rit 用法相同的 ``-m`` 参数。
 
 ## TODO 列表
 
