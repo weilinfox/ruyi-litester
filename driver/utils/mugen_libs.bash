@@ -500,14 +500,17 @@ function PKG_REMOVE() {
 	fi
 }
 
+function post_test_default() {
+	LOG_WARN "End test with default post_test function."
+}
+
 function main() {
 	RIT_MUGEN_ERROR_COUNT=0
 
 	if [[ "$(type -t post_test)" == "function" ]]; then
 		trap post_test EXIT INT HUP TERM || exit 1
 	else
-		LOG_ERROR "post_test not appare in testcase"
-		exit 1
+		trap post_test_default EXIT INT HUP TERM || exit 1
 	fi
 
 	if [[ "$(type -t run_test)" != "function" ]]; then
