@@ -21,22 +21,26 @@ function LOG_ERROR() {
 	LOG_PRINT "ERROR" $@
 }
 
-function CHECK_RESULT() {
-	local result=$1
-	local result_expect=${2-0}
-	local check_mode=${3-0}
-	local error_msg=$4
-	local exit_on_error=${5-0}
+RIT_MUGEN_ERROR_COUNT=0
 
-	if [ -z "$result" ] || [ -z "$result_expect" ] || [ -z "$check_mode" ]; then
+function CHECK_RESULT() {
+	local result="$1"
+	local result_expect="${2:-0}"
+	local check_mode="${3:-0}"
+	local error_msg="$4"
+	local exit_on_error="${5:-0}"
+
+	if [ -z "$result" ]; then
 		LOG_ERROR "Too few argument!"
 	fi
 
-	if [[ "$result" != "$result_expect" ]]; then
+	if ( [[ "$result" != "$result_expect" ]] && [[ "$check_mode" == "0" ]] ) || \
+		( [[ "$result" == "$result_expect" ]] && [[ "$check_mode" != "0" ]] ); then
 		LOG_ERROR "$error_msg"
 		LOG_ERROR "${BASH_SOURCE[1]} line ${BASH_LINENO[0]}"
 		((RIT_MUGEN_ERROR_COUNT++))
-		if [ $exit_on_error -eq 1 ]; then
+		echo COUNT $RIT_MUGEN_ERROR_COUNT
+		if [[ "$exit_on_error" != "0" ]]; then
 			exit 1
 		fi
 	fi
@@ -497,6 +501,8 @@ function PKG_REMOVE() {
 }
 
 function main() {
+	RIT_MUGEN_ERROR_COUNT=0
+
 	if [[ "$(type -t post_test)" == "function" ]]; then
 		trap post_test EXIT INT HUP TERM || exit 1
 	else
@@ -518,6 +524,8 @@ function main() {
 	fi
 
 	run_test
+
+	return "$RIT_MUGEN_ERROR_COUNT"
 }
 
 function SLEEP_WAIT() {

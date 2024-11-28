@@ -1,7 +1,5 @@
 #!/bin/bash
 
-RIT_MUGEN_ERROR_COUNT=0
-
 if [ -z "$RIT_DRIVER_PATH" ]; then
 	echo "Empty RIT_DRIVER_PATH environment variable!"
 	exit -1
@@ -127,10 +125,11 @@ function exec_case() {
 
 	SLEEP_WAIT "${timeout:-15m}" "$cmd $case_path"
 
+	local code="$?"
+
 	exec 1>&4 2>&5
 	exec 4>&- 5>&-
 
-	local code="$?"
 	if [ "$code" -eq 0 ]; then
 		LOG_INFO "The case exit by code 0."
 		((CASE_SUCCESS++))
