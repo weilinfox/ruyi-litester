@@ -3,7 +3,7 @@
 set -e
 
 SELF_VERSION=0.0.1
-SOURCE_PATH="$(dirname $(realpath $0))"
+SOURCE_PATH="$(dirname "$(realpath $0)")"
 RUN_PATH="$(realpath .)"
 DRIVER_PATH="$SOURCE_PATH"/driver
 SCRIPT_PATH="$SOURCE_PATH"/scripts
@@ -83,12 +83,14 @@ function fatal_exit() {
 	code_exit 255
 }
 
+# shellcheck disable=SC2317
 function int_exit() {
 	LOG_FATAL "SIGINT exit"
 
 	code_exit 254
 }
 
+# shellcheck disable=SC2317
 function error_exit() {
 	LOG_FATAL "SIGERR exit at line $1 code $?"
 
@@ -201,7 +203,7 @@ while [[ "$#" -gt 0 ]]; do
 		-e)
 			set +e
 			;;
-		-*|--*)
+		-*)
 			fatal_exit "unsupported argument $1"
 			;;
 		*)
@@ -230,12 +232,14 @@ fi
 case_profiles="$(yq --raw-output .\"$profile_name\".cases "$SUITE_PATH"/"$suite_name".yaml)"
 case_dirs=()
 case_len="$(echo $case_profiles | yq --raw-output length)"
-for ((i=0; i<$case_len; i++)); do
+for ((i=0; i<case_len; i++)); do
 	tmp_case="$(echo $case_profiles | yq --raw-output .[$i])"
 	[[ -d "$CASE_PATH"/"$tmp_case" ]] || fatal_exit "missing testcase directory \"$tmp_case\""
 	[[ -f "$CASE_PATH"/"$tmp_case"/rit.yaml ]] || fatal_exit "testcase \"$tmp_case\" missing rit.yaml"
 	[[ "$(yq .type "$CASE_PATH"/"$tmp_case"/rit.yaml)" != "null" ]] || fatal_exit "testcase \"$tmp_case\" type unknown"
 
+
+	# shellcheck disable=SC2086
 	if [ -z "$match_expr" ] || EXPR_MATCH "$tmp_case" $match_expr; then
 		case_dirs[${#case_dirs[@]}]="$tmp_case"
 	else
@@ -261,7 +265,7 @@ post_len="$(echo $post_yaml | yq --raw-output length)"
 
 pre_scripts=()
 post_scripts=()
-for ((i=0; i<$pre_len; i++)); do
+for ((i=0; i<pre_len; i++)); do
 	tmp_pre="$(echo $pre_yaml | yq --raw-output .[$i])"
 	tmp_post="$(echo $post_yaml | yq --raw-output .[$i])"
 	tmp_pre_len="$(echo $tmp_pre | yq --raw-output length)"
@@ -271,15 +275,15 @@ for ((i=0; i<$pre_len; i++)); do
 
 	[[ "$tmp_pre_len" == "$tmp_post_len" ]] || fatal_exit "pre and post script list $i dimension have different length"
 
-	for ((j=0; j<$tmp_pre_len; j++)); do
+	for ((j=0; j<tmp_pre_len; j++)); do
 		tmp_pre_list="$tmp_pre_list $(echo $tmp_pre | yq --raw-output .[$j])"
 		tmp_post_list="$tmp_post_list $(echo $tmp_post | yq --raw-output .[$j])"
 	done
 	tmp_pre_list="${tmp_pre_list:1}"
 	tmp_post_list="${tmp_post_list:1}"
 
-	pre_scripts[$i]="$tmp_pre_list"
-	post_scripts[$i]="$tmp_post_list"
+	pre_scripts[i]="$tmp_pre_list"
+	post_scripts[i]="$tmp_post_list"
 done
 unset pre_yaml post_yaml pre_len post_len
 unset tmp_pre tmp_post tmp_pre_len tmp_post_len tmp_pre_list tmp_post_list
@@ -299,6 +303,7 @@ done
 # host features
 HOST_FEATURES="$(uname -m)"
 
+# shellcheck disable=SC2034
 function distro_features() {
 	# os-release variables
 	local ANSI_COLOR=
@@ -351,6 +356,7 @@ function distro_features() {
 	local distro=
 
 	if [ -f "/etc/os-release" ]; then
+		# shellcheck disable=SC1091
 		. /etc/os-release
 
 		distro="linux"
@@ -384,14 +390,14 @@ if [[ "$i" == "ubuntu" ]] || [[ "$i" == "debian" ]]; then
 	mkdir -p "$TMP_PATH/bin"
 	OLD_PATH="$PATH"
 	NEW_PATH="$TMP_PATH/bin:$PATH"
-	if [ -z "$(whereis -b FileCheck | cut -d':' -f2)" ] && [ ! -z "$(ls /usr/lib/llvm-*/bin/FileCheck)" ]; then
+	if [ -z "$(whereis -b FileCheck | cut -d':' -f2)" ] && [ -n "$(ls /usr/lib/llvm-*/bin/FileCheck)" ]; then
 	for fc in $(ls /usr/lib/llvm-*/bin/FileCheck); do
 		ln -s $fc "$TMP_PATH/bin/FileCheck"
 		export PATH="$NEW_PATH"
 		break
 	done
 	fi
-	if [ -z "$(whereis -b lit | cut -d':' -f2)" ] && [ ! -z "$(ls /usr/lib/llvm-*/build/utils/lit/lit.py)" ]; then
+	if [ -z "$(whereis -b lit | cut -d':' -f2)" ] && [ -n "$(ls /usr/lib/llvm-*/build/utils/lit/lit.py)" ]; then
 	for fc in $(ls /usr/lib/llvm-*/build/utils/lit/lit.py); do
 		ln -s $fc "$TMP_PATH/bin/lit"
 		export PATH="$NEW_PATH"
@@ -403,7 +409,7 @@ elif [[ "$i" == "gentoo" ]]; then
 	mkdir -p "$TMP_PATH/bin"
 	OLD_PATH="$PATH"
 	NEW_PATH="$TMP_PATH/bin:$PATH"
-	if [ -z "$(whereis -b FileCheck | cut -d':' -f2)" ] && [ ! -z "$(ls /usr/lib/llvm/*/bin/FileCheck)" ]; then
+	if [ -z "$(whereis -b FileCheck | cut -d':' -f2)" ] && [ -n "$(ls /usr/lib/llvm/*/bin/FileCheck)" ]; then
 	for fc in $(ls /usr/lib/llvm/*/bin/FileCheck); do
 		ln -s $fc "$TMP_PATH/bin/FileCheck"
 		export PATH="$NEW_PATH"
@@ -440,16 +446,17 @@ function test_run() {
 	local lit_logging=
 	local lit_options=
 	local mugen_logging=
-	local mugen_option=
+	local mugen_options=
 	local i=
 
 	# run env pre scripts
+	# shellcheck disable=SC1090
 	for i in $(ls $ENV_PATH/*.pre 2>/dev/null); do
 		LOG_DEBUG source $i
 		source "$i"
 	done
 
-	for ((i=0; i<$case_len; i++)); do
+	for ((i=0; i<case_len; i++)); do
 		test_type="$(yq --raw-output .type ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
 
 		if [[ "$test_type" == "lit" ]]; then
@@ -494,7 +501,7 @@ function test_run() {
 
 		elif [[ "$test_type" == "mugen" ]]; then
 			mugen_logging="$(yq --raw-output .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
-			mugen_option=
+			mugen_options=
 
 			if [[ "$mugen_logging" == "null" ]] || [[ "$mugen_logging" == "info" ]]; then
 				mugen_options="$mugen_options"
@@ -514,6 +521,7 @@ function test_run() {
 	done
 
 	# run env post scripts
+	# shellcheck disable=SC1090
 	for i in $(ls $ENV_PATH/*.post 2>/dev/null); do
 		LOG_DEBUG source $i
 		source "$i"
@@ -559,6 +567,8 @@ function multi_dimensional_test() {
 }
 
 multi_dimensional_test
+
+[ -z "$OLD_PATH" ] || export PATH="$OLD_PATH"
 
 code_exit 0
 
