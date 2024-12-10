@@ -3,7 +3,7 @@ WORKDIR /ruyi-litester
 # 使用镜像
 RUN rm -rf /etc/apt/sources.list.d && mkdir /etc/apt/sources.list.d && printf "Types: deb\nURIs: http://mirrors.ustc.edu.cn/debian\nSuites: bookworm\nComponents: main contrib\nSigned-By: /usr/share/keyrings/debian-archive-keyring.gpg" > /etc/apt/sources.list.d/apt.sources
 
-RUN apt-get update && apt-get install -y llvm-14-tools coreutils util-linux yq grep procps bash sudo git python3.11-venv wget build-essential libssl-dev zstd && apt-get clean
+RUN apt-get update && apt-get install -y llvm-14-tools coreutils util-linux yq grep procps bash sudo git python3.11-venv wget build-essential libssl-dev zstd locales && apt-get clean
 
 
 FROM build
