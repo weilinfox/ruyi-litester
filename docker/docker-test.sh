@@ -47,8 +47,8 @@ fi
 docker rm ruyi-test-docker || true
 
 docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t $docker_tag -f docker/$dockerfile . && \
-#docker run -e RUYI_TELEMETRY_OPTOUT=1 --name ruyi-test-docker -it $docker_tag "$@"   
 docker run --name ruyi-test-docker -it $docker_tag "$@"   
+#docker run -e RUYI_TELEMETRY_OPTOUT=1 --name ruyi-test-docker -it $docker_tag "$@"
 
 # 复制 log 并删除 container 和 image
 docker cp ruyi-test-docker:/ruyi-litester/mugen_log/ . && docker rm ruyi-test-docker
