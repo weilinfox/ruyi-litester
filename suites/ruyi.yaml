@@ -42,3 +42,12 @@ ruyi-bin:
   post:
     - ["ruyi/ruyi-bin-remove", ]
 
+ruyi-i18n:
+  cases:
+    - ruyi-i18n
+  pre:
+    - ["i18n/setup-zh-locale", ]
+    - ["ruyi/ruyi-src-install", ]
+  post:
+    - ["i18n/setup-en-locale", ]
+    - ["ruyi/ruyi-src-remove", ]
