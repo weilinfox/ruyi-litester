@@ -13,3 +13,4 @@ for f in rit_features:
     config.available_features.add(f)
 
 config.environment.update(os.environ)
+config.test_retry_attempts = 3

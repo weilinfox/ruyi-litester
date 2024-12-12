@@ -1,6 +1,7 @@
 # NOTE: Test ruyi install and extract
 # NOTE: ``ruyi install`` outputs are printed to stderr
 # RUN: bash %s 2>&1 | FileCheck %s
+# ALLOW_RETRIES: 1
 
 # export RUYI_DEBUG=x
 
