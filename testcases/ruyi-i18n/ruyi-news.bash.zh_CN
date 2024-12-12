@@ -1,10 +1,10 @@
 # NOTE: zh_CN.UTF-8 output
 
-# ruyi news list
+ruyi news list
 # CHECK-LABEL: News items
 # CHECK: RuyiSDK 支持展示新闻了
 
-# ruyi news read 1
+ruyi news read 1
 # CHECK-LABEL: # RuyiSDK 支持展示新闻了
 # CHECK: 感谢您对 RuyiSDK 的支持！
 
