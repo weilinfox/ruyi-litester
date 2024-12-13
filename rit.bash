@@ -417,6 +417,19 @@ elif [[ "$i" == "gentoo" ]]; then
 	done
 	fi
 	break
+
+elif [[ "$i" == "fedora" ]]; then
+	mkdir -p "$TMP_PATH/bin"
+	OLD_PATH="$PATH"
+	NEW_PATH="$TMP_PATH/bin:$PATH"
+	if [ -z "$(whereis -b FileCheck | cut -d':' -f2)" ] && [ -n "$(ls /usr/lib64/llvm*/bin/FileCheck)" ]; then
+	for fc in $(ls /usr/lib64/llvm*/bin/FileCheck); do
+		ln -s $fc "$TMP_PATH/bin/FileCheck"
+		export PATH="$NEW_PATH"
+		break
+	done
+	fi
+	break
 fi
 done
 }
