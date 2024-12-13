@@ -15,15 +15,15 @@ usermod 后可能需要重启。
 ## 使用 rit
 
 ```shell
-docker/docker-test.sh --distro=ubuntu --help
+docker/docker-test.sh --distro=Ubuntu --help
 ```
 
 ```shell
-docker/docker-test.sh --distro=debian ruyi
+docker/docker-test.sh --distro=Debian ruyi
 ```
 
 ```shell
-docker/docker-test.sh --distro=arch ruyi > arch.log
+docker/docker-test.sh --distro=Arch ruyi > arch.log
 ```
 
 在另一个终端查看运行状态: 
