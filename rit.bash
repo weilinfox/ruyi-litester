@@ -301,7 +301,7 @@ for ((i=0; i<${#post_scripts[@]}; i++)); do
 done
 
 # host features
-HOST_FEATURES="$(uname -m)"
+export HOST_FEATURES="$(uname -m)"
 
 # shellcheck disable=SC2034
 function distro_features() {
