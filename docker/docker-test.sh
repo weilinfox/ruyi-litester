@@ -1,15 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
-debian_dockerfile=Debian.Dockerfile
-debian_tag=ruyi-debian
-ubuntu_dockerfile=Ubuntu.Dockerfile
-ubuntu_tag=ruyi-ubuntu
-arch_docerfile=Arch.Dockerfile
-arch_tag=ruyi-arch
-
-# default to debian 
-distro=debian
+distro=
 proxy=
 
 for i in "$@"
@@ -28,18 +20,20 @@ do
             ;;
     esac
 done
-docker_tag=
+if [ -z "$distro" ]; then
+    echo no distro specified, default to debian
+    distro=debian
+fi
 
-if [ "$distro" = "debian" ]; then
-    docker_tag=$debian_tag
-    dockerfile=$debian_dockerfile
-elif [ "$distro" = "ubuntu" ]; then
-    docker_tag=$ubuntu_tag
-    dockerfile=$ubuntu_dockerfile
-elif [ "$distro" = "arch" ]; then
-    docker_tag=$arch_tag
-    dockerfile=$arch_docerfile
-else
+# there is no need for checking if the distro is valid, since it's checked below
+
+# build docker image and run
+
+dockerfile="${distro}.Dockerfile"
+docker_tag="${distro,,}_tag"
+
+
+if [ -z "$dockerfile" ] ; then
     echo "Unknown distro: $distro"
     exit 1
 fi
