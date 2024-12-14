@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./setup-locale.bash en_US
+scripts/i18n/setup-locale.bash en_US

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./setup-locale.bash zh_CN
+scripts/i18n/setup-locale.bash zh_CN
