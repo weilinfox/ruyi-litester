@@ -1,5 +1,5 @@
 #!/bin/bash
-for i in $HOST_FEATURES; do
+for i in $RIT_CASE_FEATURES; do
 if [[ "$i" == "ubuntu" ]] || [[ "$i" == "debian" ]]; then
     echo $1.UTF-8 UTF-8 | sudo tee /etc/locale.gen
 
