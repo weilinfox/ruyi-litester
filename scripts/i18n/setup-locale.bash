@@ -6,7 +6,7 @@ if [[ "$i" == "ubuntu" ]] || [[ "$i" == "debian" ]] || [[ "$i" == "gentoo" ]]; t
     sudo locale-gen
     break
 
-elif [[ "$i" == "fedora" ]]; then
+elif [[ "$i" == "fedora" ]] || [[ "$i" == "openeuler" ]]; then
     sudo localedef -c -i $1 -f UTF-8 $1.UTF-8
 
     break
