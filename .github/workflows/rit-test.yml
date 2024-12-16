@@ -4,11 +4,13 @@ on:
   push:
     paths:
       - 'driver/**'
+      - 'rit.bash'
       - 'suites/**'
       - 'testcases/**'
   pull_request:
     paths:
       - 'driver/**'
+      - 'rit.bash'
       - 'suites/**'
       - 'testcases/**'
 
