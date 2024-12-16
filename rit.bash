@@ -582,9 +582,9 @@ function multi_dimensional_test() {
 function copy_docker_logs()
 {
 	if [ -n "$DOCKER" ]; then
-	    rm -rf logs || true
-	    mkdir logs
-	    cp ./*.log logs
+		rm -rf logs || true
+		mkdir logs
+		cp ./*.log logs
 	fi
 
 	return 0
