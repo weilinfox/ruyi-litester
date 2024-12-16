@@ -229,14 +229,14 @@ fi
 [[ -f "$SUITE_PATH"/"$suite_name".yaml ]] || fatal_exit "missing testsuite yaml profile"
 
 # parse testcases
-case_profiles="$(yq --raw-output .\"$profile_name\".cases "$SUITE_PATH"/"$suite_name".yaml)"
+case_profiles="$("$DRIVER_PATH"/yq.bash .\"$profile_name\".cases "$SUITE_PATH"/"$suite_name".yaml)"
 case_dirs=()
-case_len="$(echo $case_profiles | yq --raw-output length)"
+case_len="$(echo $case_profiles | "$DRIVER_PATH"/yq.bash length)"
 for ((i=0; i<case_len; i++)); do
-	tmp_case="$(echo $case_profiles | yq --raw-output .[$i])"
+	tmp_case="$(echo $case_profiles | "$DRIVER_PATH"/yq.bash .[$i])"
 	[[ -d "$CASE_PATH"/"$tmp_case" ]] || fatal_exit "missing testcase directory \"$tmp_case\""
 	[[ -f "$CASE_PATH"/"$tmp_case"/rit.yaml ]] || fatal_exit "testcase \"$tmp_case\" missing rit.yaml"
-	[[ "$(yq .type "$CASE_PATH"/"$tmp_case"/rit.yaml)" != "null" ]] || fatal_exit "testcase \"$tmp_case\" type unknown"
+	[[ "$("$DRIVER_PATH"/yq.bash .type "$CASE_PATH"/"$tmp_case"/rit.yaml)" != "null" ]] || fatal_exit "testcase \"$tmp_case\" type unknown"
 
 
 	# shellcheck disable=SC2086
@@ -252,13 +252,13 @@ case_len="${#case_dirs[@]}"
 unset tmp_case
 
 # parse profile
-suite_profiles="$(yq --raw-output .\"$profile_name\" "$SUITE_PATH"/"$suite_name".yaml)"
+suite_profiles="$("$DRIVER_PATH"/yq.bash .\"$profile_name\" "$SUITE_PATH"/"$suite_name".yaml)"
 [[ "$suite_profiles" == "null" ]] && fatal_exit "no such suite profile found \"$profile_name\""
 
-pre_yaml="$(echo $suite_profiles | yq --raw-output .pre)"
-post_yaml="$(echo $suite_profiles | yq --raw-output .post)"
-pre_len="$(echo $pre_yaml | yq --raw-output length)"
-post_len="$(echo $post_yaml | yq --raw-output length)"
+pre_yaml="$(echo $suite_profiles | "$DRIVER_PATH"/yq.bash .pre)"
+post_yaml="$(echo $suite_profiles | "$DRIVER_PATH"/yq.bash .post)"
+pre_len="$(echo $pre_yaml | "$DRIVER_PATH"/yq.bash length)"
+post_len="$(echo $post_yaml | "$DRIVER_PATH"/yq.bash length)"
 [[ "$pre_len" == "$post_len" ]] || fatal_exit "pre and post script list have different dimensions"
 [ "$pre_len" -lt 1 ] && fatal_exit "script list have 0 dimension"
 
@@ -266,18 +266,18 @@ post_len="$(echo $post_yaml | yq --raw-output length)"
 pre_scripts=()
 post_scripts=()
 for ((i=0; i<pre_len; i++)); do
-	tmp_pre="$(echo $pre_yaml | yq --raw-output .[$i])"
-	tmp_post="$(echo $post_yaml | yq --raw-output .[$i])"
-	tmp_pre_len="$(echo $tmp_pre | yq --raw-output length)"
-	tmp_post_len="$(echo $tmp_post | yq --raw-output length)"
+	tmp_pre="$(echo $pre_yaml | "$DRIVER_PATH"/yq.bash .[$i])"
+	tmp_post="$(echo $post_yaml | "$DRIVER_PATH"/yq.bash .[$i])"
+	tmp_pre_len="$(echo $tmp_pre | "$DRIVER_PATH"/yq.bash length)"
+	tmp_post_len="$(echo $tmp_post | "$DRIVER_PATH"/yq.bash length)"
 	tmp_pre_list=
 	tmp_post_list=
 
 	[[ "$tmp_pre_len" == "$tmp_post_len" ]] || fatal_exit "pre and post script list $i dimension have different length"
 
 	for ((j=0; j<tmp_pre_len; j++)); do
-		tmp_pre_list="$tmp_pre_list $(echo $tmp_pre | yq --raw-output .[$j])"
-		tmp_post_list="$tmp_post_list $(echo $tmp_post | yq --raw-output .[$j])"
+		tmp_pre_list="$tmp_pre_list $(echo $tmp_pre | "$DRIVER_PATH"/yq.bash .[$j])"
+		tmp_post_list="$tmp_post_list $(echo $tmp_post | "$DRIVER_PATH"/yq.bash .[$j])"
 	done
 	tmp_pre_list="${tmp_pre_list:1}"
 	tmp_post_list="${tmp_post_list:1}"
@@ -470,12 +470,12 @@ function test_run() {
 	done
 
 	for ((i=0; i<case_len; i++)); do
-		test_type="$(yq --raw-output .type ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+		test_type="$("$DRIVER_PATH"/yq.bash .type ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
 
 		if [[ "$test_type" == "lit" ]]; then
-			lit_order="$(yq --raw-output .order ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
-			lit_concurrent="$(yq --raw-output .concurrent ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
-			lit_logging="$(yq --raw-output .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+			lit_order="$("$DRIVER_PATH"/yq.bash .order ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+			lit_concurrent="$("$DRIVER_PATH"/yq.bash .concurrent ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+			lit_logging="$("$DRIVER_PATH"/yq.bash .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
 			lit_options=
 
 			if [[ "$lit_order" == "null" ]] || [[ "$lit_order" == "random" ]]; then
@@ -513,7 +513,7 @@ function test_run() {
 			"$DRIVER_PATH"/lit.bash $lit_options ${lit_args[@]} "${CASE_PATH}"/"${case_dirs[$i]}" 2>&1 | tee "$RUN_PATH"/"$suite_name"_"$profile_name"_"${case_dirs[$i]}"_"$dim"_"$LOG_DATE".log
 
 		elif [[ "$test_type" == "mugen" ]]; then
-			mugen_logging="$(yq --raw-output .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
+			mugen_logging="$("$DRIVER_PATH"/yq.bash .logging ${CASE_PATH}/${case_dirs[$i]}/rit.yaml)"
 			mugen_options=
 
 			if [[ "$mugen_logging" == "null" ]] || [[ "$mugen_logging" == "info" ]]; then
