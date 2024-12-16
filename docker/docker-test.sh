@@ -3,6 +3,7 @@ set -e
 
 distro=
 proxy=
+arch=
 
 for i in "$@"
 do
@@ -15,22 +16,39 @@ do
             proxy="${i#*=}"
             shift
             ;;
+        --arch=*)
+            arch="${i#*=}"
+            shift
+            ;;
         *)
             # unknown option
             ;;
     esac
 done
 if [ -z "$distro" ]; then
-    echo no distro specified, default to debian
+    echo no distro specified, defaulting to debian
     distro=debian
 fi
+
+if [ -z "$arch" ]; then
+    echo no arch specified, defaulting to amd64
+    arch=amd64
+fi
+
+
+if [ "$arch" != "amd64" ] && [ "$arch" != "arm64" ] && [ "$arch" != "riscv64" ]; then
+    echo "Invalid arch: $arch"
+    exit 1
+fi
+
+arch_arg=linux/$arch
 
 # there is no need for checking if the distro is valid, since it's checked below
 
 # build docker image and run
 
 dockerfile="${distro}.Dockerfile"
-docker_tag="${distro,,}_tag"
+docker_tag="${distro,,}_tag_${arch}"
 
 
 if [ -z "$dockerfile" ] ; then
@@ -38,19 +56,27 @@ if [ -z "$dockerfile" ] ; then
     exit 1
 fi
 
-docker rm ruyi-test-docker || true
+function cleanup()
+{
+    # 复制容器内的 log
+    docker cp $container_name:/ruyi-litester/mugen_log/ .
+    rm -rf logs
+    docker cp $container_name:/ruyi-litester/logs/ ./ 
 
-docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t $docker_tag -f docker/distros/$dockerfile . && \
-docker run -e DOCKER=true --name ruyi-test-docker -it $docker_tag "$@"   
-#docker run -e RUYI_TELEMETRY_OPTOUT=1 --name ruyi-test-docker -it $docker_tag "$@"
+    # 删除 container 和 image
+    docker rm ruyi-test-docker
+    docker rmi $docker_tag
+}
+trap cleanup SIGINT SIGTERM
 
-# 复制容器内的 log
-docker cp ruyi-test-docker:/ruyi-litester/mugen_log/ .
-rm -rf logs
-docker cp ruyi-test-docker:/ruyi-litester/logs/ ./ 
+container_name=ruyi-test-docker-$distro-$arch
 
-# 删除 container 和 image
-docker rm ruyi-test-docker
-docker rmi $docker_tag
+docker rm $container_name || true
+
+docker build --platform $arch_arg --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg ARCH=$arch -t $docker_tag -f docker/distros/$dockerfile . && \
+docker run --platform $arch_arg -e DOCKER=true --name $container_name -it $docker_tag "$@"   
+
+cleanup
+
 
 
