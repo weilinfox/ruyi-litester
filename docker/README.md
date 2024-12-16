@@ -38,6 +38,6 @@ docker run --privileged --rm tonistiigi/binfmt --install arm64,riscv64
 ```
 
 ```shell
-docker/docker-test.sh --distro=Ubuntu --arch=riscv ruyi > arch.log
-docker/docker-test.sh --distro=Ubuntu --arch=arm64 ruyi > arch.log
+docker/docker-test.sh --distro=Ubuntu --arch=riscv64 ruyi > ubuntu.log
+docker/docker-test.sh --distro=Ubuntu --arch=arm64 ruyi > ubuntu.log
 ```
