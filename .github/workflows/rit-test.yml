@@ -1,0 +1,23 @@
+name: commit/pr checks
+
+on:
+  push:
+    paths:
+      - 'driver/**'
+      - 'suites/**'
+      - 'testcases/**'
+  pull_request:
+    paths:
+      - 'driver/**'
+      - 'suites/**'
+      - 'testcases/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: 'rit.bash rit'
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+      - run: ./rit.bash rit
+
