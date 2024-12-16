@@ -30,3 +30,14 @@ docker/docker-test.sh --distro=Arch ruyi > arch.log
 ```shell
 docker logs -f ruyi-test-docker
 ```
+
+## 让 Docker 支持 qemu
+
+```shell
+docker run --privileged --rm tonistiigi/binfmt --install arm64,riscv64
+```
+
+```shell
+docker/docker-test.sh --distro=Ubuntu --arch=riscv ruyi > arch.log
+docker/docker-test.sh --distro=Ubuntu --arch=arm64 ruyi > arch.log
+```
