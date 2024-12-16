@@ -255,10 +255,10 @@ unset tmp_case
 suite_profiles="$("$DRIVER_PATH"/yq.bash .\"$profile_name\" "$SUITE_PATH"/"$suite_name".yaml)"
 [[ "$suite_profiles" == "null" ]] && fatal_exit "no such suite profile found \"$profile_name\""
 
-pre_yaml="$(echo $suite_profiles | "$DRIVER_PATH"/yq.bash .pre)"
-post_yaml="$(echo $suite_profiles | "$DRIVER_PATH"/yq.bash .post)"
-pre_len="$(echo $pre_yaml | "$DRIVER_PATH"/yq.bash length)"
-post_len="$(echo $post_yaml | "$DRIVER_PATH"/yq.bash length)"
+pre_yaml="$(echo "$suite_profiles" | "$DRIVER_PATH"/yq.bash .pre)"
+post_yaml="$(echo "$suite_profiles" | "$DRIVER_PATH"/yq.bash .post)"
+pre_len="$(echo "$pre_yaml" | "$DRIVER_PATH"/yq.bash length)"
+post_len="$(echo "$post_yaml" | "$DRIVER_PATH"/yq.bash length)"
 [[ "$pre_len" == "$post_len" ]] || fatal_exit "pre and post script list have different dimensions"
 [ "$pre_len" -lt 1 ] && fatal_exit "script list have 0 dimension"
 
@@ -266,18 +266,18 @@ post_len="$(echo $post_yaml | "$DRIVER_PATH"/yq.bash length)"
 pre_scripts=()
 post_scripts=()
 for ((i=0; i<pre_len; i++)); do
-	tmp_pre="$(echo $pre_yaml | "$DRIVER_PATH"/yq.bash .[$i])"
-	tmp_post="$(echo $post_yaml | "$DRIVER_PATH"/yq.bash .[$i])"
-	tmp_pre_len="$(echo $tmp_pre | "$DRIVER_PATH"/yq.bash length)"
-	tmp_post_len="$(echo $tmp_post | "$DRIVER_PATH"/yq.bash length)"
+	tmp_pre="$(echo "$pre_yaml" | "$DRIVER_PATH"/yq.bash .[$i])"
+	tmp_post="$(echo "$post_yaml" | "$DRIVER_PATH"/yq.bash .[$i])"
+	tmp_pre_len="$(echo "$tmp_pre" | "$DRIVER_PATH"/yq.bash length)"
+	tmp_post_len="$(echo "$tmp_post" | "$DRIVER_PATH"/yq.bash length)"
 	tmp_pre_list=
 	tmp_post_list=
 
 	[[ "$tmp_pre_len" == "$tmp_post_len" ]] || fatal_exit "pre and post script list $i dimension have different length"
 
 	for ((j=0; j<tmp_pre_len; j++)); do
-		tmp_pre_list="$tmp_pre_list $(echo $tmp_pre | "$DRIVER_PATH"/yq.bash .[$j])"
-		tmp_post_list="$tmp_post_list $(echo $tmp_post | "$DRIVER_PATH"/yq.bash .[$j])"
+		tmp_pre_list="$tmp_pre_list $(echo "$tmp_pre" | "$DRIVER_PATH"/yq.bash .[$j])"
+		tmp_post_list="$tmp_post_list $(echo "$tmp_post" | "$DRIVER_PATH"/yq.bash .[$j])"
 	done
 	tmp_pre_list="${tmp_pre_list:1}"
 	tmp_post_list="${tmp_post_list:1}"
