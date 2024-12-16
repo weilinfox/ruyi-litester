@@ -579,7 +579,19 @@ function multi_dimensional_test() {
 	return 0
 }
 
+function copy_docker_logs()
+{
+	if [ -n "$DOCKER" ]; then
+		rm -rf logs || true
+	    mkdir logs
+		cp ./*.log logs
+	fi
+
+	return 0
+}
+
 multi_dimensional_test
+copy_docker_logs
 
 [ -z "$OLD_PATH" ] || export PATH="$OLD_PATH"
 
