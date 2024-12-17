@@ -51,11 +51,12 @@ Docker in amd64:
 |  | Arch | Debian | Ubuntu | Fedora | openEuler | Gentoo | openkylin | revyos |
 | :- | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | amd64 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ |
-| arm64 | ➖ | ❔ | ❔ | ❔ | ❔ | ❌ | ❌ | ➖ |
-| riscv64 | ➖ | ❔ | ✅ | ➖| ❔ | ❔ | ❔ | ❔ |
+| arm64 | ➖ | ⚠️ | ✅ | ✅ | ❔ | ❌ | ❌ | ➖ |
+| riscv64 | ➖ | ⚠️ | ✅ | ➖| ⚠️ | ❔ | ✅ | ❔ |
 
 ❔: 暂未测试  
 ➖: 该发行版未提供  
-❌: 未计划支持
+❌: 未计划支持  
+⚠️: 需要人工打包
 
 <!--如何制作镜像：https://wiki.metacentrum.cz/wiki/Creating_Docker_Image_from_.iso_File -->
