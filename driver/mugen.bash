@@ -74,7 +74,7 @@ CASE_NAME=()
 LOG_DIR="$RIT_RUN_PATH"/mugen_log
 
 for ((i=0;i<$CASE_LEN;i++)); do
-	case_name="$(jq --raw-output ".cases.[$i].name" "$RIT_CASE_PATH/$SUITE/$SUITE.json")"
+	case_name="$(jq --raw-output ".cases | .[$i].name" "$RIT_CASE_PATH/$SUITE/$SUITE.json")"
 
 	if [ -n "$CASE" ] && [[ "$case_name" != "$CASE" ]]; then
 		continue
