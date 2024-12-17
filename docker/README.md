@@ -41,3 +41,14 @@ docker run --privileged --rm tonistiigi/binfmt --install arm64,riscv64
 docker/docker-test.sh --distro=Ubuntu --arch=riscv64 ruyi > ubuntu.log
 docker/docker-test.sh --distro=Ubuntu --arch=arm64 ruyi > ubuntu.log
 ```
+
+
+## 支持矩阵
+|  | Arch | Debian | Ubuntu | Fedora | openEuler | Gentoo | openkylin | revyos |
+| :- | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| amd64 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |  | |
+| arm64 | ➖ | ❔ | ❔ | ❔ | ❔ | ❔ | | |
+| riscv64 | ➖ | ❔ | ❔ | ➖| ❔ | ❔ | | |
+
+❔: 暂未测试
+➖: 该发行版未提供
