@@ -48,7 +48,7 @@ arch_arg=linux/$arch
 # build docker image and run
 
 dockerfile="${distro}.Dockerfile"
-docker_tag="${distro,,}_tag_${arch}"
+docker_tag="${distro,,}_${arch}"
 
 
 if [ -z "$dockerfile" ] ; then
@@ -61,7 +61,7 @@ function cleanup()
     # 复制容器内的 log
     docker cp $container_name:/ruyi-litester/mugen_log/ .
     rm -rf logs
-    docker cp $container_name:/ruyi-litester/logs/ ./ 
+    docker cp $container_name:/ruyi-litester/logs/ ./$docker_tag 
 
     # 删除 container 和 image
     docker rm ruyi-test-docker
@@ -73,8 +73,8 @@ container_name=ruyi-test-docker-$distro-$arch
 
 docker rm $container_name || true
 
-docker build --platform $arch_arg --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg ARCH=$arch -t $docker_tag -f docker/distros/$dockerfile . && \
-docker run --platform $arch_arg -e DOCKER=true --name $container_name -it $docker_tag "$@"   
+docker build --platform $arch_arg --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg ARCH=$arch --network host -t $docker_tag -f docker/distros/$dockerfile . && \
+docker run --platform $arch_arg -e DOCKER=true --network host --name $container_name -it $docker_tag "$@"   
 
 cleanup
 
