@@ -33,6 +33,7 @@ docker logs -f ruyi-test-docker
 
 ## 让 Docker 支持 qemu
 
+看起来需要每次开机都运行！
 ```shell
 docker run --privileged --rm tonistiigi/binfmt --install arm64,riscv64
 ```
@@ -44,11 +45,17 @@ docker/docker-test.sh --distro=Ubuntu --arch=arm64 ruyi > ubuntu.log
 
 
 ## 支持矩阵
+
+Docker in amd64:
+
 |  | Arch | Debian | Ubuntu | Fedora | openEuler | Gentoo | openkylin | revyos |
 | :- | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| amd64 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |  | |
-| arm64 | ➖ | ❔ | ❔ | ❔ | ❔ | ❔ | | |
-| riscv64 | ➖ | ❔ | ❔ | ➖| ❔ | ❔ | | |
+| amd64 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ |
+| arm64 | ➖ | ❔ | ❔ | ❔ | ❔ | ❌ | ❌ | ➖ |
+| riscv64 | ➖ | ❔ | ✅ | ➖| ❔ | ❔ | ❔ | ❔ |
 
-❔: 暂未测试
-➖: 该发行版未提供
+❔: 暂未测试  
+➖: 该发行版未提供  
+❌: 未计划支持
+
+<!--如何制作镜像：https://wiki.metacentrum.cz/wiki/Creating_Docker_Image_from_.iso_File -->
