@@ -12,7 +12,7 @@ mkdir -p "$TMP_DIR" ~/.local/bin/
 
 git clone --depth=1 "$RUYI_MASTER" "$TMP_DIR"
 
-python3 -m venv --copies "$TMP_DIR"/venv-ruyi
+python3 -m venv --system-site-packages --copies "$TMP_DIR"/venv-ruyi
 source "$TMP_DIR"/venv-ruyi/bin/activate
 pip install -i https://mirrors.bfsu.edu.cn/pypi/web/simple build installer poetry \
        	arpy certifi jinja2 packaging pygit2 pyyaml requests rich semver tomlkit typing_extensions

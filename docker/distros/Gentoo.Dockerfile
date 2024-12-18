@@ -2,12 +2,14 @@ FROM docker.1panel.live/gentoo/stage3 AS build
 WORKDIR /ruyi-litester
 # 使用镜像
 
-RUN mkdir /etc/portage/repos.conf && printf "[gentoo]\nlocation = /var/db/repos/gentoo\nsync-type = rsync\nsync-uri = rsync://mirrors.tuna.tsinghua.edu.cn/gentoo-portage\nauto-sync = yes" > /etc/portage/repos.conf/gentoo.conf && echo MAKEOPTS="-j6" >> /etc/portage/make.conf && echo "USE=-doc" >> /etc/portage/make.conf && sed -i 's/-O2/-O0/' /etc/portage/make.conf
+RUN mkdir /etc/portage/repos.conf && printf "[gentoo]\nlocation = /var/db/repos/gentoo\nsync-type = rsync\nsync-uri = rsync://mirrors.tuna.tsinghua.edu.cn/gentoo-portage\nauto-sync = yes" > /etc/portage/repos.conf/gentoo.conf && echo MAKEOPTS="-j8" >> /etc/portage/make.conf && echo "USE=-doc" >> /etc/portage/make.conf && sed -i 's/-O2/-O0/' /etc/portage/make.conf
 RUN emerge --sync --quiet
 # j6 8G 内存会被 oom kill
 RUN emerge llvm-core/llvm
-RUN emerge dev-python/lit coreutils util-linux grep procps bash sudo dev-vcs/git wget make app-arch/zstd openssl yq
-
+RUN emerge dev-python/lit coreutils util-linux grep procps bash sudo dev-vcs/git wget make app-arch/zstd openssl
+RUN emerge dev-python/pip app-misc/jq
+RUN pip install --break-system-packages yq
+RUN emerge dev-python/cryptography dev-python/pygit2 dev-python/dulwich dev-python/msgpack
 
 FROM build
 ARG UNAME=testuser
