@@ -6,8 +6,10 @@ RUN mkdir /etc/portage/repos.conf && printf "[gentoo]\nlocation = /var/db/repos/
 RUN emerge --sync --quiet
 # j6 8G 内存会被 oom kill
 RUN emerge llvm-core/llvm
-RUN emerge dev-python/lit coreutils util-linux grep procps bash sudo dev-vcs/git wget make app-arch/zstd openssl yq
-
+RUN emerge dev-python/lit coreutils util-linux grep procps bash sudo dev-vcs/git wget make app-arch/zstd openssl
+RUN emerge dev-python/pip app-misc/jq
+RUN pip install --break-system-packages yq
+RUN emerge dev-python/cryptography dev-python/pygit2 dev-python/dulwich dev-python/msgpack
 
 FROM build
 ARG UNAME=testuser
