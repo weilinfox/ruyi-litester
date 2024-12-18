@@ -231,9 +231,9 @@ fi
 # parse testcases
 case_profiles="$("$DRIVER_PATH"/yq.bash .\"$profile_name\".cases "$SUITE_PATH"/"$suite_name".yaml)"
 case_dirs=()
-case_len="$(echo $case_profiles | "$DRIVER_PATH"/yq.bash length)"
+case_len="$(echo "$case_profiles" | "$DRIVER_PATH"/yq.bash length)"
 for ((i=0; i<case_len; i++)); do
-	tmp_case="$(echo $case_profiles | "$DRIVER_PATH"/yq.bash .[$i])"
+	tmp_case="$(echo "$case_profiles" | "$DRIVER_PATH"/yq.bash .[$i])"
 	[[ -d "$CASE_PATH"/"$tmp_case" ]] || fatal_exit "missing testcase directory \"$tmp_case\""
 	[[ -f "$CASE_PATH"/"$tmp_case"/rit.yaml ]] || fatal_exit "testcase \"$tmp_case\" missing rit.yaml"
 	[[ "$("$DRIVER_PATH"/yq.bash .type "$CASE_PATH"/"$tmp_case"/rit.yaml)" != "null" ]] || fatal_exit "testcase \"$tmp_case\" type unknown"
