@@ -3,7 +3,7 @@ WORKDIR /ruyi-litester
 # 使用镜像
 RUN echo "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 RUN sed -i '/^NoExtract  = usr\/share\/locale\/\* usr\/share\/X11\/locale\/\* usr\/share\/i18n\/\*/d' /etc/pacman.conf
-RUN pacman-key --init && pacman -Syyu --noconfirm && pacman -S --noconfirm glibc llvm coreutils util-linux yq grep procps bash sudo git wget openssl-1.1 zstd make
+RUN pacman-key --init && pacman -Syyu --noconfirm && pacman -S --noconfirm glibc llvm coreutils util-linux yq grep procps bash sudo git wget openssl-1.1 zstd make glibc-locales
 
 
 FROM build
