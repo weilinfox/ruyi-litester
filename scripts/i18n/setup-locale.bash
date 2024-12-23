@@ -1,6 +1,6 @@
 #!/bin/bash
 for i in $RIT_CASE_FEATURES; do
-if [[ "$i" == "ubuntu" ]] || [[ "$i" == "debian" ]] || [[ "$i" == "gentoo" ]]; then
+if [[ "$i" == "ubuntu" ]] || [[ "$i" == "debian" ]] || [[ "$i" == "gentoo" ]] || [[ "$i" == "arch" ]]; then
     echo $1.UTF-8 UTF-8 | sudo tee /etc/locale.gen
 
     sudo locale-gen
