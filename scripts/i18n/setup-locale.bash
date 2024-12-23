@@ -13,10 +13,8 @@ elif [[ "$i" == "fedora" ]] || [[ "$i" == "openeuler" ]]; then
 fi
 done
 
-cat > /tmp/locale.sh <<EOF
+cat > "$RIT_CASE_ENV_PATH"/ruyi_ruyi-i18n.pre <<EOF
 export LANG=$1.UTF-8
 export PYTHONIOENCODING=utf-8
 export LC_ALL=$1.UTF-8
 EOF
-
-chmod +x /tmp/locale.sh
