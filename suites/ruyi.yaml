@@ -50,8 +50,8 @@ ruyi-i18n:
   cases:
     - ruyi-i18n
   pre:
-    - ["i18n/setup-zh-locale", ]
+    - ["i18n/setup-zh-locale", "i18n/setup-en-locale",]
     - ["ruyi/ruyi-src-install", ]
   post:
-    - ["i18n/setup-en-locale", ]
+    - ["i18n/setup-en-locale", _]
     - ["ruyi/ruyi-src-remove", ]
