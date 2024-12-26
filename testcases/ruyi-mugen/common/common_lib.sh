@@ -55,7 +55,7 @@ install_ruyi_bin() {
 	fi
 
 	PKG_INSTALL --fedora "curl git tar bzip2 xz zstd unzip lz4" \
-		--debian --ubuntu "curl git tar bzip2 xz-utils zstd unzip lz4" \
+		--debian --ubuntu --deepin "curl git tar bzip2 xz-utils zstd unzip lz4" \
 		--archlinux "curl git tar bzip2 xz zstd unzip lz4" \
 		--gentoo "net-misc/curl dev-vcs/git app-arch/tar app-arch/bzip2 app-arch/xz-utils app-arch/zstd app-arch/unzip app-arch/lz4"
 

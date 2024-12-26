@@ -302,6 +302,8 @@ function PKG_INSTALL() {
 	local arch_pkg=
 	local debian_flag=
 	local debian_pkg=
+	local deepin_flag=
+	local deepin_pkg=
 	local fedora_flag=
 	local fedora_pkg=
 	local gentoo_flag=
@@ -326,6 +328,10 @@ function PKG_INSTALL() {
 		--debian)
 			debian_flag=x
 			[ -z "$pkg_list" ] || { debian_flag=o; pkg_flag=x; }
+			;;
+		--deepin)
+			deepin_flag=x
+			[ -z "$pkg_list" ] || { deepin_flag=o; pkg_flag=x; }
 			;;
 		--fedora)
 			fedora_flag=x
@@ -364,6 +370,7 @@ function PKG_INSTALL() {
 	if [[ "$pkg_flag" == "x" ]] || [ "$#" -eq 0 ]; then
 		[[ "$arch_flag" == "x" ]] && { arch_flag= ; arch_pkg="$pkg_list"; }
 		[[ "$debian_flag" == "x" ]] && { debian_flag= ; debian_pkg="$pkg_list"; }
+		[[ "$deepin_flag" == "x" ]] && { deepin_flag= ; deepin_pkg="$pkg_list"; }
 		[[ "$fedora_flag" == "x" ]] && { fedora_flag= ; fedora_pkg="$pkg_list"; }
 		[[ "$openeuler_flag" == "x" ]] && { openeuler_flag= ; openeuler_pkg="$pkg_list"; }
 		[[ "$openkylin_flag" == "x" ]] && { openkylin_flag= ; openkylin_pkg="$pkg_list"; }
@@ -376,6 +383,7 @@ function PKG_INSTALL() {
 
 		[[ "$arch_flag" == "o" ]] && arch_flag=x
 		[[ "$debian_flag" == "o" ]] && debian_flag=x
+		[[ "$deepin_flag" == "o" ]] && deepin_flag=x
 		[[ "$fedora_flag" == "o" ]] && fedora_flag=x
 		[[ "$openeuler_flag" == "o" ]] && openeuler_flag=x
 		[[ "$openkylin_flag" == "o" ]] && openkylin_flag=x
@@ -389,6 +397,8 @@ function PKG_INSTALL() {
 		PACMAN_INSTALL "$arch_pkg"
 	elif HOST_HAS_FEATURE "debian"; then
 		APT_INSTALL "$debian_pkg"
+	elif HOST_HAS_FEATURE "deepin"; then
+		APT_INSTALL "$deepin_pkg"
 	elif HOST_HAS_FEATURE "fedora"; then
 		DNF_INSTALL "$fedora_pkg"
 	elif HOST_HAS_FEATURE "openeuler"; then
@@ -482,6 +492,8 @@ function PKG_REMOVE() {
 	if HOST_HAS_FEATURE "archlinux"; then
 		PACMAN_REMOVE
 	elif HOST_HAS_FEATURE "debian"; then
+		APT_REMOVE
+	elif HOST_HAS_FEATURE "deepin"; then
 		APT_REMOVE
 	elif HOST_HAS_FEATURE "fedora"; then
 		DNF_REMOVE
