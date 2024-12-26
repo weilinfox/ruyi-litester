@@ -368,6 +368,7 @@ function distro_features() {
 		[[ "$NAME" == "Ubuntu" ]] && distro="ubuntu"
 		[[ "$NAME" == "openKylin" ]] && distro="openkylin"
 		[[ "$NAME" == "openEuler" ]] && distro="openeuler"
+		[[ "$NAME" == "Deepin" ]] && distro="deepin"
 		[[ "$PRETTY_NAME" == "Gentoo Linux" ]] && distro="gentoo"
 
 		[[ "$ID_LIKE" == "arch" ]] && distro="archlinux"
@@ -386,7 +387,7 @@ function distro_features() {
 # Gentoo FileCheck wrapper
 function whereis_lit_and_filecheck() {
 for i in $HOST_FEATURES; do
-if [[ "$i" == "ubuntu" ]] || [[ "$i" == "debian" ]] || [[ "$i" == "revyos" ]] || [[ "$i" == "openkylin" ]] ; then
+if [[ "$i" == "ubuntu" ]] || [[ "$i" == "debian" ]] || [[ "$i" == "deepin" ]] || [[ "$i" == "revyos" ]] || [[ "$i" == "openkylin" ]] ; then
 	mkdir -p "$TMP_PATH/bin"
 	OLD_PATH="$PATH"
 	NEW_PATH="$TMP_PATH/bin:$PATH"

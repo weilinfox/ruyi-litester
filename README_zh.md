@@ -206,6 +206,7 @@ logging: debug
 | x86\_64 |  |
 | archlinux |  |
 | debian |  |
+| deepin |  |
 | fedora |  |
 | linux | 系统为 Linux，但是没有成功获取到具体发行版信息 |
 | openkylin |  |
