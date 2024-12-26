@@ -1,15 +1,14 @@
 # NOTE: Test wps-office installation
-# REQUIRES: riscv64
 #
 # RUN: bash %s 2>&1 | FileCheck %s
 
 ruyi update
 
-ruyi install extra/wps-office
+ruyi install --host x86_64 extra/wps-office
 # CHECK-LABEL: info: instructions on fetching this file:
 # CHECK: https://linux.wps.cn
 
-if [[ "$(ruyi install wps-office 2>&1 | tail -n1)" =~ wps-office_([0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)_amd64.deb ]]; then
+if [[ "$(ruyi install --host x86_64 wps-office 2>&1 | tail -n1)" =~ wps-office_([0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)_amd64.deb ]]; then
 	version="${BASH_REMATCH[1]}"
 	build="${BASH_REMATCH[2]}"
 else
@@ -59,7 +58,7 @@ url+="?t=${timestamp10}&k=${md5hash%% *}"
 
 curl -L $url -o ~/.cache/ruyi/distfiles/$file
 
-ruyi install extra/wps-office
+ruyi install --host x86_64 extra/wps-office
 # CHECK: info: extracting wps-office_{{.*}}_amd64.deb for package wps-office-{{.*}}
 # CHECK: info: package wps-office-{{.*}} installed to
 
