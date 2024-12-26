@@ -5,6 +5,7 @@ ruyi:
     - ruyi-help
     - ruyi-basic
     - ruyi-advance
+    - ruyi-mugen
   pre:
     # each pre script should have a corresponding post script
     # or set it to _
@@ -17,6 +18,7 @@ ruyi-local:
     - ruyi-help
     - ruyi-basic
     - ruyi-advance
+    - ruyi-mugen
   pre:
     - ["_", ]
   post:
@@ -27,6 +29,7 @@ ruyi-src:
     - ruyi-help
     - ruyi-basic
     - ruyi-advance
+    - ruyi-mugen
   pre:
     - ["ruyi/ruyi-src-install", ]
   post:
@@ -37,6 +40,7 @@ ruyi-bin:
     - ruyi-help
     - ruyi-basic
     - ruyi-advance
+    - ruyi-mugen
   pre:
     - ["ruyi/ruyi-bin-install", ]
   post:

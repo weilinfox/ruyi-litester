@@ -14,7 +14,7 @@ EXECUTE_T=120m
 
 function pre_test() {
 	LOG_INFO "Start environmental preparation."
-	install_ruyi_bin || LOG_ERROR "Install ruyi error"
+	# install_ruyi_bin || LOG_ERROR "Install ruyi error"
 	LOG_INFO "End of environmental preparation!"
 }
 
@@ -66,7 +66,7 @@ function run_test() {
 
 function post_test() {
 	LOG_INFO "start environment cleanup."
-	remove_ruyi_bin
+	# remove_ruyi_bin
 	LOG_INFO "Finish environment cleanup!"
 }
 
