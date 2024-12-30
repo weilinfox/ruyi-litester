@@ -20,7 +20,7 @@ case "$(uname -m)" in
 		;;
 esac
 
-if [[ "$version" =~ "-" ]]; then
+if [[ "$RUYI_VERSION" =~ "-" ]]; then
 	RUYI_LINK="https://mirror.iscas.ac.cn/ruyisdk/ruyi/testing/${RUYI_VERSION}/ruyi.${RUYI_ARCH}"
 else
 	RUYI_LINK="https://mirror.iscas.ac.cn/ruyisdk/ruyi/releases/${RUYI_VERSION}/ruyi.${RUYI_ARCH}"
