@@ -20,7 +20,11 @@ case "$(uname -m)" in
 		;;
 esac
 
-RUYI_LINK="https://mirror.iscas.ac.cn/ruyisdk/ruyi/releases/${RUYI_VERSION}/ruyi.${RUYI_ARCH}"
+if [[ "$version" =~ "-" ]]; then
+	RUYI_LINK="https://mirror.iscas.ac.cn/ruyisdk/ruyi/testing/${RUYI_VERSION}/ruyi.${RUYI_ARCH}"
+else
+	RUYI_LINK="https://mirror.iscas.ac.cn/ruyisdk/ruyi/releases/${RUYI_VERSION}/ruyi.${RUYI_ARCH}"
+fi
 
 if wget --help > /dev/null; then
 	wget $RUYI_LINK -O ~/.local/bin/ruyi
