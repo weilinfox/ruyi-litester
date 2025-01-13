@@ -44,3 +44,5 @@ if [ -z "$(whereis ruyi | cut -d: -f2)" ]; then
 	echo "export PATH=$PATH" >> "$RIT_CASE_ENV_PATH"/ruyi_ruyi-bin-install.post
 fi
 
+~/.local/bin/ruyi telemetry consent
+
