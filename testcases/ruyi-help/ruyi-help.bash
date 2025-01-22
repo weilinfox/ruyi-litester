@@ -67,6 +67,16 @@ ruyi venv --help
 # CHECK-NEXT: dest
 # CHECK: options:
 
+ruyi telemetry --help
+# CHECK-LABEL: usage: ruyi telemetry [
+# CHECK: options:
+# CHECK: subcommands:
+
+ruyi config --help
+# CHECK-LABEL: usage: ruyi config [
+# CHECK: options:
+# CHECK: subcommands:
+
 ruyi admin --help
 # CHECK-LABEL: usage: ruyi admin [
 # CHECK: options:
