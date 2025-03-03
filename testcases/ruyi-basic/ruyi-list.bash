@@ -9,14 +9,14 @@ ruyi version
 
 ruyi update
 
-ruyi list
+ruyi list --name-contains ""
 # NOTE: warn that output order of packages varias on machines
 # CHECK-LABEL: List of available packages:
 # CHECK-NOT: Package declares
 # CHECK: * toolchain
 # CHECK-NOT: Package declares
 
-ruyi list --verbose
+ruyi list --name-contains "" --verbose
 # CHECK-LABEL: ## {{.*}}
 # CHECK: ## toolchain
 # CHECK: * Package kind:

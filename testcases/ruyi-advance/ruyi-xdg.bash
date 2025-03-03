@@ -26,9 +26,9 @@ rm -rf "$default_ruyi_dir" "$default_ruyi_data_dir" "$default_ruyi_state_dir"
 
 ruyi update
 
-ruyi list
+ruyi list --name-contains plct
 # CHECK-LABEL: List of available packages:
-ruyi list --verbose
+ruyi list --name-contains plct --verbose
 # CHECK: Package declares
 # CHECK: ### Binary artifacts
 # CHECK: ### Toolchain metadata
