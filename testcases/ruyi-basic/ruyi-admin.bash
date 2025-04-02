@@ -15,12 +15,6 @@ ruyi admin checksum $0
 # CHECK-NEXT: sha256 =
 # CHECK-NEXT: sha512 =
 
-#ruyi admin checksum --format json $0
-# # CHECK-LABEL: [
-# # CHECK: "name":
-# # CHECK: "size":
-# # CHECK: "checksums":
-
 ruyi admin checksum --format toml $0
 # CHECK-LABEL{LITERAL}: [[distfiles]]
 # CHECK-NEXT: name =
