@@ -10,7 +10,7 @@ ruyi version
 ruyi update
 
 ruyi list --name-contains ""
-# NOTE: warn that output order of packages varias on machines
+# NOTE: warn that output order of packages varies on machines
 # CHECK-LABEL: List of available packages:
 # CHECK-NOT: Package declares
 # CHECK: * toolchain
@@ -30,4 +30,42 @@ ruyi list --name-contains "" --verbose
 
 ruyi list profiles
 # CHECK: needs flavor(s):
+
+ruyi list --category-contains ""
+# NOTE: warn that output order of packages varies on machines
+# CHECK-LABEL: List of available packages:
+# CHECK-NOT: Package declares
+# CHECK: * toolchain
+# CHECK-NOT: Package declares
+
+ruyi list --category-is "toolchain"
+# NOTE: warn that output order of packages varies on machines
+# CHECK-LABEL: List of available packages:
+# CHECK-NOT: Package declares
+# CHECK: * toolchain
+# CHECK-NOT: Package declares
+
+ruyi list --category-contains "" --verbose
+# CHECK-LABEL: ## {{.*}}
+# CHECK: ## toolchain
+# CHECK: * Package kind:
+# CHECK: * Vendor:
+# CHECK: Package declares {{[0-9]+}} distfile(s):
+# CHECK: ### Binary artifacts
+# CHECK: ### Toolchain metadata
+# CHECK: * Target:
+# CHECK: * Flavors:
+# CHECK: * Components:
+
+ruyi list --category-is "toolchain" --verbose
+# CHECK-LABEL: ## {{.*}}
+# CHECK: ## toolchain
+# CHECK: * Package kind:
+# CHECK: * Vendor:
+# CHECK: Package declares {{[0-9]+}} distfile(s):
+# CHECK: ### Binary artifacts
+# CHECK: ### Toolchain metadata
+# CHECK: * Target:
+# CHECK: * Flavors:
+# CHECK: * Components:
 
