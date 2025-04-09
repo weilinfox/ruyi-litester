@@ -38,13 +38,6 @@ ruyi list --category-contains ""
 # CHECK: * toolchain
 # CHECK-NOT: Package declares
 
-ruyi list --category-is "toolchain"
-# NOTE: warn that output order of packages varies on machines
-# CHECK-LABEL: List of available packages:
-# CHECK-NOT: Package declares
-# CHECK: * toolchain
-# CHECK-NOT: Package declares
-
 ruyi list --category-contains "" --verbose
 # CHECK-LABEL: ## {{.*}}
 # CHECK: ## toolchain
@@ -57,6 +50,13 @@ ruyi list --category-contains "" --verbose
 # CHECK: * Flavors:
 # CHECK: * Components:
 
+ruyi list --category-is "toolchain"
+# NOTE: warn that output order of packages varies on machines
+# CHECK-LABEL: List of available packages:
+# CHECK-NOT: Package declares
+# CHECK: * toolchain
+# CHECK-NOT: Package declares
+
 ruyi list --category-is "toolchain" --verbose
 # CHECK-LABEL: ## {{.*}}
 # CHECK: ## toolchain
@@ -68,4 +68,3 @@ ruyi list --category-is "toolchain" --verbose
 # CHECK: * Target:
 # CHECK: * Flavors:
 # CHECK: * Components:
-
