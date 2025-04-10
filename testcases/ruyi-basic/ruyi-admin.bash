@@ -36,3 +36,8 @@ cat "$tmp_path"/test.toml
 # CHECK: [distfiles.checksums]
 
 rm -rf "$tmp_path"
+
+ruyi admin run-plugin-cmd --help
+# CHECK-LABEL: usage: ruyi admin run-plugin-cmd [-h] COMMAND-NAME [COMMAND-ARG ...]
+# CHECK: positional arguments:
+# CHECK: options:
