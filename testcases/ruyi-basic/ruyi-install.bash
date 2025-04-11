@@ -24,3 +24,13 @@ ruyi install name:gnu-upstream
 ruyi install gnu-upstream'(0.20231212.0)'
 # CHECK-COUNT-3: info: skipping already installed package
 
+# 测试 --reinstall 选项
+ruyi install --reinstall gnu-upstream
+# CHECK: warn: package {{.*}} seems already installed; purging and re-installing due to --reinstall
+# CHECK-LABEL: info: extracting {{.*}} for package {{.*}}
+# CHECK: info: package {{.*}} installed to {{.*}}
+
+# 测试 --fetch-only 选项
+ruyi install -f llvm-plct
+# CHECK-LABEL: info: downloading {{.*}}
+# CHECK: info: package {{.*}} installed to {{.*}}
