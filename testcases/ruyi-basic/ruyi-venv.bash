@@ -1,15 +1,17 @@
-# NOTE: Test ruyi venv creation
+# NOTE: Test ruyi venv creation and sysroot options
 # RUN: bash %s 2>&1 | FileCheck %s
 
 export RUYI_DEBUG=x
 
 ruyi update
 
+# Install required packages
 ruyi install gnu-plct
+ruyi install gnu-milkv-milkv-duo-musl-bin
+ruyi install gnu-milkv-milkv-duo-elf-bin
 
-# Test default sysroot behavior (--with-sysroot)
+# Test default sysroot behavior
 venv_path=/tmp/rit-ruyi-basic-ruyi-venv
-# NOTE: too many debug messages
 RUYI_DEBUG= ruyi venv --toolchain gnu-plct milkv-duo "$venv_path"
 # CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
 # CHECK: info: The virtual environment is now created.
@@ -59,6 +61,42 @@ RUYI_DEBUG= ruyi venv --toolchain gnu-plct --sysroot-from gnu-milkv-milkv-duo-mu
 # CHECK: info: The virtual environment is now created.
 # CHECK: ruyi-deactivate
 # CHECK: /tmp/rit-ruyi-basic-ruyi-venv-sysroot-from/sysroot
+
+# Verify sysroot from specified package
+ls -la "$venv_path/sysroot/usr/lib"
+# CHECK: libc.so
+
+rm -rf "$venv_path"
+
+# Test multiple toolchains with different sysroot options
+venv_path=/tmp/rit-ruyi-basic-ruyi-venv-multi
+# Test 1: Multiple toolchains with default sysroot
+RUYI_DEBUG= ruyi venv --toolchain gnu-plct --toolchain gnu-milkv-milkv-duo-musl-bin --toolchain gnu-milkv-milkv-duo-elf-bin milkv-duo "$venv_path"
+# CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
+# CHECK: info: The virtual environment is now created.
+# CHECK: ruyi-deactivate
+# CHECK: /tmp/rit-ruyi-basic-ruyi-venv-multi/sysroot
+
+rm -rf "$venv_path"
+
+# Test 2: Multiple toolchains with --without-sysroot
+RUYI_DEBUG= ruyi venv --toolchain gnu-plct --toolchain gnu-milkv-milkv-duo-musl-bin --toolchain gnu-milkv-milkv-duo-elf-bin --without-sysroot milkv-duo "$venv_path"
+# CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
+# CHECK: info: The virtual environment is now created.
+# CHECK: ruyi-deactivate
+
+# Verify no sysroot is created
+test ! -d "$venv_path/sysroot" && echo "no sysroot"
+# CHECK: no sysroot
+
+rm -rf "$venv_path"
+
+# Test 3: Multiple toolchains with --sysroot-from
+RUYI_DEBUG= ruyi venv --toolchain gnu-plct --toolchain gnu-milkv-milkv-duo-musl-bin --toolchain gnu-milkv-milkv-duo-elf-bin --sysroot-from gnu-milkv-milkv-duo-musl-bin milkv-duo "$venv_path"
+# CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
+# CHECK: info: The virtual environment is now created.
+# CHECK: ruyi-deactivate
+# CHECK: /tmp/rit-ruyi-basic-ruyi-venv-multi/sysroot
 
 # Verify sysroot from specified package
 ls -la "$venv_path/sysroot/usr/lib"
