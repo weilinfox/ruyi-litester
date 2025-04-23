@@ -32,7 +32,6 @@ ruyi list profiles
 # CHECK: needs flavor(s):
 
 ruyi list --category-contains ""
-# NOTE: warn that output order of packages varies on machines
 # CHECK-LABEL: List of available packages:
 # CHECK-NOT: Package declares
 # CHECK: * toolchain
@@ -51,7 +50,6 @@ ruyi list --category-contains "" --verbose
 # CHECK: * Components:
 
 ruyi list --category-is "toolchain"
-# NOTE: warn that output order of packages varies on machines
 # CHECK-LABEL: List of available packages:
 # CHECK-NOT: Package declares
 # CHECK: * toolchain
