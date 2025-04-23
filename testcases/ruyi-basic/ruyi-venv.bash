@@ -7,6 +7,7 @@ ruyi update
 
 ruyi install gnu-plct
 
+# Test default sysroot behavior (--with-sysroot)
 venv_path=/tmp/rit-ruyi-basic-ruyi-venv
 # NOTE: too many debug messages
 RUYI_DEBUG= ruyi venv --toolchain gnu-plct milkv-duo "$venv_path"
@@ -14,6 +15,12 @@ RUYI_DEBUG= ruyi venv --toolchain gnu-plct milkv-duo "$venv_path"
 # CHECK: info: The virtual environment is now created.
 # CHECK: ruyi-deactivate
 # CHECK: /tmp/rit-ruyi-basic-ruyi-venv/sysroot
+
+# Verify sysroot structure
+ls -la "$venv_path/sysroot"
+# CHECK: usr
+# CHECK: lib
+# CHECK: etc
 
 oldps1="$PS1"
 source "$venv_path"/bin/ruyi-activate
@@ -32,3 +39,29 @@ echo PS1 checkpoint
 
 rm -rf "$venv_path"
 
+# Test --without-sysroot
+venv_path=/tmp/rit-ruyi-basic-ruyi-venv-no-sysroot
+RUYI_DEBUG= ruyi venv --toolchain gnu-plct --without-sysroot milkv-duo "$venv_path"
+# CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
+# CHECK: info: The virtual environment is now created.
+# CHECK: ruyi-deactivate
+
+# Verify no sysroot is created
+test ! -d "$venv_path/sysroot" && echo "no sysroot"
+# CHECK: no sysroot
+
+rm -rf "$venv_path"
+
+# Test --sysroot-from
+venv_path=/tmp/rit-ruyi-basic-ruyi-venv-sysroot-from
+RUYI_DEBUG= ruyi venv --toolchain gnu-plct --sysroot-from gnu-milkv-milkv-duo-musl-bin milkv-duo "$venv_path"
+# CHECK-LABEL: info: Creating a Ruyi virtual environment at {{.*}}
+# CHECK: info: The virtual environment is now created.
+# CHECK: ruyi-deactivate
+# CHECK: /tmp/rit-ruyi-basic-ruyi-venv-sysroot-from/sysroot
+
+# Verify sysroot from specified package
+ls -la "$venv_path/sysroot/usr/lib"
+# CHECK: libc.so
+
+rm -rf "$venv_path"
