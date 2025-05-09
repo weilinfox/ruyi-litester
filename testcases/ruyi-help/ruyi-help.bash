@@ -118,3 +118,7 @@ ruyi version --help
 # CHECK-LABEL: usage: ruyi version [
 # CHECK: options:
 
+ruyi admin run-plugin-cmd --help
+# CHECK-LABEL: usage: ruyi admin run-plugin-cmd [-h] COMMAND-NAME [COMMAND-ARG ...]
+# CHECK: positional arguments:
+# CHECK: options:
