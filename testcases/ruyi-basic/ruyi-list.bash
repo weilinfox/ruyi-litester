@@ -16,18 +16,19 @@ ruyi list --name-contains ""
 # CHECK: * toolchain
 # CHECK-NOT: Package declares
 
-ruyi list --name-contains "" --verbose
-# CHECK-LABEL: ## {{.*}}
-# CHECK: ## toolchain
+ruyi list --name-contains "gnu-plct-xthead" --verbose
+# CHECK-LABEL: ## toolchain/gnu-plct-xthead {{.*}}
+# CHECK: * Slug: (none)
 # CHECK: * Package kind:
-# CHECK: * Vendor:
+# CHECK: * Vendor: PLCT
+# CHECK: * Upstream version number:
 # CHECK: Package declares {{[0-9]+}} distfile(s):
 # CHECK: ### Binary artifacts
 # CHECK: ### Toolchain metadata
 # CHECK: * Target:
-# CHECK: * Flavors:
+# CHECK: * Quirks:
 # CHECK: * Components:
 
 ruyi list profiles
-# CHECK: needs flavor(s):
+# CHECK: needs quirks:
 
