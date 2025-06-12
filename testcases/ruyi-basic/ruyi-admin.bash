@@ -24,7 +24,13 @@ ruyi admin checksum --format toml $0
 # CHECK-NEXT: sha256 =
 # CHECK-NEXT: sha512 =
 
-ruyi admin checksum --format toml $0 > "$tmp_path"/test.toml
+cat >"$tmp_path"/test.toml <<EOF
+format = "v1"
+[metadata]
+vendor = { name = "kosaka", eula = "" }
+desc = "test metadata"
+EOF
+ruyi admin checksum --format toml $0 >> "$tmp_path"/test.toml
 ruyi admin format-manifest "$tmp_path"/test.toml
 cat "$tmp_path"/test.toml
 # CHECK-LABEL: format = "v1"
