@@ -21,6 +21,6 @@ ruyi install gnu-upstream
 # CHECK: info: package
 ruyi install gnu-upstream
 ruyi install name:gnu-upstream
-ruyi install gnu-upstream'(0.20231212.0)'
+ruyi install gnu-upstream'(0.20250401.0)'
 # CHECK-COUNT-3: info: skipping already installed package
 
