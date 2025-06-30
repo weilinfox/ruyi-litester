@@ -29,7 +29,7 @@ fi
 if wget --help > /dev/null; then
 	wget $RUYI_LINK -O ~/.local/bin/ruyi
 elif curl --help > /dev/null; then
-	curl $RUYI_LINK -o ~/.local/bin/ruyi
+	curl -L $RUYI_LINK -o ~/.local/bin/ruyi
 else
 	LOG_ERROR "missing wget/curl support"
 	exit -1
