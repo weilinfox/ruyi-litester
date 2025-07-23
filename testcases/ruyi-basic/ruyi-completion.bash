@@ -11,8 +11,10 @@ ruyi --output-completion-script=bash
 
 ruyi --output-completion-script=zsh
 # CHECK-LABEL: #compdef ruyi
-# CHECK: if [[ -z "${ZSH_VERSION-}" ]]; then
+# CHECK: _python_argcomplete_ruyi
 
 ruyi --output-completion-script=fish
 # CHECK-LABEL: ValueError: Unsupported shell: fish
 
+echo exit code $?
+# CHECL-LABEL: exit code 1
