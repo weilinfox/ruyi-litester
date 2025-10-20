@@ -11,7 +11,7 @@ ruyi update
 old_path=$(pwd)
 tmp_path="/tmp/rit-ruyi-basic-ruyi-install"
 mkdir "$tmp_path" && cd "$tmp_path"
-ruyi extract ruyisdk-demo
+ruyi extract --extract-without-subdir ruyisdk-demo
 # CHECK-LABEL: info: extracting {{.*}} for package {{.*}}
 # CHECK: info: package
 ls -la rvv-autovec

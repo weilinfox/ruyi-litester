@@ -20,7 +20,7 @@ ruyi venv -t gnu-plct-xthead sipeed-lpi4a "$venv_path"
 echo Gcc compilation checkpoint
 old_path="$(pwd)"
 mkdir "$venv_path"/test_tmp && cd "$venv_path"/test_tmp
-ruyi extract coremark\(1.0.1\)
+ruyi extract --extract-without-subdir coremark\(1.0.1\)
 # CHECK-LABEL: info: extracting {{.*}}
 # CHECK: info: package
 ls -la
