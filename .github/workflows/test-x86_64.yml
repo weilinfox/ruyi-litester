@@ -42,8 +42,14 @@ jobs:
       TEST_START_TIME: ${{ inputs.test_start_time }}
 
     steps:
-      - name: Checkout repo
+      - name: Checkout ruyi-litester
         uses: actions/checkout@v4
+
+      - name: Checkout ruyi-litester-reports
+        uses: actions/checkout@v4
+        with:
+          repository: weilinfox/ruyi-litester-reports
+          path: ruyi-litester-reports
 
       - name: Build test image for ${{ matrix.distro }}
         run: |
