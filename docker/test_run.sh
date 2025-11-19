@@ -1,4 +1,69 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+debug_env() {
+  echo "================ ENV DEBUG BEGIN ================"
+  echo "[DEBUG] date: $(date || echo 'date failed')"
+  echo "[DEBUG] whoami: $(whoami || echo 'whoami failed')"
+  echo "[DEBUG] id: $(id || echo 'id failed')"
+  echo "[DEBUG] pwd: $(pwd || echo 'pwd failed')"
+  echo "[DEBUG] shell options: \$- = $-"
+
+  echo
+  echo "---- uname -a ----"
+  uname -a || true
+
+  echo
+  echo "---- /etc/os-release ----"
+  if [[ -r /etc/os-release ]]; then
+    cat /etc/os-release
+  else
+    echo "no /etc/os-release"
+  fi
+
+  echo
+  echo "---- lsb_release -a ----"
+  if command -v lsb_release >/dev/null 2>&1; then
+    lsb_release -a || true
+  else
+    echo "lsb_release not installed"
+  fi
+
+  echo
+  echo "---- locale ----"
+  if command -v locale >/dev/null 2>&1; then
+    locale || echo "locale command failed"
+  else
+    echo "locale command not found"
+  fi
+
+  echo
+  echo "---- LANG / LC_* ----"
+  echo "LANG=${LANG-<unset>}"
+  echo "LC_ALL=${LC_ALL-<unset>}"
+  env | grep '^LC_' || echo "no LC_* in env"
+
+  echo
+  echo "---- locale config files ----"
+  for f in /etc/locale.gen /etc/locale.conf /etc/default/locale; do
+    if [[ -r "$f" ]]; then
+      echo ">>> $f"
+      cat "$f"
+    else
+      echo ">>> $f (not present)"
+    fi
+  done
+
+  echo
+  echo "---- env (sorted) ----"
+  env | sort
+
+  echo "================= ENV DEBUG END ================="
+  echo
+}
+
+debug_env
 
 [ -d ~/.config/ruyi ] && rm -rf ~/.config/ruyi
 rm -rf /tmp/rit.bash
