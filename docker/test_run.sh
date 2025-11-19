@@ -15,7 +15,8 @@ cp -v ruyi_ruyi-bin_ruyi-basic_*.log ruyi-litester-reports/report_tmpl/26test_lo
 bash ruyi-litester-reports/report_gen.sh ${DISTRO_ID}
 
 rm -f *.md
-mv ruyi-test-logs.tar.gz /artifacts/ruyi-test-${DISTRO_ID}-logs.tar.gz
-mv ruyi-test-logs_failed.tar.gz /artifacts/ruyi-test-${DISTRO_ID}-logs_failed.tar.gz
-mv ruyi_report/*.md /artifacts/
+
+sudo mv ruyi-test-logs.tar.gz /artifacts/ruyi-test-${DISTRO_ID}-logs.tar.gz
+sudo mv ruyi-test-logs_failed.tar.gz /artifacts/ruyi-test-${DISTRO_ID}-logs_failed.tar.gz
+sudo mv ruyi_report/*.md /artifacts/
 
