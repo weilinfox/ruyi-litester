@@ -3,7 +3,7 @@ WORKDIR /ruyi-litester
 
 # RUN rm -rf /etc/apt/sources.list.d && mkdir /etc/apt/sources.list.d && printf "Types: deb\nURIs: http://mirrors.ustc.edu.cn/debian\nSuites: bookworm\nComponents: main contrib\nSigned-By: /usr/share/keyrings/debian-archive-keyring.gpg" > /etc/apt/sources.list.d/apt.sources
 
-RUN apt-get update && apt-get upgprade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" && apt-get install -y llvm-14-tools coreutils util-linux yq file expect git make tar jq build-essential zstd && apt-get clean
+RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" && apt-get install -y llvm-14-tools coreutils util-linux yq file expect git make tar jq build-essential zstd && apt-get clean
 
 FROM builder
 ARG UNAME=ruyisdk_test
