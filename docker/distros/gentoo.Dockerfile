@@ -1,0 +1,22 @@
+FROM gentoo/portage:latest AS builder
+WORKDIR /ruyi-litester
+
+RUN mkdir /etc/portage/repos.conf && printf "[gentoo]\nlocation = /var/db/repos/gentoo\nsync-type = rsync\nsync-uri = rsync://mirrors.tuna.tsinghua.edu.cn/gentoo-portage\nauto-sync = yes" > /etc/portage/repos.conf/gentoo.conf && echo MAKEOPTS="-j8" >> /etc/portage/make.conf && echo "USE=-doc" >> /etc/portage/make.conf && sed -i 's/-O2/-O0/' /etc/portage/make.conf
+RUN emerge --sync --quiet
+# j6 8G 内存会被 oom kill
+RUN emerge --color=n --getbinpkg --noreplace --autounmask=y llvm-core/llvm
+RUN emerge --color=n --getbinpkg --noreplace --autounmask=y dev-python/lit coreutils util-linux grep procps bash sudo wget make app-arch/zstd openssl
+RUN emerge --color=n --getbinpkg --noreplace --autounmask=y app-admin/sudo sys-apps/file dev-tcltk/expect dev-vcs/git dev-build/make app-arch/tar app-misc/jq app-misc/yq
+
+FROM builder
+ARG UNAME=ruyisdk_test
+RUN useradd -m -s /bin/bash $UNAME
+
+RUN echo 'ruyisdk_test ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+WORKDIR /ruyi-litester
+COPY . .
+RUN chown -R $UNAME:$UNAME /ruyi-litester
+USER $UNAME
+
+
+ENTRYPOINT ["docker/test_run.sh"]
