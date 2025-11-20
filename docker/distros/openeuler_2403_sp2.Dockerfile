@@ -6,6 +6,7 @@ WORKDIR /ruyi-litester
 
 RUN dnf upgrade -y && dnf install -y llvm coreutils util-linux grep procps bash sudo git wget make zstd jq python3-pip xz
 RUN pip install yq lit
+RUN echo 'LANG=en_US.UTF-8' > /etc/locale.conf
 
 FROM builder
 ARG UNAME=ruyisdk_test
