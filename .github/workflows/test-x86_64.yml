@@ -33,7 +33,6 @@ jobs:
           - fedora_43
           - deepin_beige
           - deepin_crimson
-          - gentoo
           - openkylin
           - opencloudos
 
