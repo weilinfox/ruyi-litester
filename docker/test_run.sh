@@ -55,6 +55,16 @@ debug_env() {
     fi
   done
 
+  echo "---- timezone ----"
+  echo "TZ=${TZ-<unset>}"
+  if [ -L /etc/localtime ]; then
+    echo "/etc/localtime -> $(readlink -f /etc/localtime || true)"
+  elif [ -f /etc/localtime ]; then
+    echo "/etc/localtime is a regular file"
+  else
+    echo "/etc/localtime not found"
+  fi
+
   echo
   echo "---- env (sorted) ----"
   env | sort
