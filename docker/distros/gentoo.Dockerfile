@@ -9,12 +9,7 @@ WORKDIR /ruyi-litester
 RUN echo MAKEOPTS="-j8" >> /etc/portage/make.conf && echo "USE=-doc" >> /etc/portage/make.conf # && sed -i 's/-O2/-O0/' /etc/portage/make.conf
 RUN emerge --sync --color=n
 RUN eselect profile list
-RUN mkdir -p /etc/portage/binrepos.conf && cat > /etc/portage/binrepos.conf/gentoobinhost.conf << 'EOF'
-[gentoobinhost]
-priority = 9999
-sync-uri = https://distfiles.gentoo.org/releases/amd64/binpackages/23.0/x86-64/
-auto-sync = yes
-EOF
+RUN mkdir -p /etc/portage/binrepos.conf && printf '%s\n' '[gentoobinhost]' 'priority = 9999' 'sync-uri = https://distfiles.gentoo.org/releases/amd64/binpackages/23.0/x86-64/' 'auto-sync = yes' >> /etc/portage/binrepos.conf/gentoobinhost.conf
 RUN echo 'FEATURES="${FEATURES} getbinpkg"'  >> /etc/portage/make.conf && echo 'FEATURES="${FEATURES} binpkg-request-signature"' >> /etc/portage/make.conf && getuto
 # j6 8G 内存会被 oom kill
 RUN emerge --color=n --getbinpkg --noreplace --autounmask=y llvm-core/llvm
