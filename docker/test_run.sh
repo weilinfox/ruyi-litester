@@ -69,6 +69,12 @@ debug_env() {
   echo "---- env (sorted) ----"
   env | sort
 
+  echo "---- network ----"
+  ping -4 github.com -c 5
+  ping -6 github.com -c 5
+  ping -4 wps.com -c 5
+  ping -6 wps.com -c 5
+
   echo "================= ENV DEBUG END ================="
   echo
 }
