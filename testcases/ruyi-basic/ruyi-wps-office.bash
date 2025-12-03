@@ -56,7 +56,11 @@ secrityKey=7f8faaaa468174dc1c9cd62e5f218a5b
 md5hash=$(echo -n "${secrityKey}${uri}${timestamp10}" | md5sum)
 url+="?t=${timestamp10}&k=${md5hash%% *}"
 
-curl -L $url -o ~/.cache/ruyi/distfiles/$file
+if curl --help >/dev/null; then
+	curl -L $url -o ~/.cache/ruyi/distfiles/$file
+else
+	wget $url -O ~/.cache/ruyi/distfiles/$file
+fi
 
 ruyi install --host x86_64 extra/wps-office
 # CHECK: info: extracting wps-office_{{.*}}_amd64.deb for package wps-office-{{.*}}
