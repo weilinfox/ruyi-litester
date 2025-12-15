@@ -14,7 +14,7 @@ on:
 
 jobs:
   litester-aarch64:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     strategy:
       fail-fast: false
@@ -28,11 +28,11 @@ jobs:
           - openeuler_2403_sp1
           - openeuler_2403_sp2
           - openeuler_2503
-          - archlinux
+         #- archlinux  上游仓库没有arm64容器镜像
           - fedora_42
           - fedora_43
-          - deepin_beige
-          - deepin_crimson
+         #- deepin_beige 上游仓库没有arm64容器镜像
+         #- deepin_crimson 上游仓库没有arm64容器镜像
           - openkylin
           - opencloudos
 
@@ -41,14 +41,6 @@ jobs:
       TEST_START_TIME: ${{ inputs.test_start_time }}
 
     steps:
-      - name: Set up QEMU for multi-arch
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Checkout ruyi-litester
         uses: actions/checkout@v4
 
@@ -77,12 +69,11 @@ jobs:
 
       - name: Build aarch64 test image for ${{ matrix.distro }}
         run: |
-          docker buildx build \
+          docker build \
             --platform linux/arm64 \
             --build-arg ARCH=arm64 \
             -f docker/distros/${{ matrix.distro }}.Dockerfile \
             -t ruyi-litester:${{ matrix.distro }}-arm64 \
-            --load \
             .
 
       - name: Run litester in Docker (${{ matrix.distro }} aarch64)
@@ -102,4 +93,3 @@ jobs:
           name: ruyi-litester-${{ matrix.distro }}-arm64
           path: artifacts/${{ matrix.distro }}-arm64
           if-no-files-found: error
-
