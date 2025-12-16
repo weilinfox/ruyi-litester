@@ -1,4 +1,4 @@
-name: Ruyi Litester (multi-distro)
+name: Ruyi Litester (arm64 multi-distro)
 
 on:
   workflow_dispatch:
@@ -13,8 +13,8 @@ on:
         default: "20251119"
 
 jobs:
-  litester:
-    runs-on: ubuntu-latest
+  litester-arm64:
+    runs-on: ubuntu-24.04-arm
 
     strategy:
       fail-fast: false
@@ -28,11 +28,9 @@ jobs:
           - openeuler_2403_sp1
           - openeuler_2403_sp2
           - openeuler_2503
-          - archlinux
           - fedora_42
           - fedora_43
-          - deepin_beige
-          - deepin_crimson
+          - deepin_crimson_arm64
           - openkylin
           - opencloudos
 
@@ -49,6 +47,23 @@ jobs:
         with:
           repository: weilinfox/ruyi-litester-reports
           path: ruyi-litester-reports
+
+      #- name: Free space on ARM runner
+      #  run: |
+      #    echo "Disk usage before cleanup:"
+      #    df -h /
+
+          # Remove large preinstalled SDKs and logs
+      #    sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android /usr/local/share/powershell || true
+      #    sudo rm -rf /home/runner/actions-runner/_diag/* || true
+      #    sudo rm -rf /home/runner/work/_temp || true
+
+          # Optional: clean caches
+      #    sudo apt-get clean || true
+      #    sudo rm -rf ~/.cache/pip ~/.cache/npm ~/.cache/yarn ~/.cache/node-gyp || true
+
+      #    echo "Disk usage after cleanup:"
+      #    df -h /
 
       - name: Build test image for ${{ matrix.distro }}
         run: |
