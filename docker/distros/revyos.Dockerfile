@@ -1,4 +1,4 @@
-FROM cyl18/revyosindocker AS build
+FROM cyl18/revyosindocker:latest AS build
 ARG ARCH
 WORKDIR /ruyi-litester
 

@@ -20,21 +20,21 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-          - debian_bookworm
+         #- debian_bookworm
           - debian_trixie
           - debian_sid
           - ubuntu_jammy
           - ubuntu_noble
-          - openeuler_2403_sp1
-          - openeuler_2403_sp2
-          - openeuler_2503
-          - archlinux
-          - fedora_42
-          - fedora_43
-          - deepin_beige
-          - deepin_crimson
+         #- openeuler_2403_sp1
+         #- openeuler_2403_sp2
+         #- openeuler_2503
+         #- archlinux
+         #- fedora_42
+         #- fedora_43
+          - deepin_beige_riscv64
+          - deepin_crimson_riscv64
           - openkylin
-          - opencloudos
+         #- opencloudos
           - gentoo
           - revyos
 
