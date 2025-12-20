@@ -35,8 +35,6 @@ jobs:
           - deepin_crimson_riscv64
           - openkylin
          #- opencloudos
-          - gentoo
-          - revyos
 
     env:
       RUYI_VERSION: ${{ inputs.ruyi_version }}
