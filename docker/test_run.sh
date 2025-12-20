@@ -69,32 +69,11 @@ debug_env() {
   echo "---- env (sorted) ----"
   env | sort
 
-  echo
   echo "---- network ----"
-  nc_ping() {
-    local host=$1 port=$2 ip_version=$3  # 4 or 6
-    local timeout=${4:-3}
-    local ip_flag="-4"
-    [ "$ip_version" = "6" ] && ip_flag="-6"
-    nc "$ip_flag" -z -w "$timeout" "$host" "$port" >/dev/null 2>&1
-  }
-
-  for host in github.com wps.com; do
-    echo "[DEBUG] nc -4 $host 443"
-    if nc_ping "$host" 443 4; then
-      echo "[OK] nc -4 $host:443 succeeded"
-    else
-      echo "[WARN] nc -4 $host:443 failed (exit=$?)"
-    fi
-
-    echo "[DEBUG] nc -6 $host 443"
-    if nc_ping "$host" 443 6; then
-      echo "[OK] nc -6 $host:443 succeeded"
-    else
-      echo "[WARN] nc -6 $host:443 failed (exit=$?)"
-    fi
-    echo
-  done
+  ping -4 github.com -c 5
+  ping -6 github.com -c 5
+  ping -4 wps.com -c 5
+  ping -6 wps.com -c 5
 
   echo "================= ENV DEBUG END ================="
   echo
