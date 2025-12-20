@@ -74,14 +74,14 @@ jobs:
 
       - name: Build test image for ${{ matrix.distro }}
         run: |
-          docker build \
+          docker build --platform=linux/riscv64 \
             -f docker/distros/${{ matrix.distro }}.Dockerfile \
             -t ruyi-litester:${{ matrix.distro }} .
 
       - name: Run litester in Docker (${{ matrix.distro }})
         run: |
           mkdir -p artifacts/${{ matrix.distro }}
-          docker run --rm \
+          docker run --rm --platform=linux/riscv64 \
             -e RUYI_VERSION \
             -e TEST_START_TIME \
             -e DISTRO_ID=${{ matrix.distro }} \
