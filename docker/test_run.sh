@@ -100,3 +100,4 @@ rm -f *.md
 sudo mv ruyi-test-logs.tar.gz /artifacts/ruyi-test-${DISTRO_ID}-logs.tar.gz
 sudo mv ruyi-test-logs_failed.tar.gz /artifacts/ruyi-test-${DISTRO_ID}-logs_failed.tar.gz
 sudo mv ruyi_report/*.md /artifacts/
+
