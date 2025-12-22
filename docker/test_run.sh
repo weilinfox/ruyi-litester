@@ -69,11 +69,15 @@ debug_env() {
   echo "---- env (sorted) ----"
   env | sort
 
+  echo
   echo "---- network ----"
-  ping -4 github.com -c 5
-  ping -6 github.com -c 5
-  ping -4 wps.com -c 5
-  ping -6 wps.com -c 5
+  for host in github.com wps.com; do
+    if nc -z "$host" 443; then
+      echo "[OK] $host: succeeded"
+    else
+      echo "[WARN] $host: failed"
+    fi
+  done
 
   echo "================= ENV DEBUG END ================="
   echo
