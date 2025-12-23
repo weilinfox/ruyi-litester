@@ -72,7 +72,7 @@ debug_env() {
   echo
   echo "---- network ----"
   for host in github.com wps.com; do
-    if nc -z "$host" 443; then
+    if bash -c ">/dev/tcp/${host}/443"; then
       echo "[OK] $host: succeeded"
     else
       echo "[WARN] $host: failed"
