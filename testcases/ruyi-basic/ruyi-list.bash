@@ -29,23 +29,23 @@ ruyi list --name-contains "gnu-plct-xthead" --verbose
 # CHECK: * Quirks:
 # CHECK: * Components:
 
-ruyi uninstall gnu-upstream -y || true
-ruyi list --name-contains 'gnu-upstream' --is-installed y
+ruyi uninstall gnu-plct-xthead -y || true
+ruyi list --name-contains 'gnu-plct-xthead' --is-installed y
 # CHECK-LABEL: List of available packages:
 # CHECK-NOT: installed
 
-ruyi list --name-contains 'gnu-upstream' --is-installed n
+ruyi list --name-contains 'gnu-plct-xthead' --is-installed n
 # CHECK-LABEL: List of available packages:
-# CHECK: toolchain/gnu-upstream
+# CHECK: toolchain/gnu-plct-xthead
 
-ruyi install gnu-upstream
-ruyi list --name-contains 'gnu-upstream' --is-installed y
+ruyi install gnu-plct-xthead
+ruyi list --name-contains 'gnu-plct-xthead' --is-installed y
 # CHECK-LABEL: List of available packages:
 # CHECK: installed
 
-ruyi list --name-contains 'gnu-upstream' --is-installed n
+ruyi list --name-contains 'gnu-plct-xthead' --is-installed n
 # CHECK-LABEL: List of available packages:
-# CHECK-NOT: toolchain/gnu-upstream
+# CHECK-NOT: toolchain/gnu-plct-xthead
 
 ruyi list --category-is source
 # CHECK-LABEL: List of available packages:
