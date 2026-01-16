@@ -136,6 +136,11 @@ function EXPR_MATCH() {
 
 	done
 
-	return "${nums[0]}"
+	local res="${nums[0]}"
+	if [[ "$res" != "1" ]] && [[ "$res" != "0" ]]; then
+		[[ "$str" =~ "$res" ]]
+		res=$?
+	fi
+	return "$res"
 }
 
