@@ -29,6 +29,32 @@ ruyi list --name-contains "gnu-plct-xthead" --verbose
 # CHECK: * Quirks:
 # CHECK: * Components:
 
+ruyi uninstall gnu-milkv-milkv-duo-bin -y || true
+ruyi list --name-contains 'gnu-milkv-milkv-duo-bin' --is-installed y
+# CHECK-LABEL: List of available packages:
+# CHECK-NOT: installed
+
+ruyi list --name-contains 'gnu-milkv-milkv-duo-bin' --is-installed n
+# CHECK-LABEL: List of available packages:
+# CHECK: toolchain/gnu-milkv-milkv-duo-bin
+
+ruyi install gnu-milkv-milkv-duo-bin
+ruyi list --name-contains 'gnu-milkv-milkv-duo-bin' --is-installed y
+# CHECK-LABEL: List of available packages:
+# CHECK: installed
+
+ruyi list --name-contains 'gnu-milkv-milkv-duo-bin' --is-installed n
+# CHECK-LABEL: List of available packages:
+# CHECK-NOT: toolchain/gnu-milkv-milkv-duo-bin
+
+ruyi list --category-is source
+# CHECK-LABEL: List of available packages:
+# CHECK: source/coremark
+
+ruyi list --category-contains sourc
+# CHECK-LABEL: List of available packages:
+# CHECK: source/coremark
+
 ruyi list profiles
 # CHECK: needs quirks:
 
